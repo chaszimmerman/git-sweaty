@@ -13115,5 +13115,31 @@
     "start_date_local": "2026-04-11T09:40:57Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-04-14",
+    "distance": 9089.4,
+    "elevation_gain": 44.0,
+    "id": "18108987212",
+    "moving_time": 6472.0,
+    "name": "NYC Walk",
+    "raw_activity_type": "Walk",
+    "raw_type": "Walk",
+    "start_date_local": "2026-04-14T12:49:41Z",
+    "type": "Walk",
+    "year": 2026
+  },
+  {
+    "date": "2026-04-15",
+    "distance": 6444.6,
+    "elevation_gain": 18.0,
+    "id": "18116550252",
+    "moving_time": 2119.0,
+    "name": "NYC Squares Park Morning Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-04-15T06:15:54Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
