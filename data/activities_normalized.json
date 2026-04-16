@@ -13141,5 +13141,18 @@
     "start_date_local": "2026-04-15T06:15:54Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-04-16",
+    "distance": 5502.1,
+    "elevation_gain": 10.0,
+    "id": "18129899104",
+    "moving_time": 1923.0,
+    "name": "Morning Run in NYC",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-04-16T06:12:29Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
