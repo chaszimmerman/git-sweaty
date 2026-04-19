@@ -1353,6 +1353,169 @@
         filter: brightness(1.2);
       }
 
+      /* ── Monthly Activity Heatmap ───────────────────────────────── */
+      .monthly-heatmap-card {
+        padding: 16px 20px 14px;
+      }
+      .monthly-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .monthly-chip-row {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+      .monthly-chip {
+        appearance: none;
+        font: inherit;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: border-color 0.15s, color 0.15s, background 0.15s;
+      }
+      .monthly-chip:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        color: var(--text);
+      }
+      .monthly-chip.active {
+        background: rgba(56, 189, 248, 0.15);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .monthly-grid-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .monthly-header-row,
+      .monthly-type-row {
+        display: flex;
+        align-items: center;
+        gap: 0;
+      }
+      .monthly-type-label {
+        width: 82px;
+        flex-shrink: 0;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding-right: 4px;
+      }
+      .monthly-type-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .monthly-cells {
+        display: flex;
+        flex: 1;
+        gap: 3px;
+      }
+      .monthly-month-label {
+        flex: 1;
+        text-align: center;
+        font-size: 10px;
+        color: var(--muted);
+        font-family: "JetBrains Mono", monospace;
+      }
+      .monthly-cell {
+        flex: 1;
+        height: 48px;
+        border-radius: 5px;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 4px;
+        transition: transform 0.1s, filter 0.1s;
+        overflow: hidden;
+      }
+      .monthly-cell:hover {
+        transform: scale(1.06);
+        filter: brightness(1.2);
+        z-index: 5;
+      }
+      .monthly-cell-empty {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .monthly-cell-empty:hover {
+        transform: none;
+        filter: none;
+      }
+      .monthly-yoy-badge {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9px;
+        font-weight: 700;
+        line-height: 1;
+        padding: 2px 3px;
+        border-radius: 3px;
+        background: rgba(0, 0, 0, 0.35);
+        white-space: nowrap;
+      }
+      .monthly-badge-up   { color: #4ade80; }
+      .monthly-badge-down { color: #f87171; }
+      .monthly-badge-flat { color: rgba(255, 255, 255, 0.5); }
+      .monthly-legend-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .monthly-legend-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .monthly-legend-label {
+        font-size: 11px;
+        color: rgba(148, 163, 184, 0.7);
+        white-space: nowrap;
+      }
+      .monthly-gradient-bar {
+        height: 9px;
+        border-radius: 5px;
+        flex: 1;
+        max-width: 130px;
+      }
+      .monthly-legend-note {
+        margin-left: auto;
+        font-size: 11px;
+        color: rgba(148, 163, 184, 0.4);
+        font-style: italic;
+      }
+      .monthly-badge-sample {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 1px 4px;
+        border-radius: 3px;
+        background: rgba(0, 0, 0, 0.3);
+      }
+      .monthly-empty {
+        font-size: 13px;
+        color: var(--muted);
+        padding: 20px 0;
+        text-align: center;
+      }
+      /* ── End Monthly Activity Heatmap ───────────────────────────── */
+
       .tooltip {
         position: fixed;
         pointer-events: none;

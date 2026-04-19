@@ -70,6 +70,42 @@ You can switch between `strava` and `garmin` at any time.
 - Re-run `./scripts/bootstrap.sh` (or the quickstart curl command) and choose a different source.
 - If you re-run setup and choose the same source, setup asks whether to force a one-time full backfill. You can also update your response for unit preference, day of week start, placing strava/garmin profle link on your dashboard, and whether you'd like activity links in the tooltips.
 
+## Fork Customizations
+
+> **Note:** The following changes were made in this fork (`chaszimmerman/git-sweaty`) and are not part of the upstream `aspain/git-sweaty` repository. If you sync from upstream, review these customizations before overwriting `site/app.js` and `site/index.html`.
+
+### Monthly Activity Heatmap
+
+A new **Monthly Activity** section appears between the Activity Frequency chart and the year-by-year heatmaps. It shows a color-intensity grid of monthly totals — one row per activity type, one column per month.
+
+- Toggle between **Distance** and **Count** views via pill buttons above the grid
+- Year chips appear when "All Years" is selected at the top; selecting a specific year at the top filters the monthly section to that year automatically
+- Cell color intensity is normalized **per activity type** (darkest = that type's personal best month), so low-volume types still show meaningful gradient variation
+- **YoY badges** (`+8%` / `-4%`) appear on each cell when prior-year data is available, based on the currently selected metric (distance or count)
+- **Hover tooltip** shows full detail: count + distance for the month, each with its own vs-prior-year delta
+- A legend below the grid explains the gradient scale and the YoY badge convention
+
+### Activity Type Color Overrides
+
+The upstream color assignments produced visually similar colors for some activity type pairs. This fork adds explicit accent color overrides:
+
+| Type | Color |
+|------|-------|
+| `TrailRun` | Purple `#9b5de5` (distinct from Run's cyan) |
+| `Hike` | Orange `#fb5607` (distinct from Walk's yellow-green) |
+| `Workout` | Coral `#ff8a5b` |
+
+These overrides apply globally across the entire dashboard (frequency chart, year heatmaps, monthly heatmap, and legend dots).
+
+### Section Order
+
+The dashboard renders sections in this order:
+1. Activity Frequency (bar chart)
+2. **Monthly Activity** (heatmap — this fork)
+3. Year-by-year contribution heatmaps
+
+---
+
 ## Other Features
 
 - The GitHub Pages site is optimized for responsive desktop/mobile viewing.

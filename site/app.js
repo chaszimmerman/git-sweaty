@@ -1,7 +1,9 @@
 const DEFAULT_COLORS = ["#1f2937", "#1f2937", "#1f2937", "#1f2937", "#1f2937"];
 const MULTI_TYPE_COLOR = "#b967ff";
 const TYPE_ACCENT_OVERRIDES = {
-  Workout: "#ff8a5b",
+  Workout:   "#ff8a5b",
+  TrailRun:  "#9b5de5",
+  Hike:      "#fb5607",
 };
 const FALLBACK_VAPORWAVE = ["#f15bb5", "#fee440", "#00bbf9", "#00f5d4", "#9b5de5", "#fb5607", "#ffbe0b", "#72efdd"];
 const STAT_PLACEHOLDER = "- - -";
@@ -3769,6 +3771,298 @@ function buildStatPanel(title, subtitle) {
   return { panel, body };
 }
 
+function buildMonthlyHeatmap(payload, types, years, units) {
+  const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const card = document.createElement("div");
+  card.className = "card monthly-heatmap-card";
+
+  let activeYear = years[0];
+  let activeMetric = "distance";
+  const showYearChips = years.length > 1;
+
+  // ── Controls ──────────────────────────────────────────────────
+  const controls = document.createElement("div");
+  controls.className = "monthly-controls";
+
+  if (showYearChips) {
+    const yearRow = document.createElement("div");
+    yearRow.className = "monthly-chip-row";
+    years.forEach((year) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "monthly-chip" + (year === activeYear ? " active" : "");
+      btn.textContent = String(year);
+      btn.addEventListener("click", () => {
+        yearRow.querySelectorAll(".monthly-chip").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeYear = year;
+        renderGrid();
+      });
+      yearRow.appendChild(btn);
+    });
+    controls.appendChild(yearRow);
+  }
+
+  const metricRow = document.createElement("div");
+  metricRow.className = "monthly-chip-row";
+  [
+    { key: "distance", label: () => units.distance === "km" ? "km" : "Miles" },
+    { key: "count",    label: () => "Count" },
+  ].forEach(({ key, label }) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "monthly-chip" + (key === activeMetric ? " active" : "");
+    btn.textContent = label();
+    btn.addEventListener("click", () => {
+      metricRow.querySelectorAll(".monthly-chip").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeMetric = key;
+      renderGrid();
+    });
+    metricRow.appendChild(btn);
+  });
+  controls.appendChild(metricRow);
+  card.appendChild(controls);
+
+  const gridWrap = document.createElement("div");
+  gridWrap.className = "monthly-grid-wrap";
+  card.appendChild(gridWrap);
+
+  const legendWrap = document.createElement("div");
+  legendWrap.className = "monthly-legend-wrap";
+  card.appendChild(legendWrap);
+
+  // ── Helpers ───────────────────────────────────────────────────
+  function getMonthlyTotals(year, type) {
+    const yearAggs = payload.aggregates?.[String(year)]?.[type] || {};
+    const monthly = Array.from({ length: 12 }, () => null);
+    Object.entries(yearAggs).forEach(([date, vals]) => {
+      const m = parseInt(date.slice(5, 7), 10) - 1;
+      if (m < 0 || m > 11) return;
+      if (!monthly[m]) monthly[m] = { count: 0, distance: 0 };
+      monthly[m].count    += vals.count || 0;
+      monthly[m].distance += vals.distance || 0;
+    });
+    return monthly;
+  }
+
+  function metricVal(md) {
+    if (!md) return 0;
+    if (activeMetric === "count") return md.count || 0;
+    const meters = md.distance || 0;
+    return units.distance === "km" ? meters / 1000 : meters / 1609.344;
+  }
+
+  function intensityColor(hex, intensity) {
+    if (!hex || hex.length < 7) return `rgba(148,163,184,${0.08 + intensity * 0.87})`;
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const opacity = 0.08 + intensity * 0.87;
+    return `rgba(${r},${g},${b},${opacity})`;
+  }
+
+  // ── Render ────────────────────────────────────────────────────
+  function renderGrid() {
+    gridWrap.innerHTML = "";
+    legendWrap.innerHTML = "";
+
+    const activeTypes = types.filter((type) => {
+      const monthly = getMonthlyTotals(activeYear, type);
+      return monthly.some((md) => md && (md.count > 0 || md.distance > 0));
+    });
+
+    if (!activeTypes.length) {
+      const empty = document.createElement("div");
+      empty.className = "monthly-empty";
+      empty.textContent = "No activity data for this year.";
+      gridWrap.appendChild(empty);
+      renderLegend();
+      return;
+    }
+
+    // Per-type min/max for gradient normalization
+    const typeStats = {};
+    activeTypes.forEach((type) => {
+      let min = Infinity, max = 0;
+      getMonthlyTotals(activeYear, type).forEach((md) => {
+        const v = metricVal(md);
+        if (v > 0) { if (v > max) max = v; if (v < min) min = v; }
+      });
+      typeStats[type] = { min: min === Infinity ? 0 : min, max };
+    });
+
+    // Month header
+    const header = document.createElement("div");
+    header.className = "monthly-header-row";
+    const spacer = document.createElement("div");
+    spacer.className = "monthly-type-label";
+    header.appendChild(spacer);
+    const headerCells = document.createElement("div");
+    headerCells.className = "monthly-cells";
+    MONTH_LABELS.forEach((name) => {
+      const el = document.createElement("div");
+      el.className = "monthly-month-label";
+      el.textContent = name;
+      headerCells.appendChild(el);
+    });
+    header.appendChild(headerCells);
+    gridWrap.appendChild(header);
+
+    // Type rows
+    activeTypes.forEach((type) => {
+      const color = getColors(type)[4];
+      const { min, max } = typeStats[type];
+      const range = max - min;
+      const monthly = getMonthlyTotals(activeYear, type);
+      const prevMonthly = getMonthlyTotals(activeYear - 1, type);
+
+      const row = document.createElement("div");
+      row.className = "monthly-type-row";
+
+      const label = document.createElement("div");
+      label.className = "monthly-type-label";
+      const dot = document.createElement("div");
+      dot.className = "monthly-type-dot";
+      dot.style.background = color;
+      label.appendChild(dot);
+      label.appendChild(document.createTextNode(displayType(type)));
+      row.appendChild(label);
+
+      const cells = document.createElement("div");
+      cells.className = "monthly-cells";
+
+      for (let m = 0; m < 12; m++) {
+        const md = monthly[m];
+        const val = metricVal(md);
+        const cell = document.createElement("div");
+        cell.className = "monthly-cell" + (!val ? " monthly-cell-empty" : "");
+
+        if (val > 0) {
+          const intensity = range > 0 ? (val - min) / range : 1;
+          cell.style.background = intensityColor(color, intensity);
+          cell.style.boxShadow = `0 0 8px ${intensityColor(color, intensity * 0.4)}`;
+
+          // YoY badge
+          const prevMd = prevMonthly[m];
+          const prevVal = metricVal(prevMd);
+          let yoyCountPct = null;
+          let yoyDistPct = null;
+
+          if (prevMd && prevVal > 0) {
+            const pct = Math.round(((val - prevVal) / prevVal) * 100);
+            const sign = pct > 0 ? "+" : "";
+            const cls = pct > 0 ? "monthly-badge-up" : pct < 0 ? "monthly-badge-down" : "monthly-badge-flat";
+            const badge = document.createElement("div");
+            badge.className = `monthly-yoy-badge ${cls}`;
+            badge.textContent = `${sign}${pct}%`;
+            cell.appendChild(badge);
+          }
+
+          // Compute per-metric YoY for tooltip
+          if (prevMd) {
+            const prevCount = prevMd.count || 0;
+            const curCount  = md.count || 0;
+            if (prevCount > 0) {
+              const cp = Math.round(((curCount - prevCount) / prevCount) * 100);
+              yoyCountPct = `${cp > 0 ? "+" : ""}${cp}%`;
+            }
+            const prevDist = metricVal(prevMd);
+            const curDist  = metricVal(md);
+            if (activeMetric === "distance" && prevDist > 0) {
+              const dp = Math.round(((curDist - prevDist) / prevDist) * 100);
+              yoyDistPct = `${dp > 0 ? "+" : ""}${dp}%`;
+            }
+          }
+
+          // Tooltip
+          if (!useTouchInteractions) {
+            const capturedM    = m;
+            const capturedType = type;
+            const capturedMd   = md;
+            const capturedPrev = prevMd;
+            const capturedYoyCount = yoyCountPct;
+            const capturedYoyDist  = yoyDistPct;
+
+            cell.addEventListener("mouseenter", (event) => {
+              if (isTooltipPinned()) return;
+              const lines = buildMonthlyCellTooltip(
+                capturedM, capturedType, capturedMd, capturedPrev,
+                capturedYoyCount, capturedYoyDist,
+              );
+              showTooltip({ lines }, event.clientX, event.clientY);
+            });
+            cell.addEventListener("mousemove", (event) => {
+              if (isTooltipPinned()) return;
+              const lines = buildMonthlyCellTooltip(
+                capturedM, capturedType, capturedMd, capturedPrev,
+                capturedYoyCount, capturedYoyDist,
+              );
+              showTooltip({ lines }, event.clientX, event.clientY);
+            });
+            cell.addEventListener("mouseleave", () => {
+              if (!isTooltipPinned()) hideTooltip();
+            });
+          }
+        }
+
+        cells.appendChild(cell);
+      }
+
+      row.appendChild(cells);
+      gridWrap.appendChild(row);
+    });
+
+    renderLegend();
+  }
+
+  function buildMonthlyCellTooltip(m, type, md, prevMd, yoyCountPct, yoyDistPct) {
+    const distLabel = units.distance === "km" ? "km" : "mi";
+    const lines = [];
+    lines.push(createTooltipTextLine(`${MONTH_LABELS[m]} · ${displayType(type)}`));
+    lines.push(createTooltipTextLine(""));
+
+    const count = md?.count ?? 0;
+    lines.push(createTooltipTextLine(
+      `Count:    ${count}${yoyCountPct ? `  (${yoyCountPct} vs prior yr)` : ""}`,
+    ));
+
+    const distFormatted = md ? formatDistance(md.distance || 0, units) : "—";
+    lines.push(createTooltipTextLine(
+      `Distance: ${distFormatted}${yoyDistPct ? `  (${yoyDistPct} vs prior yr)` : ""}`,
+    ));
+
+    return lines;
+  }
+
+  function renderLegend() {
+    const metricLabel = activeMetric === "distance" ? units.distance : "count";
+
+    const row1 = document.createElement("div");
+    row1.className = "monthly-legend-row";
+    row1.innerHTML = `
+      <span class="monthly-legend-label">Less ${metricLabel}</span>
+      <div class="monthly-gradient-bar" style="background:linear-gradient(to right,rgba(255,255,255,0.05),rgba(255,255,255,0.5));"></div>
+      <span class="monthly-legend-label">More ${metricLabel}</span>
+      <span class="monthly-legend-note">scaled per activity type</span>
+    `;
+    legendWrap.appendChild(row1);
+
+    const row2 = document.createElement("div");
+    row2.className = "monthly-legend-row";
+    row2.innerHTML = `
+      <span class="monthly-badge-sample monthly-badge-up">+8%</span>
+      <span class="monthly-badge-sample monthly-badge-down">−4%</span>
+      <span class="monthly-legend-label">% change vs. same month, prior year</span>
+    `;
+    legendWrap.appendChild(row2);
+  }
+
+  renderGrid();
+  return card;
+}
+
 function buildStatsOverview(payload, types, years, color, options = {}) {
   const card = document.createElement("div");
   card.className = "card more-stats";
@@ -4903,6 +5197,8 @@ async function init() {
         const yearTotals = getTypesYearTotals(payload, types, years);
         const cardYears = years.filter((year) => (yearTotals.get(year) || 0) > 0);
         const combinedSelectionKey = `combined:${types.join("|")}`;
+        let frequencyCardRow = null;
+        const yearCardRows = [];
         if (showMoreStats) {
           const frequencyCard = buildStatsOverview(payload, types, cardYears, frequencyCardColor, {
             units: currentUnits,
@@ -4912,13 +5208,7 @@ async function init() {
             onMetricStateChange: onFrequencyMetricStateChange,
           });
           setCardScrollKey(frequencyCard, `${combinedSelectionKey}:frequency`);
-          list.appendChild(
-            buildLabeledCardRow(
-              "Activity Frequency",
-              frequencyCard,
-              "frequency",
-            ),
-          );
+          frequencyCardRow = buildLabeledCardRow("Activity Frequency", frequencyCard, "frequency");
         }
         cardYears.forEach((year) => {
           const yearData = payload.aggregates?.[String(year)] || {};
@@ -4962,8 +5252,16 @@ async function init() {
           );
           setCardScrollKey(card, `${combinedSelectionKey}:year:${year}`);
           trackYearMetricAvailability(year, nextVisibleYearMetricYears);
-          list.appendChild(buildLabeledCardRow(String(year), card, "year"));
+          yearCardRows.push(buildLabeledCardRow(String(year), card, "year"));
         });
+        if (frequencyCardRow) {
+          list.appendChild(frequencyCardRow);
+        }
+        if (cardYears.length) {
+          const monthlyCard = buildMonthlyHeatmap(payload, types, cardYears, currentUnits);
+          list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
+        }
+        yearCardRows.forEach((row) => list.appendChild(row));
         section.appendChild(list);
         heatmaps.appendChild(section);
       } else {
@@ -4976,6 +5274,8 @@ async function init() {
           const yearTotals = getTypeYearTotals(payload, type, years);
           const cardYears = years.filter((year) => (yearTotals.get(year) || 0) > 0);
           const typeCardKey = `type:${type}`;
+          let typeFrequencyCardRow = null;
+          const typeYearCardRows = [];
           if (showMoreStats) {
             const frequencyCard = buildStatsOverview(payload, [type], cardYears, frequencyCardColor, {
               units: currentUnits,
@@ -4985,13 +5285,7 @@ async function init() {
               onMetricStateChange: onFrequencyMetricStateChange,
             });
             setCardScrollKey(frequencyCard, `${typeCardKey}:frequency`);
-            list.appendChild(
-              buildLabeledCardRow(
-                "Activity Frequency",
-                frequencyCard,
-                "frequency",
-              ),
-            );
+            typeFrequencyCardRow = buildLabeledCardRow("Activity Frequency", frequencyCard, "frequency");
           }
           cardYears.forEach((year) => {
             const aggregates = payload.aggregates?.[String(year)]?.[type] || {};
@@ -5005,8 +5299,16 @@ async function init() {
             });
             setCardScrollKey(card, `${typeCardKey}:year:${year}`);
             trackYearMetricAvailability(year, nextVisibleYearMetricYears);
-            list.appendChild(buildLabeledCardRow(String(year), card, "year"));
+            typeYearCardRows.push(buildLabeledCardRow(String(year), card, "year"));
           });
+          if (typeFrequencyCardRow) {
+            list.appendChild(typeFrequencyCardRow);
+          }
+          if (cardYears.length) {
+            const monthlyCard = buildMonthlyHeatmap(payload, [type], cardYears, currentUnits);
+            list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
+          }
+          typeYearCardRows.forEach((row) => list.appendChild(row));
           if (!list.childElementCount) {
             return;
           }
