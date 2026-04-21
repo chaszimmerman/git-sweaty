@@ -66,3 +66,12 @@ Layout order within the heatmaps section (top → bottom):
 1. Activity Frequency
 2. Monthly Activity (new)
 3. Year heatmaps (2026, 2025, ...)
+
+### Year card metric reset (Total Activities button)
+In `buildCard` in `app.js`, the "Total Activities" stat card is now a `button` (was a plain `div`).
+- Shows as active (highlighted) when no other metric is selected (the default count view)
+- When Distance / Time / Elevation is active, clicking Total Activities resets back to the default count view — equivalent to clicking the active metric card a second time to deselect it
+- Both paths still work: re-clicking the active metric card toggles it off, or clicking Total Activities resets it
+
+### Layout centering
+`justify-content: center` added to `.card-body` and `.more-stats` in `index.html` so year card heatmaps and the Activity Frequency graphs center horizontally within their cards on wider viewports. No visual change on mobile (stacked layouts use `1fr` columns which already fill full width).
