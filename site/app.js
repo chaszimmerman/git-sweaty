@@ -3572,6 +3572,7 @@ function buildCard(type, year, aggregates, units, options = {}) {
   }
   activeMetricKey = normalizeSingleSelectKey(activeMetricKey, filterableMetricKeys);
   const metricButtons = new Map();
+  let totalActivitiesButton = null;
   const reportYearMetricState = (source) => {
     if (!onYearMetricStateChange || !Number.isFinite(cardMetricYear)) return;
     onYearMetricStateChange({
@@ -3581,14 +3582,36 @@ function buildCard(type, year, aggregates, units, options = {}) {
       source,
     });
   };
-  const renderMetricButtonState = () => renderSingleSelectButtonState(
-    metricItems,
-    metricButtons,
-    activeMetricKey,
-  );
+  const renderMetricButtonState = () => {
+    renderSingleSelectButtonState(metricItems, metricButtons, activeMetricKey);
+    if (totalActivitiesButton) {
+      const isDefault = !activeMetricKey;
+      totalActivitiesButton.classList.toggle("active", isDefault);
+      totalActivitiesButton.setAttribute("aria-pressed", isDefault ? "true" : "false");
+    }
+  };
 
   const statItems = [
-    { label: "Total Activities", value: totals.count.toLocaleString() },
+    {
+      label: "Total Activities",
+      value: totals.count.toLocaleString(),
+      cardOptions: {
+        tagName: "button",
+        className: "card-stat more-stats-fact-card more-stats-fact-button",
+        ariaPressed: !activeMetricKey,
+      },
+      enhance: (statCard) => {
+        totalActivitiesButton = statCard;
+        statCard.addEventListener("click", () => {
+          if (!activeMetricKey) return;
+          activeMetricKey = null;
+          renderMetricButtonState();
+          renderHeatmap();
+          reportYearMetricState("card");
+          schedulePostInteractionAlignment();
+        });
+      },
+    },
     ...metricItems.map((item) => ({
       label: item.label,
       value: item.value,
