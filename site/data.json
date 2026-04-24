@@ -9134,6 +9134,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/18218804229",
       "year": 2026
+    },
+    {
+      "date": "2026-04-24",
+      "hour": 11,
+      "name": "Lunch Treadmill Shakeout Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/18240823496",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -18250,6 +18259,15 @@
           "distance": 5760.0,
           "elevation_gain": 103.0,
           "moving_time": 1842.0
+        },
+        "2026-04-24": {
+          "activity_ids": [
+            "18240823496"
+          ],
+          "count": 1,
+          "distance": 3822.9,
+          "elevation_gain": 0.0,
+          "moving_time": 1346.0
         }
       },
       "Walk": {
@@ -18265,7 +18283,7 @@
       }
     }
   },
-  "generated_at": "2026-04-24T16:04:11.008509+00:00",
+  "generated_at": "2026-04-24T21:17:17.423183+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",

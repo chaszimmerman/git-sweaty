@@ -13193,5 +13193,18 @@
     "start_date_local": "2026-04-22T18:35:15Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-04-24",
+    "distance": 3822.9,
+    "elevation_gain": 0.0,
+    "id": "18240823496",
+    "moving_time": 1346.0,
+    "name": "Lunch Treadmill Shakeout Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-04-24T11:54:11Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
