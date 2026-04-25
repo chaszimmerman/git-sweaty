@@ -43,8 +43,9 @@ def _extract_strava_pr_rank(dist_meters: float, best_efforts: List[Dict]) -> int
     effort_name = _BADGE_TO_STRAVA_EFFORT.get(_race_badge_label_mi(dist_mi))
     if not effort_name:
         return 0
+    effort_name_lower = effort_name.lower()
     for effort in (best_efforts or []):
-        if effort.get("name") == effort_name:
+        if str(effort.get("name") or "").lower() == effort_name_lower:
             rank = effort.get("pr_rank")
             if rank in (1, 2, 3):
                 return int(rank)
