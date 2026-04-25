@@ -66,12 +66,13 @@ Added to `TYPE_ACCENT_OVERRIDES` in `app.js` for visual distinction across all d
 Layout order within the heatmaps section (top → bottom):
 1. Activity Frequency
 2. Monthly Activity (new)
-3. Races (new)
-4. Year heatmaps (2026, 2025, ...)
+3. Year heatmaps (2026, 2025, ...)
+4. Races (new)
 
 ### Races card (`buildRacesCard`)
-New section between Monthly Activity and the year heatmaps, listing all detected race activities.
+New section below all year heatmaps, listing all detected race activities.
 - Columns: Date · Name · Distance · Time · Pace · PR badge
+- Year chips filter the table; "All" is default. PR ranks always computed across all time regardless of year filter — an all-time PR doesn't reset when filtering to one year.
 - Race detection: two-signal — Strava `workout_type == 1` OR name-pattern regex (covers older activities before Strava's race tag existed). Belt-and-suspenders approach.
 - PR detection: Strava `best_efforts` `pr_rank` for standard distances (5K, 10K, Half-Marathon, Marathon); pace-based fallback for non-standard (4 Mi, 5 Mi, 10 Mi, 12 Mi)
 - PR badges: "PR" (gold `#fee440`), "2nd" (silver `#c0c0c0`), "3rd" (bronze `#cd7f32`)

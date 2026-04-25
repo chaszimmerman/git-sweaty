@@ -3844,18 +3844,17 @@ function raceBadgeLabel(distanceMi) {
 function buildRacesCard(payload, types, years, units) {
   const typeSet = new Set(Array.isArray(types) ? types : []);
   const yearSet = new Set(Array.isArray(years) ? years.map(Number) : []);
-  const multiYear = yearSet.size !== 1;
   const distUnit = (units || {}).distance || "mi";
   const KM_PER_MI = 1.60934;
 
-  const raceActivities = (payload.activities || []).filter(
+  const allRaceActivities = (payload.activities || []).filter(
     (a) => a.is_race && typeSet.has(a.type) && yearSet.has(Number(a.year))
   );
 
   const card = document.createElement("div");
   card.className = "card races-card";
 
-  if (!raceActivities.length) {
+  if (!allRaceActivities.length) {
     const empty = document.createElement("div");
     empty.className = "races-empty";
     empty.textContent = "No races for current filters";
@@ -3863,7 +3862,8 @@ function buildRacesCard(payload, types, years, units) {
     return card;
   }
 
-  const enriched = raceActivities.map((a) => {
+  // Enrich all races — PR ranks always computed across all time, not just visible year.
+  const enrichedAll = allRaceActivities.map((a) => {
     const dateStr = String(a.date || "");
     const agg = payload.aggregates?.[String(a.year)]?.[a.type]?.[dateStr] || {};
     const distMeters = Number(agg.distance || 0);
@@ -3877,11 +3877,10 @@ function buildRacesCard(payload, types, years, units) {
     return { ...a, distMi, distDisplay, pace, raceTime, movingTime };
   }).sort((a, b) => b.date.localeCompare(a.date));
 
-  // PR rank: use Strava's official pr_rank for standard distances (5K, 10K, Half, Marathon).
-  // Fall back to pace-based computation for non-standard distances (4 Mi, 5 Mi, 10 Mi, 12 Mi).
+  // PR rank: Strava best_efforts for standard distances; pace-based fallback for others.
   const stravaRankedBadges = new Set(["5K", "10K", "Half", "Marathon"]);
   const bestPaceByBadge = {};
-  enriched.forEach((race) => {
+  enrichedAll.forEach((race) => {
     const badge = raceBadgeLabel(race.distMi);
     if (!badge || stravaRankedBadges.has(badge) || !race.movingTime || !race.distMi) return;
     const secPerMi = race.movingTime / race.distMi;
@@ -3889,7 +3888,7 @@ function buildRacesCard(payload, types, years, units) {
       bestPaceByBadge[badge] = secPerMi;
     }
   });
-  enriched.forEach((race) => {
+  enrichedAll.forEach((race) => {
     const badge = raceBadgeLabel(race.distMi);
     if (race.strava_pr_rank) {
       race.prRank = race.strava_pr_rank;
@@ -3901,26 +3900,38 @@ function buildRacesCard(payload, types, years, units) {
     }
   });
 
+  // Year chips — only shown when multiple years have races.
+  const raceYears = [...new Set(enrichedAll.map((r) => Number(r.year)))].sort((a, b) => b - a);
+  let activeYear = null; // null = All
+
+  let chipRow = null;
+  if (raceYears.length > 1) {
+    chipRow = document.createElement("div");
+    chipRow.className = "races-chip-row";
+    ["All", ...raceYears].forEach((yr) => {
+      const btn = document.createElement("button");
+      btn.className = "races-chip" + (yr === "All" ? " active" : "");
+      btn.textContent = String(yr);
+      btn.addEventListener("click", () => {
+        activeYear = yr === "All" ? null : Number(yr);
+        chipRow.querySelectorAll(".races-chip").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderTable();
+      });
+      chipRow.appendChild(btn);
+    });
+    card.appendChild(chipRow);
+  }
+
   const header = document.createElement("div");
   header.className = "races-header";
-  const count = enriched.length;
-  const yearLabel = !multiYear ? ` in ${[...yearSet][0]}` : "";
-  header.textContent = `${count} Race${count !== 1 ? "s" : ""}${yearLabel}`;
   card.appendChild(header);
 
-  const table = document.createElement("div");
-  table.className = "races-table";
+  const tableWrap = document.createElement("div");
+  card.appendChild(tableWrap);
 
-  const colHeader = document.createElement("div");
-  colHeader.className = "races-col-header";
-  ["Date", "Race", "Dist", "Time", "Pace", ""].forEach((label) => {
-    const th = document.createElement("div");
-    th.textContent = label;
-    colHeader.appendChild(th);
-  });
-  table.appendChild(colHeader);
-
-  enriched.forEach((race) => {
+  function buildTableRow(race) {
+    const showYear = activeYear === null;
     const row = document.createElement("div");
     row.className = "races-row";
 
@@ -3929,7 +3940,7 @@ function buildRacesCard(payload, types, years, units) {
     const d = new Date(race.date + "T00:00:00");
     const monthStr = d.toLocaleString("en-US", { month: "short" });
     const dayStr = d.getUTCDate();
-    dateEl.textContent = multiYear
+    dateEl.textContent = showYear
       ? `${monthStr} ${dayStr}, ${race.year}`
       : `${monthStr} ${dayStr}`;
     row.appendChild(dateEl);
@@ -3980,11 +3991,36 @@ function buildRacesCard(payload, types, years, units) {
       badgeEl.appendChild(pill);
     }
     row.appendChild(badgeEl);
+    return row;
+  }
 
-    table.appendChild(row);
-  });
+  function renderTable() {
+    const visible = activeYear === null
+      ? enrichedAll
+      : enrichedAll.filter((r) => Number(r.year) === activeYear);
 
-  card.appendChild(table);
+    const count = visible.length;
+    const yearLabel = activeYear !== null ? ` in ${activeYear}` : "";
+    header.textContent = `${count} Race${count !== 1 ? "s" : ""}${yearLabel}`;
+
+    tableWrap.innerHTML = "";
+    const table = document.createElement("div");
+    table.className = "races-table";
+
+    const colHeader = document.createElement("div");
+    colHeader.className = "races-col-header";
+    ["Date", "Race", "Dist", "Time", "Pace", ""].forEach((label) => {
+      const th = document.createElement("div");
+      th.textContent = label;
+      colHeader.appendChild(th);
+    });
+    table.appendChild(colHeader);
+
+    visible.forEach((race) => table.appendChild(buildTableRow(race)));
+    tableWrap.appendChild(table);
+  }
+
+  renderTable();
   return card;
 }
 
@@ -5479,10 +5515,12 @@ async function init() {
         if (cardYears.length) {
           const monthlyCard = buildMonthlyHeatmap(payload, types, cardYears, currentUnits);
           list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
+        }
+        yearCardRows.forEach((row) => list.appendChild(row));
+        if (cardYears.length) {
           const racesCard = buildRacesCard(payload, types, years, currentUnits);
           list.appendChild(buildLabeledCardRow("Races", racesCard, "races"));
         }
-        yearCardRows.forEach((row) => list.appendChild(row));
         section.appendChild(list);
         heatmaps.appendChild(section);
       } else {
@@ -5528,10 +5566,12 @@ async function init() {
           if (cardYears.length) {
             const monthlyCard = buildMonthlyHeatmap(payload, [type], cardYears, currentUnits);
             list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
+          }
+          typeYearCardRows.forEach((row) => list.appendChild(row));
+          if (cardYears.length) {
             const racesCard = buildRacesCard(payload, [type], years, currentUnits);
             list.appendChild(buildLabeledCardRow("Races", racesCard, "races"));
           }
-          typeYearCardRows.forEach((row) => list.appendChild(row));
           if (!list.childElementCount) {
             return;
           }
