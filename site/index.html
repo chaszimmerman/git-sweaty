@@ -1516,6 +1516,122 @@
       }
       /* ── End Monthly Activity Heatmap ───────────────────────────── */
 
+      /* ── Races Card ─────────────────────────────────────────────── */
+      .races-card {
+        padding: 20px 24px;
+      }
+      .races-header {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 12px;
+      }
+      .races-table {
+        display: grid;
+        grid-template-columns: auto 1fr auto auto auto auto;
+        gap: 0;
+        width: 100%;
+      }
+      .races-col-header {
+        display: contents;
+      }
+      .races-col-header > div {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0 8px 8px 0;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      }
+      .races-col-header > div:last-child {
+        padding-right: 0;
+      }
+      .races-row {
+        display: contents;
+      }
+      .races-row > div {
+        font-size: 13px;
+        padding: 7px 8px 7px 0;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.07);
+        display: flex;
+        align-items: center;
+        color: var(--text);
+      }
+      .races-row:last-child > div {
+        border-bottom: none;
+      }
+      .races-row > div:last-child {
+        padding-right: 0;
+      }
+      .races-date {
+        white-space: nowrap;
+        color: var(--muted) !important;
+        font-size: 12px !important;
+        min-width: 90px;
+      }
+      .races-name {
+        padding-right: 16px !important;
+      }
+      .races-dist {
+        white-space: nowrap;
+        color: var(--muted) !important;
+        font-size: 12px !important;
+        min-width: 52px;
+      }
+      .races-time {
+        white-space: nowrap;
+        color: var(--muted) !important;
+        font-size: 12px !important;
+        min-width: 60px;
+      }
+      .races-pace {
+        white-space: nowrap;
+        color: var(--muted) !important;
+        font-size: 12px !important;
+        min-width: 72px;
+      }
+      .races-badge-cell {
+        min-width: 52px;
+        justify-content: flex-end !important;
+        gap: 4px;
+      }
+      .races-badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        color: #fb5607;
+        background: rgba(251, 86, 7, 0.12);
+        border: 1px solid rgba(251, 86, 7, 0.3);
+        border-radius: 4px;
+        padding: 2px 6px;
+        white-space: nowrap;
+      }
+      .races-badge-pr {
+        color: #fee440;
+        background: rgba(254, 228, 64, 0.12);
+        border-color: rgba(254, 228, 64, 0.35);
+      }
+      .races-badge-2nd {
+        color: #c0c0c0;
+        background: rgba(192, 192, 192, 0.1);
+        border-color: rgba(192, 192, 192, 0.3);
+      }
+      .races-badge-3rd {
+        color: #cd7f32;
+        background: rgba(205, 127, 50, 0.1);
+        border-color: rgba(205, 127, 50, 0.3);
+      }
+      .races-empty {
+        font-size: 13px;
+        color: var(--muted);
+        padding: 20px 0;
+        text-align: center;
+      }
+      /* ── End Races Card ──────────────────────────────────────────── */
+
       .tooltip {
         position: fixed;
         pointer-events: none;

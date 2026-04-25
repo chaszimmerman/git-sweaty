@@ -165,13 +165,19 @@ def _load_activities(
         if source == "garmin" and include_garmin_activity_urls:
             include_provider_activity_urls = True
 
+        is_race = bool(item.get("is_race"))
+        if is_race:
+            activity["is_race"] = True
+        strava_pr_rank = item.get("strava_pr_rank")
+        if strava_pr_rank and int(strava_pr_rank) in (1, 2, 3):
+            activity["strava_pr_rank"] = int(strava_pr_rank)
         if include_provider_activity_urls:
             url = _activity_url_from_id(source, item.get("id"))
             if url:
                 activity["url"] = url
-                activity_name = str(item.get("name") or "").strip()
-                if activity_name:
-                    activity["name"] = activity_name
+        activity_name = str(item.get("name") or "").strip()
+        if activity_name and (include_provider_activity_urls or is_race):
+            activity["name"] = activity_name
         activities.append(activity)
     return activities
 

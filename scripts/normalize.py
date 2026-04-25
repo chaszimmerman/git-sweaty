@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 from typing import Any, Dict, List
 
 from activity_types import canonicalize_activity_type, featured_types_from_config, normalize_activity_type
@@ -11,6 +12,43 @@ from provider_fields import (
 from utils import ensure_dir, load_config, normalize_source, parse_iso_datetime, raw_activity_dir, read_json, write_json
 
 OUT_PATH = os.path.join("data", "activities_normalized.json")
+RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
+
+_RACE_NAME_RE = re.compile(
+    r"\b(race|races|5k|10k|15k|half|marathon|miler|milers|dash|trot|solstice)\b",
+    re.IGNORECASE,
+)
+_BADGE_TO_STRAVA_EFFORT = {
+    "5K":       "5k",
+    "10K":      "10k",
+    "Half":     "Half-Marathon",
+    "Marathon": "Marathon",
+}
+
+
+def _race_badge_label_mi(dist_mi: float) -> str:
+    if 2.9  <= dist_mi <= 3.4:  return "5K"
+    if 3.7  <= dist_mi <= 4.2:  return "4 Mi"
+    if 4.9  <= dist_mi <= 5.3:  return "5 Mi"
+    if 6.0  <= dist_mi <= 6.6:  return "10K"
+    if 9.8  <= dist_mi <= 10.4: return "10 Mi"
+    if 11.7 <= dist_mi <= 12.4: return "12 Mi"
+    if 13.0 <= dist_mi <= 13.5: return "Half"
+    if 26.0 <= dist_mi <= 26.5: return "Marathon"
+    return ""
+
+
+def _extract_strava_pr_rank(dist_meters: float, best_efforts: List[Dict]) -> int:
+    dist_mi = dist_meters * 0.000621371
+    effort_name = _BADGE_TO_STRAVA_EFFORT.get(_race_badge_label_mi(dist_mi))
+    if not effort_name:
+        return 0
+    for effort in (best_efforts or []):
+        if effort.get("name") == effort_name:
+            rank = effort.get("pr_rank")
+            if rank in (1, 2, 3):
+                return int(rank)
+    return 0
 
 
 def _coalesce(*values: Any) -> Any:
@@ -83,6 +121,8 @@ def _normalize_activity(activity: Dict, type_aliases: Dict[str, str], source: st
         activity.get("totalElevationGain"),
     )
     activity_name = str(_coalesce(activity.get("name"), activity.get("activityName"), "") or "").strip()
+    workout_type = activity.get("workout_type")
+    is_race = workout_type == 1 or bool(_RACE_NAME_RE.search(activity_name))
 
     normalized = {
         "id": str(activity_id),
@@ -98,6 +138,8 @@ def _normalize_activity(activity: Dict, type_aliases: Dict[str, str], source: st
     }
     if activity_name:
         normalized["name"] = activity_name
+    if is_race:
+        normalized["is_race"] = True
     return normalized
 
 
@@ -174,7 +216,26 @@ def normalize() -> List[Dict]:
         for item in existing.values()
         if item.get("id") is not None and item.get("date")
     ]
+    race_best_efforts: Dict[str, List] = {}
+    if os.path.exists(RACE_BEST_EFFORTS_PATH):
+        try:
+            race_best_efforts = read_json(RACE_BEST_EFFORTS_PATH) or {}
+        except Exception:
+            pass
+
     for item in items:
+        if "is_race" not in item:
+            activity_name = str(item.get("name") or "").strip()
+            if _RACE_NAME_RE.search(activity_name):
+                item["is_race"] = True
+        if item.get("is_race"):
+            activity_id = str(item.get("id") or "")
+            efforts = race_best_efforts.get(activity_id, [])
+            pr_rank = _extract_strava_pr_rank(float(item.get("distance") or 0), efforts)
+            if pr_rank:
+                item["strava_pr_rank"] = pr_rank
+            elif "strava_pr_rank" in item:
+                del item["strava_pr_rank"]
         raw_activity_type = str(item.get("raw_activity_type") or item.get("raw_type") or item.get("type") or other_bucket)
         raw_type = str(item.get("raw_type") or raw_activity_type or other_bucket)
         item["raw_activity_type"] = raw_activity_type

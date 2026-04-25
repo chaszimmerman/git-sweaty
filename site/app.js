@@ -2547,6 +2547,18 @@ function createTooltipLinkedTypeLine(prefix, label, suffix, href) {
   return segments;
 }
 
+function formatPace(movingTimeSec, distanceMeters, distUnit) {
+  if (!movingTimeSec || !distanceMeters) return null;
+  const dist = distUnit === "km" ? distanceMeters / 1000 : distanceMeters / 1609.344;
+  if (dist <= 0) return null;
+  const secPerUnit = movingTimeSec / dist;
+  if (!isFinite(secPerUnit) || secPerUnit <= 0) return null;
+  const mins = Math.floor(secPerUnit / 60);
+  const secs = Math.round(secPerUnit % 60);
+  const secsStr = secs < 10 ? `0${secs}` : `${secs}`;
+  return `${mins}:${secsStr} /${distUnit === "km" ? "km" : "mi"}`;
+}
+
 function formatTooltipDuration(seconds) {
   const durationMinutes = Math.round(Number(seconds || 0) / 60);
   if (durationMinutes >= 60) {
@@ -2722,10 +2734,12 @@ function buildCombinedTypeDetailsByDate(payload, types, years) {
   const typeBreakdownsByDate = {};
   const activityLinksByDateType = {};
   const typeMetricsByDateType = {};
+  const raceDateKeys = new Set();
   const activities = getFilteredActivities(payload, types, years);
 
   activities.forEach((activity) => {
     const dateStr = String(activity.date || "");
+    if (activity.is_race && dateStr) raceDateKeys.add(dateStr);
     if (!dateStr) return;
     if (!detailsByDate[dateStr]) {
       detailsByDate[dateStr] = {
@@ -2830,6 +2844,7 @@ function buildCombinedTypeDetailsByDate(payload, types, years) {
     typeBreakdownsByDate,
     activityLinksByDateType,
     typeMetricsByDateType,
+    raceDateKeys,
   };
 }
 
@@ -3251,6 +3266,12 @@ function buildHeatmapArea(aggregates, year, units, colors, type, layout, options
       cell.style.background = filled ? colors[4] : colors[0];
     }
 
+    const isRaceDate = filled && options.raceDateKeys instanceof Set && options.raceDateKeys.has(dateStr);
+    if (isRaceDate) {
+      cell.style.outline = "2px solid #fb5607";
+      cell.style.outlineOffset = "-2px";
+    }
+
     const typeBreakdown = type === "all" ? options.typeBreakdownsByDate?.[dateStr] : null;
     const typeLabels = type === "all" ? options.typeLabelsByDate?.[dateStr] : null;
     const activityLinksByType = options.activityLinksByDateType?.[dateStr] || {};
@@ -3264,6 +3285,10 @@ function buildHeatmapArea(aggregates, year, units, colors, type, layout, options
     const shouldShowPerTypeMetrics = type === "all" && Number(entry.count || 0) > 1;
     let renderedTypeBreakdown = false;
     const lines = [createTooltipTextLine(dateStr)];
+    if (isRaceDate) {
+      const pace = formatPace(Number(entry.moving_time || 0), Number(entry.distance || 0), units?.distance);
+      lines.push(createTooltipTextLine(pace ? `Race · ${pace}` : "Race"));
+    }
     if (singleTypeLabel) {
       lines.push(createTooltipLinkedTypeLine("", singleTypeLabel, "", singleActivityLink));
     } else {
@@ -3792,6 +3817,175 @@ function buildStatPanel(title, subtitle) {
   body.className = "stat-body";
   panel.appendChild(body);
   return { panel, body };
+}
+
+function formatRaceTime(seconds) {
+  if (!seconds || seconds <= 0) return null;
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.round(seconds % 60);
+  const mm = m < 10 ? `0${m}` : `${m}`;
+  const ss = s < 10 ? `0${s}` : `${s}`;
+  return h > 0 ? `${h}:${mm}:${ss}` : `${m}:${ss}`;
+}
+
+function raceBadgeLabel(distanceMi) {
+  if (distanceMi >= 2.9  && distanceMi <= 3.4)  return "5K";
+  if (distanceMi >= 3.7  && distanceMi <= 4.2)  return "4 Mi";
+  if (distanceMi >= 4.9  && distanceMi <= 5.3)  return "5 Mi";
+  if (distanceMi >= 6.0  && distanceMi <= 6.6)  return "10K";
+  if (distanceMi >= 9.8  && distanceMi <= 10.4) return "10 Mi";
+  if (distanceMi >= 11.7 && distanceMi <= 12.4) return "12 Mi";
+  if (distanceMi >= 13.0 && distanceMi <= 13.5) return "Half";
+  if (distanceMi >= 26.0 && distanceMi <= 26.5) return "Marathon";
+  return null;
+}
+
+function buildRacesCard(payload, types, years, units) {
+  const typeSet = new Set(Array.isArray(types) ? types : []);
+  const yearSet = new Set(Array.isArray(years) ? years.map(Number) : []);
+  const multiYear = yearSet.size !== 1;
+  const distUnit = (units || {}).distance || "mi";
+  const KM_PER_MI = 1.60934;
+
+  const raceActivities = (payload.activities || []).filter(
+    (a) => a.is_race && typeSet.has(a.type) && yearSet.has(Number(a.year))
+  );
+
+  const card = document.createElement("div");
+  card.className = "card races-card";
+
+  if (!raceActivities.length) {
+    const empty = document.createElement("div");
+    empty.className = "races-empty";
+    empty.textContent = "No races for current filters";
+    card.appendChild(empty);
+    return card;
+  }
+
+  const enriched = raceActivities.map((a) => {
+    const dateStr = String(a.date || "");
+    const agg = payload.aggregates?.[String(a.year)]?.[a.type]?.[dateStr] || {};
+    const distMeters = Number(agg.distance || 0);
+    const distMi = distMeters * 0.000621371;
+    const distDisplay = distUnit === "km"
+      ? `${(distMi * KM_PER_MI).toFixed(1)} km`
+      : `${distMi.toFixed(1)} mi`;
+    const movingTime = Number(agg.moving_time || 0);
+    const pace = formatPace(movingTime, distMeters, distUnit);
+    const raceTime = formatRaceTime(movingTime);
+    return { ...a, distMi, distDisplay, pace, raceTime, movingTime };
+  }).sort((a, b) => b.date.localeCompare(a.date));
+
+  // PR rank: use Strava's official pr_rank for standard distances (5K, 10K, Half, Marathon).
+  // Fall back to pace-based computation for non-standard distances (4 Mi, 5 Mi, 10 Mi, 12 Mi).
+  const stravaRankedBadges = new Set(["5K", "10K", "Half", "Marathon"]);
+  const bestPaceByBadge = {};
+  enriched.forEach((race) => {
+    const badge = raceBadgeLabel(race.distMi);
+    if (!badge || stravaRankedBadges.has(badge) || !race.movingTime || !race.distMi) return;
+    const secPerMi = race.movingTime / race.distMi;
+    if (!(badge in bestPaceByBadge) || secPerMi < bestPaceByBadge[badge]) {
+      bestPaceByBadge[badge] = secPerMi;
+    }
+  });
+  enriched.forEach((race) => {
+    const badge = raceBadgeLabel(race.distMi);
+    if (race.strava_pr_rank) {
+      race.prRank = race.strava_pr_rank;
+    } else if (badge && !stravaRankedBadges.has(badge) && race.movingTime && race.distMi) {
+      const secPerMi = race.movingTime / race.distMi;
+      race.prRank = secPerMi === bestPaceByBadge[badge] ? 1 : 0;
+    } else {
+      race.prRank = 0;
+    }
+  });
+
+  const header = document.createElement("div");
+  header.className = "races-header";
+  const count = enriched.length;
+  const yearLabel = !multiYear ? ` in ${[...yearSet][0]}` : "";
+  header.textContent = `${count} Race${count !== 1 ? "s" : ""}${yearLabel}`;
+  card.appendChild(header);
+
+  const table = document.createElement("div");
+  table.className = "races-table";
+
+  const colHeader = document.createElement("div");
+  colHeader.className = "races-col-header";
+  ["Date", "Race", "Dist", "Time", "Pace", ""].forEach((label) => {
+    const th = document.createElement("div");
+    th.textContent = label;
+    colHeader.appendChild(th);
+  });
+  table.appendChild(colHeader);
+
+  enriched.forEach((race) => {
+    const row = document.createElement("div");
+    row.className = "races-row";
+
+    const dateEl = document.createElement("div");
+    dateEl.className = "races-date";
+    const d = new Date(race.date + "T00:00:00");
+    const monthStr = d.toLocaleString("en-US", { month: "short" });
+    const dayStr = d.getUTCDate();
+    dateEl.textContent = multiYear
+      ? `${monthStr} ${dayStr}, ${race.year}`
+      : `${monthStr} ${dayStr}`;
+    row.appendChild(dateEl);
+
+    const nameEl = document.createElement("div");
+    nameEl.className = "races-name";
+    nameEl.textContent = race.name || displayType(race.type);
+    row.appendChild(nameEl);
+
+    const distEl = document.createElement("div");
+    distEl.className = "races-dist";
+    distEl.textContent = race.distDisplay;
+    row.appendChild(distEl);
+
+    const timeEl = document.createElement("div");
+    timeEl.className = "races-time";
+    timeEl.textContent = race.raceTime || "";
+    row.appendChild(timeEl);
+
+    const paceEl = document.createElement("div");
+    paceEl.className = "races-pace";
+    paceEl.textContent = race.pace || "";
+    row.appendChild(paceEl);
+
+    const badgeEl = document.createElement("div");
+    badgeEl.className = "races-badge-cell";
+    if (race.prRank === 1) {
+      const prPill = document.createElement("span");
+      prPill.className = "races-badge races-badge-pr";
+      prPill.textContent = "PR";
+      badgeEl.appendChild(prPill);
+    } else if (race.prRank === 2) {
+      const prPill = document.createElement("span");
+      prPill.className = "races-badge races-badge-2nd";
+      prPill.textContent = "2nd";
+      badgeEl.appendChild(prPill);
+    } else if (race.prRank === 3) {
+      const prPill = document.createElement("span");
+      prPill.className = "races-badge races-badge-3rd";
+      prPill.textContent = "3rd";
+      badgeEl.appendChild(prPill);
+    }
+    const badge = raceBadgeLabel(race.distMi);
+    if (badge) {
+      const pill = document.createElement("span");
+      pill.className = "races-badge";
+      pill.textContent = badge;
+      badgeEl.appendChild(pill);
+    }
+    row.appendChild(badgeEl);
+
+    table.appendChild(row);
+  });
+
+  card.appendChild(table);
+  return card;
 }
 
 function buildMonthlyHeatmap(payload, types, years, units) {
@@ -5211,6 +5405,7 @@ async function init() {
         typeBreakdownsByDate,
         activityLinksByDateType,
         typeMetricsByDateType,
+        raceDateKeys,
       } = buildCombinedTypeDetailsByDate(payload, types, years);
       if (showCombinedTypes) {
         const section = document.createElement("div");
@@ -5271,6 +5466,7 @@ async function init() {
               typeLabelsByDate,
               activityLinksByDateType,
               typeMetricsByDateType,
+              raceDateKeys,
             },
           );
           setCardScrollKey(card, `${combinedSelectionKey}:year:${year}`);
@@ -5283,6 +5479,8 @@ async function init() {
         if (cardYears.length) {
           const monthlyCard = buildMonthlyHeatmap(payload, types, cardYears, currentUnits);
           list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
+          const racesCard = buildRacesCard(payload, types, years, currentUnits);
+          list.appendChild(buildLabeledCardRow("Races", racesCard, "races"));
         }
         yearCardRows.forEach((row) => list.appendChild(row));
         section.appendChild(list);
@@ -5330,6 +5528,8 @@ async function init() {
           if (cardYears.length) {
             const monthlyCard = buildMonthlyHeatmap(payload, [type], cardYears, currentUnits);
             list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
+            const racesCard = buildRacesCard(payload, [type], years, currentUnits);
+            list.appendChild(buildLabeledCardRow("Races", racesCard, "races"));
           }
           typeYearCardRows.forEach((row) => list.appendChild(row));
           if (!list.childElementCount) {

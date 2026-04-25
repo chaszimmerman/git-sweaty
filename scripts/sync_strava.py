@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import shutil
 import sys
 import time
@@ -26,8 +27,40 @@ STATE_PATH = os.path.join("data", "backfill_state_strava.json")
 LEGACY_STATE_PATH = os.path.join("data", "backfill_state.json")
 ATHLETE_PATH = os.path.join("data", "athletes_strava.json")
 LEGACY_ATHLETE_PATH = os.path.join("data", "athletes.json")
+RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
 TRANSIENT_HTTP_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504, 597}
 MAX_REQUEST_ATTEMPTS = 5
+
+_RACE_NAME_RE = re.compile(
+    r"\b(race|races|5k|10k|15k|half|marathon|miler|milers|dash|trot|solstice)\b",
+    re.IGNORECASE,
+)
+# Strava best_effort names for standard race distances
+_STRAVA_EFFORT_BY_BADGE = {
+    "5K":       "5k",
+    "10K":      "10k",
+    "Half":     "Half-Marathon",
+    "Marathon": "Marathon",
+}
+
+
+def _race_badge_label_mi(dist_mi: float) -> Optional[str]:
+    if 2.9  <= dist_mi <= 3.4:  return "5K"
+    if 3.7  <= dist_mi <= 4.2:  return "4 Mi"
+    if 4.9  <= dist_mi <= 5.3:  return "5 Mi"
+    if 6.0  <= dist_mi <= 6.6:  return "10K"
+    if 9.8  <= dist_mi <= 10.4: return "10 Mi"
+    if 11.7 <= dist_mi <= 12.4: return "12 Mi"
+    if 13.0 <= dist_mi <= 13.5: return "Half"
+    if 26.0 <= dist_mi <= 26.5: return "Marathon"
+    return None
+
+
+def _is_strava_race(activity: Dict) -> bool:
+    if activity.get("workout_type") == 1:
+        return True
+    name = str(activity.get("name") or "").strip()
+    return bool(_RACE_NAME_RE.search(name))
 
 
 class RateLimitExceeded(RuntimeError):
@@ -547,6 +580,72 @@ def _maybe_reset_for_new_athlete(
     return token
 
 
+def _fetch_detailed_activity(token: str, activity_id: str, limiter: Optional[RateLimiter]) -> Dict:
+    return _request_json_with_retry(
+        "GET",
+        f"https://www.strava.com/api/v3/activities/{activity_id}",
+        limiter=limiter,
+        request_kind="read",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+
+def _enrich_race_best_efforts(
+    config: Dict, token: str, limiter: RateLimiter, dry_run: bool
+) -> Tuple[int, str]:
+    """Fetch Strava best_efforts for standard-distance race activities and persist them."""
+    activities_path = os.path.join("data", "activities_normalized.json")
+    if not os.path.exists(activities_path):
+        return 0, token
+
+    items = read_json(activities_path) or []
+    existing = read_json(RACE_BEST_EFFORTS_PATH) if os.path.exists(RACE_BEST_EFFORTS_PATH) else {}
+    if not isinstance(existing, dict):
+        existing = {}
+
+    # Collect IDs for races with a standard Strava effort distance
+    to_fetch = []
+    for item in items:
+        if not item.get("is_race"):
+            continue
+        dist_mi = float(item.get("distance") or 0) * 0.000621371
+        badge = _race_badge_label_mi(dist_mi)
+        if badge not in _STRAVA_EFFORT_BY_BADGE:
+            continue
+        activity_id = str(item.get("id") or "").strip()
+        if activity_id:
+            to_fetch.append(activity_id)
+
+    if not to_fetch or dry_run:
+        return 0, token
+
+    print(f"Enriching best_efforts for {len(to_fetch)} standard-distance race(s)...")
+    enriched = 0
+    updated = dict(existing)
+    for activity_id in to_fetch:
+        try:
+            detailed, token = _run_with_token_refresh(
+                config, token, limiter, f"race detail {activity_id}",
+                lambda access_token, aid=activity_id: _fetch_detailed_activity(access_token, aid, limiter),
+            )
+            efforts = [
+                {"name": e.get("name"), "elapsed_time": e.get("elapsed_time"), "pr_rank": e.get("pr_rank")}
+                for e in (detailed.get("best_efforts") or [])
+                if e.get("pr_rank") in (1, 2, 3)
+            ]
+            updated[activity_id] = efforts
+            enriched += 1
+        except Exception as exc:
+            print(f"Warning: could not fetch detail for activity {activity_id}: {exc}")
+
+    if updated != existing:
+        ensure_dir("data")
+        write_json(RACE_BEST_EFFORTS_PATH, updated)
+
+    print(f"Race best_efforts enriched: {enriched}/{len(to_fetch)}")
+    return enriched, token
+
+
 def _write_activity(activity: Dict) -> bool:
     activity_id = activity.get("id")
     if not activity_id:
@@ -827,6 +926,10 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
     total_fetched = total + int(recent_summary.get("fetched", 0))
     total_new_or_updated = new_or_updated + int(recent_summary.get("new_or_updated", 0))
 
+    race_efforts_enriched = 0
+    if not rate_limited:
+        race_efforts_enriched, token = _enrich_race_best_efforts(config, token, limiter, dry_run)
+
     summary = {
         "source": "strava",
         "fetched": total_fetched,
@@ -841,6 +944,7 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
     }
     if rate_limited:
         summary["rate_limit_message"] = rate_limit_message
+    summary["race_efforts_enriched"] = race_efforts_enriched
     return summary
 
 
