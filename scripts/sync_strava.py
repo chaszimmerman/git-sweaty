@@ -603,10 +603,13 @@ def _enrich_race_best_efforts(
     if not isinstance(existing, dict):
         existing = {}
 
-    # Collect IDs for races with a standard Strava effort distance
+    # Collect IDs for races with a standard Strava effort distance.
+    # Check both the persisted is_race flag and the name pattern so this works
+    # on first run before normalize has had a chance to write is_race flags.
     to_fetch = []
     for item in items:
-        if not item.get("is_race"):
+        is_race = item.get("is_race") or bool(_RACE_NAME_RE.search(str(item.get("name") or "")))
+        if not is_race:
             continue
         dist_mi = float(item.get("distance") or 0) * 0.000621371
         badge = _race_badge_label_mi(dist_mi)
