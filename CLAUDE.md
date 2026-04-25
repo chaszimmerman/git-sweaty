@@ -43,6 +43,7 @@ A GitHub Pages dashboard that turns Strava/Garmin workout activities into GitHub
 - `config.yaml` — base defaults (committed)
 - `config.local.yaml` — secrets/overrides (gitignored, written by CI from GitHub secrets)
 - Key config options: `source`, `sync.lookback_years`, `sync.start_date`, `activities.types`, `units.distance`, `heatmaps.week_start`
+- `activities.exclude_race_ids` — list of Strava activity IDs to exclude from race detection (name-pattern false positives)
 
 ## Fork Customizations (vs upstream aspain/git-sweaty)
 Changes made to `site/app.js` and `site/index.html` — do not blindly overwrite on upstream sync.
@@ -65,7 +66,19 @@ Added to `TYPE_ACCENT_OVERRIDES` in `app.js` for visual distinction across all d
 Layout order within the heatmaps section (top → bottom):
 1. Activity Frequency
 2. Monthly Activity (new)
-3. Year heatmaps (2026, 2025, ...)
+3. Races (new)
+4. Year heatmaps (2026, 2025, ...)
+
+### Races card (`buildRacesCard`)
+New section between Monthly Activity and the year heatmaps, listing all detected race activities.
+- Columns: Date · Name · Distance · Time · Pace · PR badge
+- Race detection: two-signal — Strava `workout_type == 1` OR name-pattern regex (covers older activities before Strava's race tag existed). Belt-and-suspenders approach.
+- PR detection: Strava `best_efforts` `pr_rank` for standard distances (5K, 10K, Half-Marathon, Marathon); pace-based fallback for non-standard (4 Mi, 5 Mi, 10 Mi, 12 Mi)
+- PR badges: "PR" (gold `#fee440`), "2nd" (silver `#c0c0c0`), "3rd" (bronze `#cd7f32`)
+- `data/race_best_efforts.json` — persisted to `dashboard-data` branch; re-fetched every sync to stay current when new PRs are set
+- Tooltips on all race-day heatmap cells show "Race · pace" in addition to normal activity info
+- Race days get an orange ring border (`#fb5607`, `outline: 2px solid`) on heatmap cells — preserves type color fill
+- False positives (naming errors): add the Strava activity ID to `activities.exclude_race_ids` in `config.yaml`
 
 ### Year card metric reset (Total Activities button)
 In `buildCard` in `app.js`, the "Total Activities" stat card is now a `button` (was a plain `div`).

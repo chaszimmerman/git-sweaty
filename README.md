@@ -97,12 +97,24 @@ The upstream color assignments produced visually similar colors for some activit
 
 These overrides apply globally across the entire dashboard (frequency chart, year heatmaps, monthly heatmap, and legend dots).
 
+### Races Card
+
+A **Races** section appears between Monthly Activity and the year heatmaps, listing all detected race activities in reverse-chronological order.
+
+- Columns: Date · Name · Distance · Time · Pace · PR badge
+- Race detection uses Strava's `workout_type` flag **and** name-pattern matching (covers older activities before Strava introduced the race tag)
+- PR badges (**PR** / **2nd** / **3rd**) are sourced from Strava's official `best_efforts` API for standard distances (5K, 10K, Half-Marathon, Marathon); pace-based fallback applies to non-standard distances
+- Race days show an **orange ring border** on heatmap cells (all year heatmaps), preserving the activity-type fill color
+- Race tooltips include average pace
+- To suppress a false-positive (naming error), add the Strava activity ID to `activities.exclude_race_ids` in `config.yaml`
+
 ### Section Order
 
 The dashboard renders sections in this order:
 1. Activity Frequency (bar chart)
 2. **Monthly Activity** (heatmap — this fork)
-3. Year-by-year contribution heatmaps
+3. **Races** (this fork)
+4. Year-by-year contribution heatmaps
 
 ---
 
@@ -145,6 +157,7 @@ Activity type behavior:
 - `activities.group_aliases` (map canonical type names to explicit grouped labels)
 - `activities.group_other_types` (when `true`, non-featured types are grouped into broader buckets; repo default is `false`)
 - `activities.other_bucket` (fallback group name when grouped type matching has no hit)
+- `activities.exclude_race_ids` (list of Strava activity IDs to exclude from race detection — useful for name-pattern false positives)
 
 Display + rate-limit settings:
 - `units.distance` (`mi` or `km`)
