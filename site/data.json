@@ -1997,7 +1997,6 @@
     {
       "date": "2022-11-25",
       "hour": 8,
-      "is_race": true,
       "name": "Post Thanksgiving/Turkey Trot & Pre USAENG World Cup Viewing Party Recovery Run",
       "subtype": "Run",
       "type": "Run",
@@ -18365,7 +18364,7 @@
       }
     }
   },
-  "generated_at": "2026-04-25T20:19:29.061995+00:00",
+  "generated_at": "2026-04-25T20:25:54.660257+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
