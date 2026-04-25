@@ -192,6 +192,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2022-02-12T10:08:12Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2022
   },
@@ -375,6 +376,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2022-02-26T15:09:46Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2022
   },
@@ -806,6 +808,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2022-04-09T08:34:19Z",
+    "strava_pr_rank": 2,
     "type": "Run",
     "year": 2022
   },
@@ -2358,6 +2361,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2022-09-25T08:32:48Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2022
   },
@@ -3804,6 +3808,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2023-03-11T07:07:02Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2023
   },
@@ -3818,6 +3823,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2023-03-12T13:04:25Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2023
   },
@@ -4040,6 +4046,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2023-04-08T08:33:43Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2023
   },
@@ -6072,6 +6079,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2023-11-15T17:35:23Z",
+    "strava_pr_rank": 2,
     "type": "Run",
     "year": 2023
   },
@@ -7273,6 +7281,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2024-04-06T08:30:21Z",
+    "strava_pr_rank": 3,
     "type": "Run",
     "year": 2024
   },
@@ -10184,6 +10193,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2025-03-16T13:02:05Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2025
   },
@@ -10341,6 +10351,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2025-04-05T08:30:39Z",
+    "strava_pr_rank": 2,
     "type": "Run",
     "year": 2025
   },
@@ -10576,6 +10587,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2025-05-10T09:00:34Z",
+    "strava_pr_rank": 3,
     "type": "Run",
     "year": 2025
   },
@@ -12978,6 +12990,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2026-03-15T13:00:36Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2026
   },
@@ -13018,6 +13031,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2026-03-21T07:02:23Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2026
   },
@@ -13266,6 +13280,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2026-04-25T08:32:22Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2026
   }
