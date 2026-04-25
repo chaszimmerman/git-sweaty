@@ -170,6 +170,7 @@ def normalize() -> List[Dict]:
     featured_types = featured_types_from_config(activities_cfg)
     include_all_types = bool(activities_cfg.get("include_all_types", True))
     exclude_types = {str(item) for item in (activities_cfg.get("exclude_types", []) or [])}
+    exclude_race_ids = {str(item) for item in (activities_cfg.get("exclude_race_ids", []) or [])}
     group_other_types = bool(activities_cfg.get("group_other_types", True))
     other_bucket = str(activities_cfg.get("other_bucket", "OtherSports"))
     group_aliases = activities_cfg.get("group_aliases", {}) or {}
@@ -225,6 +226,10 @@ def normalize() -> List[Dict]:
             pass
 
     for item in items:
+        if str(item.get("id") or "") in exclude_race_ids:
+            item.pop("is_race", None)
+            item.pop("strava_pr_rank", None)
+            continue
         if "is_race" not in item:
             activity_name = str(item.get("name") or "").strip()
             if _RACE_NAME_RE.search(activity_name):

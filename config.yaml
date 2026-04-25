@@ -91,6 +91,8 @@ activities:
   other_bucket: OtherSports # fallback bucket for unknown activity categories
   group_aliases: {}         # optional explicit group overrides, e.g. {SkiErg: WinterSports}
   type_aliases: {}          # optional explicit remaps; keep empty for exact source naming
+  exclude_race_ids:         # activity IDs to exclude from race detection (name-pattern false positives)
+    - 8166514475            # "Post Thanksgiving/Turkey Trot & Pre USAENG..." — naming error, not a race
 
 units:
   distance: "mi"   # "mi" or "km"
