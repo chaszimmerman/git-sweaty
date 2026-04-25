@@ -13206,5 +13206,18 @@
     "start_date_local": "2026-04-24T11:54:11Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-04-25",
+    "distance": 10074.6,
+    "elevation_gain": 67.0,
+    "id": "18252142978",
+    "moving_time": 2931.0,
+    "name": "Sole of the City 10K Race",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-04-25T08:32:22Z",
+    "type": "Run",
+    "year": 2026
   }
 ]

@@ -9143,6 +9143,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/18240823496",
       "year": 2026
+    },
+    {
+      "date": "2026-04-25",
+      "hour": 8,
+      "name": "Sole of the City 10K Race",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/18252142978",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -18268,6 +18277,15 @@
           "distance": 3822.9,
           "elevation_gain": 0.0,
           "moving_time": 1346.0
+        },
+        "2026-04-25": {
+          "activity_ids": [
+            "18252142978"
+          ],
+          "count": 1,
+          "distance": 10074.6,
+          "elevation_gain": 67.0,
+          "moving_time": 2931.0
         }
       },
       "Walk": {
@@ -18283,7 +18301,7 @@
       }
     }
   },
-  "generated_at": "2026-04-24T21:17:17.423183+00:00",
+  "generated_at": "2026-04-25T15:38:41.397020+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
