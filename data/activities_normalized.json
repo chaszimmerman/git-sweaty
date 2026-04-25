@@ -9284,6 +9284,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2024-11-30T09:01:26Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2024
   },
@@ -11946,6 +11947,7 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2025-11-01T09:17:16Z",
+    "strava_pr_rank": 1,
     "type": "Run",
     "year": 2025
   },

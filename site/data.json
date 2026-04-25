@@ -6435,6 +6435,7 @@
       "hour": 9,
       "is_race": true,
       "name": "NCR Half Marathon Race",
+      "strava_pr_rank": 1,
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/13017203518",
@@ -8281,6 +8282,7 @@
       "hour": 9,
       "is_race": true,
       "name": "Ocean City Maryland Half Marathon Race",
+      "strava_pr_rank": 1,
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/16322508516",
@@ -18348,7 +18350,7 @@
       }
     }
   },
-  "generated_at": "2026-04-25T20:00:42.181088+00:00",
+  "generated_at": "2026-04-25T20:08:34.762555+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
