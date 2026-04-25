@@ -129,6 +129,7 @@
     {
       "date": "2022-02-12",
       "hour": 10,
+      "is_race": true,
       "name": "Morning 5K Run",
       "subtype": "Run",
       "type": "Run",
@@ -255,6 +256,7 @@
     {
       "date": "2022-02-26",
       "hour": 15,
+      "is_race": true,
       "name": "Afternoon Run 10k",
       "subtype": "Run",
       "type": "Run",
@@ -327,6 +329,7 @@
     {
       "date": "2022-03-08",
       "hour": 16,
+      "is_race": true,
       "name": "Afternoon Walk 5K",
       "subtype": "Walk",
       "type": "Walk",
@@ -552,6 +555,7 @@
     {
       "date": "2022-04-09",
       "hour": 8,
+      "is_race": true,
       "name": "Soul of the City 10k Morning Race",
       "subtype": "Run",
       "type": "Run",
@@ -894,6 +898,7 @@
     {
       "date": "2022-06-04",
       "hour": 7,
+      "is_race": true,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -948,6 +953,7 @@
     {
       "date": "2022-06-12",
       "hour": 9,
+      "is_race": true,
       "name": "Four Seasons Hotel Beat Cancer 5K with Elise",
       "subtype": "Run",
       "type": "Run",
@@ -984,6 +990,7 @@
     {
       "date": "2022-06-18",
       "hour": 8,
+      "is_race": true,
       "name": "Dads Day 5K Race in Patterson Park",
       "subtype": "Run",
       "type": "Run",
@@ -1461,6 +1468,7 @@
     {
       "date": "2022-09-03",
       "hour": 7,
+      "is_race": true,
       "name": "Morning Run Charles St 12 Race #Chas12",
       "subtype": "Run",
       "type": "Run",
@@ -1623,6 +1631,7 @@
     {
       "date": "2022-09-25",
       "hour": 8,
+      "is_race": true,
       "name": "NDP Blazer Dash 5K Race",
       "subtype": "Run",
       "type": "Run",
@@ -1974,6 +1983,7 @@
     {
       "date": "2022-11-24",
       "hour": 8,
+      "is_race": true,
       "name": "Towson Y Turkey Trot",
       "subtype": "Run",
       "type": "Run",
@@ -1983,6 +1993,7 @@
     {
       "date": "2022-11-25",
       "hour": 8,
+      "is_race": true,
       "name": "Post Thanksgiving/Turkey Trot & Pre USAENG World Cup Viewing Party Recovery Run",
       "subtype": "Run",
       "type": "Run",
@@ -2622,6 +2633,7 @@
     {
       "date": "2023-03-11",
       "hour": 7,
+      "is_race": true,
       "name": "Annapolis Running Festival 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -2631,6 +2643,7 @@
     {
       "date": "2023-03-12",
       "hour": 13,
+      "is_race": true,
       "name": "Baltimore Shamrock 5K Race",
       "subtype": "Run",
       "type": "Run",
@@ -2784,6 +2797,7 @@
     {
       "date": "2023-04-08",
       "hour": 8,
+      "is_race": true,
       "name": "Sole of the City 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -3090,6 +3104,7 @@
     {
       "date": "2023-06-03",
       "hour": 7,
+      "is_race": true,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -3261,6 +3276,7 @@
     {
       "date": "2023-07-04",
       "hour": 8,
+      "is_race": true,
       "name": "Towson 4 on the 4th Race",
       "subtype": "Run",
       "type": "Run",
@@ -3693,6 +3709,7 @@
     {
       "date": "2023-09-09",
       "hour": 7,
+      "is_race": true,
       "name": "Charles Street 12 Race",
       "subtype": "Run",
       "type": "Run",
@@ -4188,6 +4205,7 @@
     {
       "date": "2023-11-15",
       "hour": 17,
+      "is_race": true,
       "name": "Yahoo Run in the Dark 10k Fundraiser",
       "subtype": "Run",
       "type": "Run",
@@ -4242,6 +4260,7 @@
     {
       "date": "2023-11-23",
       "hour": 8,
+      "is_race": true,
       "name": "Towson Y Turkey Trot",
       "subtype": "Run",
       "type": "Run",
@@ -4377,6 +4396,7 @@
     {
       "date": "2023-12-16",
       "hour": 8,
+      "is_race": true,
       "name": "Celtic Solstice 5 Miler",
       "subtype": "Run",
       "type": "Run",
@@ -4854,6 +4874,7 @@
     {
       "date": "2024-03-09",
       "hour": 7,
+      "is_race": true,
       "name": "Annapolis Running Festival 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -4863,6 +4884,7 @@
     {
       "date": "2024-03-10",
       "hour": 13,
+      "is_race": true,
       "name": "Baltimore Shamrock 5K Race",
       "subtype": "Run",
       "type": "Run",
@@ -5016,6 +5038,7 @@
     {
       "date": "2024-04-06",
       "hour": 8,
+      "is_race": true,
       "name": "Sole of the City 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -5223,6 +5246,7 @@
     {
       "date": "2024-05-11",
       "hour": 9,
+      "is_race": true,
       "name": "Every Hour Every Day 5K Race",
       "subtype": "Run",
       "type": "Run",
@@ -5340,6 +5364,7 @@
     {
       "date": "2024-06-01",
       "hour": 7,
+      "is_race": true,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -5538,6 +5563,7 @@
     {
       "date": "2024-07-04",
       "hour": 8,
+      "is_race": true,
       "name": "Towson 4 on the 4th Race",
       "subtype": "Run",
       "type": "Run",
@@ -5772,6 +5798,7 @@
     {
       "date": "2024-08-18",
       "hour": 7,
+      "is_race": true,
       "name": "Dreaded Druid Hills 10k",
       "subtype": "Run",
       "type": "Run",
@@ -5889,6 +5916,7 @@
     {
       "date": "2024-09-07",
       "hour": 7,
+      "is_race": true,
       "name": "Charles St 12 Mile Race",
       "subtype": "Run",
       "type": "Run",
@@ -6114,6 +6142,7 @@
     {
       "date": "2024-10-13",
       "hour": 11,
+      "is_race": true,
       "name": "Trucktoberfest 5K Run w/ Lori",
       "subtype": "Run",
       "type": "Run",
@@ -6159,6 +6188,7 @@
     {
       "date": "2024-10-19",
       "hour": 8,
+      "is_race": true,
       "name": "Baltimore Running Festival 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -6393,6 +6423,7 @@
     {
       "date": "2024-11-28",
       "hour": 8,
+      "is_race": true,
       "name": "Morning Turkey Trot",
       "subtype": "Run",
       "type": "Run",
@@ -6402,6 +6433,7 @@
     {
       "date": "2024-11-30",
       "hour": 9,
+      "is_race": true,
       "name": "NCR Half Marathon Race",
       "subtype": "Run",
       "type": "Run",
@@ -6465,6 +6497,7 @@
     {
       "date": "2024-12-14",
       "hour": 8,
+      "is_race": true,
       "name": "Celtic Solstice 5 Miler",
       "subtype": "Run",
       "type": "Run",
@@ -7023,6 +7056,7 @@
     {
       "date": "2025-03-16",
       "hour": 13,
+      "is_race": true,
       "name": "Baltimore Shamrock 5K Race",
       "subtype": "Run",
       "type": "Run",
@@ -7131,6 +7165,7 @@
     {
       "date": "2025-04-05",
       "hour": 8,
+      "is_race": true,
       "name": "Sole of the City 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -7293,6 +7328,7 @@
     {
       "date": "2025-05-10",
       "hour": 9,
+      "is_race": true,
       "name": "Every Hour Every Day 5K(+)ish Race",
       "subtype": "Run",
       "type": "Run",
@@ -7446,6 +7482,7 @@
     {
       "date": "2025-06-07",
       "hour": 7,
+      "is_race": true,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -7599,6 +7636,7 @@
     {
       "date": "2025-07-04",
       "hour": 8,
+      "is_race": true,
       "name": "Towson 4 on the 4th Race",
       "subtype": "Run",
       "type": "Run",
@@ -7806,6 +7844,7 @@
     {
       "date": "2025-08-16",
       "hour": 7,
+      "is_race": true,
       "name": "Dreaded Druid Hills 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -7878,6 +7917,7 @@
     {
       "date": "2025-08-30",
       "hour": 7,
+      "is_race": true,
       "name": "Charles Street 12 Mile Race #chuck12 #chas12",
       "subtype": "Run",
       "type": "Run",
@@ -8157,6 +8197,7 @@
     {
       "date": "2025-10-18",
       "hour": 8,
+      "is_race": true,
       "name": "Baltimore Running Festival 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -8238,6 +8279,7 @@
     {
       "date": "2025-11-01",
       "hour": 9,
+      "is_race": true,
       "name": "Ocean City Maryland Half Marathon Race",
       "subtype": "Run",
       "type": "Run",
@@ -8436,6 +8478,7 @@
     {
       "date": "2025-12-07",
       "hour": 8,
+      "is_race": true,
       "name": "Angel Park 5K",
       "subtype": "Run",
       "type": "Run",
@@ -8472,6 +8515,7 @@
     {
       "date": "2025-12-13",
       "hour": 8,
+      "is_race": true,
       "name": "Celtic Solstice 5 Miler",
       "subtype": "Run",
       "type": "Run",
@@ -8949,6 +8993,7 @@
     {
       "date": "2026-03-15",
       "hour": 13,
+      "is_race": true,
       "name": "Baltimore Shamrock 5K Race",
       "subtype": "Run",
       "type": "Run",
@@ -8976,6 +9021,7 @@
     {
       "date": "2026-03-21",
       "hour": 7,
+      "is_race": true,
       "name": "Annapolis Running Festival 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -9147,6 +9193,7 @@
     {
       "date": "2026-04-25",
       "hour": 8,
+      "is_race": true,
       "name": "Sole of the City 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -18301,7 +18348,7 @@
       }
     }
   },
-  "generated_at": "2026-04-25T18:59:22.569188+00:00",
+  "generated_at": "2026-04-25T20:00:42.181088+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
