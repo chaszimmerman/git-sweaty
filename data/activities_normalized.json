@@ -13282,5 +13282,18 @@
     "strava_pr_rank": 1,
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-04-27",
+    "distance": 10697.4,
+    "elevation_gain": 200.0,
+    "id": "18284718749",
+    "moving_time": 3782.0,
+    "name": "Afternoon Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-04-27T17:29:10Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
