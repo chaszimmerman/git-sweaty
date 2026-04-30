@@ -559,7 +559,6 @@
       "hour": 8,
       "is_race": true,
       "name": "Soul of the City 10k Morning Race",
-      "strava_pr_rank": 2,
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/6954248592",
@@ -18418,7 +18417,7 @@
       }
     }
   },
-  "generated_at": "2026-04-29T23:19:31.983623+00:00",
+  "generated_at": "2026-04-30T16:23:43.048991+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
