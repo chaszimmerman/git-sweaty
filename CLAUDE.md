@@ -71,7 +71,7 @@ Layout order within the heatmaps section (top → bottom):
 
 ### Races card (`buildRacesCard`)
 New section below all year heatmaps, listing all detected race activities.
-- Columns: Date · Name · Distance · Time · Pace · PR badge
+- Columns: Date · Name · Distance · Time · Pace · Elevation · PR badge
 - Year chips filter the table; "All" is default. PR ranks always computed across all time regardless of year filter — an all-time PR doesn't reset when filtering to one year.
 - Race detection: two-signal — Strava `workout_type == 1` OR name-pattern regex (covers older activities before Strava's race tag existed). Belt-and-suspenders approach.
 - PR detection: Strava `best_efforts` `pr_rank` for standard distances (5K, 10K, Half-Marathon, Marathon); pace-based fallback for non-standard (4 Mi, 5 Mi, 10 Mi, 12 Mi)

@@ -3845,7 +3845,9 @@ function buildRacesCard(payload, types, years, units) {
   const typeSet = new Set(Array.isArray(types) ? types : []);
   const yearSet = new Set(Array.isArray(years) ? years.map(Number) : []);
   const distUnit = (units || {}).distance || "mi";
+  const elevUnit = (units || {}).elevation || "ft";
   const KM_PER_MI = 1.60934;
+  const M_PER_FT = 0.3048;
 
   const allRaceActivities = (payload.activities || []).filter(
     (a) => a.is_race && typeSet.has(a.type) && yearSet.has(Number(a.year))
@@ -3874,7 +3876,13 @@ function buildRacesCard(payload, types, years, units) {
     const movingTime = Number(agg.moving_time || 0);
     const pace = formatPace(movingTime, distMeters, distUnit);
     const raceTime = formatRaceTime(movingTime);
-    return { ...a, distMi, distDisplay, pace, raceTime, movingTime };
+    const elevMeters = Number(agg.elevation_gain || 0);
+    const elevDisplay = elevMeters > 0
+      ? (elevUnit === "ft"
+          ? `${Math.round(elevMeters / M_PER_FT)} ft`
+          : `${Math.round(elevMeters)} m`)
+      : "";
+    return { ...a, distMi, distDisplay, pace, raceTime, movingTime, elevDisplay };
   }).sort((a, b) => b.date.localeCompare(a.date));
 
   // PR rank: Strava best_efforts for standard distances; pace-based fallback for others.
@@ -3965,6 +3973,11 @@ function buildRacesCard(payload, types, years, units) {
     paceEl.textContent = race.pace || "";
     row.appendChild(paceEl);
 
+    const elevEl = document.createElement("div");
+    elevEl.className = "races-elev";
+    elevEl.textContent = race.elevDisplay || "";
+    row.appendChild(elevEl);
+
     const badgeEl = document.createElement("div");
     badgeEl.className = "races-badge-cell";
     if (race.prRank === 1) {
@@ -4009,7 +4022,7 @@ function buildRacesCard(payload, types, years, units) {
 
     const colHeader = document.createElement("div");
     colHeader.className = "races-col-header";
-    ["Date", "Race", "Dist", "Time", "Pace", ""].forEach((label) => {
+    ["Date", "Race", "Dist", "Time", "Pace", "Elev", ""].forEach((label) => {
       const th = document.createElement("div");
       th.textContent = label;
       colHeader.appendChild(th);

@@ -101,7 +101,7 @@ These overrides apply globally across the entire dashboard (frequency chart, yea
 
 A **Races** section appears between Monthly Activity and the year heatmaps, listing all detected race activities in reverse-chronological order.
 
-- Columns: Date · Name · Distance · Time · Pace · PR badge
+- Columns: Date · Name · Distance · Time · Pace · Elevation · PR badge
 - Year chips filter the table (All / 2026 / 2025 / …); PR ranks are always computed across all-time so filtering to one year doesn't lose historical PR context
 - Race detection uses Strava's `workout_type` flag **and** name-pattern matching (covers older activities before Strava introduced the race tag)
 - PR badges (**PR** / **2nd** / **3rd**) are sourced from Strava's official `best_efforts` API for standard distances (5K, 10K, Half-Marathon, Marathon); pace-based fallback applies to non-standard distances
