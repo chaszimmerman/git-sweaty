@@ -9277,6 +9277,16 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/18418379620",
       "year": 2026
+    },
+    {
+      "date": "2026-05-09",
+      "hour": 9,
+      "is_race": true,
+      "name": "Every Hour Every Day 5K (+) Race",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/18438774389",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -18474,6 +18484,15 @@
           "distance": 5335.2,
           "elevation_gain": 100.0,
           "moving_time": 1798.0
+        },
+        "2026-05-09": {
+          "activity_ids": [
+            "18438774389"
+          ],
+          "count": 1,
+          "distance": 5337.9,
+          "elevation_gain": 68.0,
+          "moving_time": 1541.0
         }
       },
       "Walk": {
@@ -18489,7 +18508,7 @@
       }
     }
   },
-  "generated_at": "2026-05-08T16:19:08.094336+00:00",
+  "generated_at": "2026-05-09T15:57:02.636966+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
