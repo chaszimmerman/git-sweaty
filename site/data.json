@@ -9282,7 +9282,7 @@
       "date": "2026-05-09",
       "hour": 9,
       "is_race": true,
-      "name": "Every Hour Every Day 5K (+) Race",
+      "name": "Every Hour Every Day 5K(+)ish Race",
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/18438774389",
@@ -18508,7 +18508,7 @@
       }
     }
   },
-  "generated_at": "2026-05-10T15:58:51.235743+00:00",
+  "generated_at": "2026-05-11T17:29:46.635509+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
