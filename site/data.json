@@ -9296,6 +9296,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/18469865534",
       "year": 2026
+    },
+    {
+      "date": "2026-05-12",
+      "hour": 18,
+      "name": "Evening Treadmill Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/18483880388",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -18511,6 +18520,15 @@
           "distance": 11875.5,
           "elevation_gain": 215.0,
           "moving_time": 4051.0
+        },
+        "2026-05-12": {
+          "activity_ids": [
+            "18483880388"
+          ],
+          "count": 1,
+          "distance": 5136.6,
+          "elevation_gain": 0.0,
+          "moving_time": 1632.0
         }
       },
       "Walk": {
@@ -18526,7 +18544,7 @@
       }
     }
   },
-  "generated_at": "2026-05-12T17:15:53.734109+00:00",
+  "generated_at": "2026-05-13T17:21:02.934765+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",

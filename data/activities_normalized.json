@@ -13399,5 +13399,18 @@
     "start_date_local": "2026-05-11T17:33:35Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-05-12",
+    "distance": 5136.6,
+    "elevation_gain": 0.0,
+    "id": "18483880388",
+    "moving_time": 1632.0,
+    "name": "Evening Treadmill Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-05-12T18:27:02Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
