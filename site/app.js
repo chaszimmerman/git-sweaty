@@ -3841,6 +3841,137 @@ function raceBadgeLabel(distanceMi) {
   return null;
 }
 
+// Normalize a race name into a series key so the same race across years
+// groups together. Names are kept byte-identical per series upstream (in
+// Strava), so this only needs to be case/punctuation/whitespace tolerant.
+function raceSeriesKey(name) {
+  return String(name || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function _fmtMMSS(totalSec) {
+  const s = Math.max(0, Math.round(Number(totalSec) || 0));
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${String(r).padStart(2, "0")}`;
+}
+
+// Hand-rolled dual-axis SVG progression chart for one race series.
+// X = year; left Y = pace (inverted: faster = higher, so improvement
+// trends upward); right Y = avg heart rate (bpm). No chart dependency.
+function buildRaceProgressionChart(seriesRaces, distUnit) {
+  const PACE_COLOR = "#38bdf8"; // --accent
+  const HR_COLOR = "#f43f5e";   // rose
+  const KM_PER_MI = 1.60934;
+
+  // One point per year — if a year has duplicates keep the fastest effort.
+  const byYear = new Map();
+  seriesRaces.forEach((r) => {
+    const yr = Number(r.year);
+    const dist = distUnit === "km" ? r.distMi * KM_PER_MI : r.distMi;
+    if (!r.movingTime || !dist) return;
+    const paceSec = r.movingTime / dist;
+    const prev = byYear.get(yr);
+    if (!prev || paceSec < prev.paceSec) {
+      byYear.set(yr, { yr, paceSec, hr: Number(r.avg_hr) || null });
+    }
+  });
+  const pts = [...byYear.values()].sort((a, b) => a.yr - b.yr);
+
+  const wrap = document.createElement("div");
+  wrap.className = "races-chart-wrap";
+  if (pts.length < 2) return wrap;
+
+  const W = 680, H = 300;
+  const mL = 54, mR = 54, mT = 30, mB = 46;
+  const pL = mL, pR = W - mR, pT = mT, pB = H - mB;
+  const pW = pR - pL, pH = pB - pT;
+  const n = pts.length;
+  const xFor = (i) => (n === 1 ? pL + pW / 2 : pL + (i / (n - 1)) * pW);
+
+  const paceVals = pts.map((p) => p.paceSec);
+  let minP = Math.min(...paceVals), maxP = Math.max(...paceVals);
+  if (minP === maxP) { minP -= 5; maxP += 5; }
+  const padP = (maxP - minP) * 0.12;
+  minP -= padP; maxP += padP;
+  // Inverted: fastest (min) → top (small y), slowest (max) → bottom.
+  const yPace = (v) => pT + ((v - minP) / (maxP - minP)) * pH;
+
+  const hrPts = pts.filter((p) => p.hr != null);
+  const hasHR = hrPts.length >= 1;
+  let minH = 0, maxH = 0;
+  if (hasHR) {
+    const hv = hrPts.map((p) => p.hr);
+    minH = Math.min(...hv); maxH = Math.max(...hv);
+    if (minH === maxH) { minH -= 5; maxH += 5; }
+    const padH = (maxH - minH) * 0.18;
+    minH -= padH; maxH += padH;
+  }
+  const yHR = (v) => pB - ((v - minH) / (maxH - minH)) * pH;
+
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const parts = [];
+  parts.push(`<svg viewBox="0 0 ${W} ${H}" class="races-chart-svg" role="img" aria-label="Race progression chart">`);
+
+  // Axis frame + x gridlines per year
+  parts.push(`<line x1="${pL}" y1="${pT}" x2="${pL}" y2="${pB}" class="rc-axis"/>`);
+  parts.push(`<line x1="${pR}" y1="${pT}" x2="${pR}" y2="${pB}" class="rc-axis"/>`);
+  parts.push(`<line x1="${pL}" y1="${pB}" x2="${pR}" y2="${pB}" class="rc-axis"/>`);
+  pts.forEach((p, i) => {
+    const x = xFor(i);
+    parts.push(`<line x1="${x.toFixed(1)}" y1="${pT}" x2="${x.toFixed(1)}" y2="${pB}" class="rc-grid"/>`);
+    parts.push(`<text x="${x.toFixed(1)}" y="${pB + 18}" class="rc-xlabel">${p.yr}</text>`);
+  });
+
+  // Per-point value labels below show exact pace/HR, so dedicated numeric
+  // axis ticks are intentionally omitted to keep the edges uncluttered.
+
+  // Pace line + points + value labels (always present)
+  const paceLine = pts.map((p, i) => `${xFor(i).toFixed(1)},${yPace(p.paceSec).toFixed(1)}`).join(" ");
+  parts.push(`<polyline points="${paceLine}" fill="none" stroke="${PACE_COLOR}" stroke-width="2.5"/>`);
+  pts.forEach((p, i) => {
+    const x = xFor(i), y = yPace(p.paceSec);
+    parts.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5" fill="${PACE_COLOR}"/>`);
+    parts.push(`<text x="${x.toFixed(1)}" y="${(y - 9).toFixed(1)}" class="rc-val rc-pace-fill">${_fmtMMSS(p.paceSec)}</text>`);
+  });
+
+  // HR line + points + value labels (segments skip missing years)
+  if (hasHR) {
+    let seg = [];
+    const flush = () => {
+      if (seg.length >= 2) {
+        parts.push(`<polyline points="${seg.join(" ")}" fill="none" stroke="${HR_COLOR}" stroke-width="2.5" stroke-dasharray="1 0"/>`);
+      }
+      seg = [];
+    };
+    pts.forEach((p, i) => {
+      if (p.hr == null) { flush(); return; }
+      const x = xFor(i), y = yHR(p.hr);
+      seg.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+      parts.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5" fill="${HR_COLOR}"/>`);
+      parts.push(`<text x="${x.toFixed(1)}" y="${(y + 16).toFixed(1)}" class="rc-val rc-hr-fill">${Math.round(p.hr)}</text>`);
+    });
+    flush();
+  }
+
+  parts.push(`</svg>`);
+  wrap.innerHTML = parts.join("");
+
+  // HTML legend below the SVG
+  const legend = document.createElement("div");
+  legend.className = "races-chart-legend";
+  const unitLabel = distUnit === "km" ? "min/km" : "min/mi";
+  legend.innerHTML =
+    `<span class="rc-leg"><span class="rc-swatch" style="background:${PACE_COLOR}"></span>Pace (${esc(unitLabel)}) — faster is higher</span>` +
+    (hasHR
+      ? `<span class="rc-leg"><span class="rc-swatch" style="background:${HR_COLOR}"></span>Avg HR (bpm)</span>`
+      : `<span class="rc-leg rc-leg-note">No heart rate data for this series</span>`);
+  wrap.appendChild(legend);
+  return wrap;
+}
+
 function buildRacesCard(payload, types, years, units) {
   const typeSet = new Set(Array.isArray(types) ? types : []);
   const yearSet = new Set(Array.isArray(years) ? years.map(Number) : []);
@@ -3908,6 +4039,24 @@ function buildRacesCard(payload, types, years, units) {
     }
   });
 
+  // Group races into series (same race across years). A series is
+  // "chartable" when it spans 2+ distinct years. Series data is always the
+  // full cross-year set, independent of the active year-chip filter.
+  const seriesMap = new Map();
+  enrichedAll.forEach((r) => {
+    const key = raceSeriesKey(r.name || displayType(r.type));
+    if (!seriesMap.has(key)) seriesMap.set(key, []);
+    seriesMap.get(key).push(r);
+  });
+  const chartableSeries = new Set();
+  seriesMap.forEach((list, key) => {
+    if (new Set(list.map((r) => Number(r.year))).size >= 2) chartableSeries.add(key);
+  });
+  // data.json activities carry no id, so identify a row by date + name
+  // (unique per race). Accordion: one chart open at a time.
+  const rowKeyFor = (r) => `${r.date}::${r.name || displayType(r.type)}`;
+  let expandedRowKey = null;
+
   // Year chips — only shown when multiple years have races.
   const raceYears = [...new Set(enrichedAll.map((r) => Number(r.year)))].sort((a, b) => b - a);
   let activeYear = null; // null = All
@@ -3922,6 +4071,7 @@ function buildRacesCard(payload, types, years, units) {
       btn.textContent = String(yr);
       btn.addEventListener("click", () => {
         activeYear = yr === "All" ? null : Number(yr);
+        expandedRowKey = null;
         chipRow.querySelectorAll(".races-chip").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         renderTable();
@@ -3940,8 +4090,19 @@ function buildRacesCard(payload, types, years, units) {
 
   function buildTableRow(race) {
     const showYear = activeYear === null;
+    const seriesKey = raceSeriesKey(race.name || displayType(race.type));
+    const isChartable = chartableSeries.has(seriesKey);
+    const rKey = rowKeyFor(race);
+    const isExpanded = isChartable && rKey === expandedRowKey;
     const row = document.createElement("div");
-    row.className = "races-row";
+    row.className = "races-row" + (isChartable ? " races-row-chartable" : "") +
+      (isExpanded ? " races-row-expanded" : "");
+    if (isChartable) {
+      row.addEventListener("click", () => {
+        expandedRowKey = isExpanded ? null : rKey;
+        renderTable();
+      });
+    }
 
     const dateEl = document.createElement("div");
     dateEl.className = "races-date";
@@ -3955,7 +4116,15 @@ function buildRacesCard(payload, types, years, units) {
 
     const nameEl = document.createElement("div");
     nameEl.className = "races-name";
-    nameEl.textContent = race.name || displayType(race.type);
+    if (isChartable) {
+      const chev = document.createElement("span");
+      chev.className = "races-chevron" + (isExpanded ? " open" : "");
+      chev.textContent = "›";
+      nameEl.appendChild(chev);
+    }
+    nameEl.appendChild(
+      document.createTextNode(race.name || displayType(race.type))
+    );
     row.appendChild(nameEl);
 
     const distEl = document.createElement("div");
@@ -4029,7 +4198,20 @@ function buildRacesCard(payload, types, years, units) {
     });
     table.appendChild(colHeader);
 
-    visible.forEach((race) => table.appendChild(buildTableRow(race)));
+    visible.forEach((race) => {
+      table.appendChild(buildTableRow(race));
+      if (rowKeyFor(race) === expandedRowKey) {
+        const seriesKey = raceSeriesKey(race.name || displayType(race.type));
+        if (chartableSeries.has(seriesKey)) {
+          const chartRow = document.createElement("div");
+          chartRow.className = "races-chart-row";
+          chartRow.appendChild(
+            buildRaceProgressionChart(seriesMap.get(seriesKey) || [], distUnit)
+          );
+          table.appendChild(chartRow);
+        }
+      }
+    });
     tableWrap.appendChild(table);
   }
 
