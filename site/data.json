@@ -127,6 +127,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 173,
       "date": "2022-02-12",
       "hour": 10,
       "is_race": true,
@@ -255,6 +256,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 168,
       "date": "2022-02-26",
       "hour": 15,
       "is_race": true,
@@ -329,6 +331,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 104,
       "date": "2022-03-08",
       "hour": 16,
       "is_race": true,
@@ -555,6 +558,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 164,
       "date": "2022-04-09",
       "hour": 8,
       "is_race": true,
@@ -898,6 +902,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 169,
       "date": "2022-06-04",
       "hour": 7,
       "is_race": true,
@@ -953,6 +958,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 139,
       "date": "2022-06-12",
       "hour": 9,
       "is_race": true,
@@ -990,6 +996,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 170,
       "date": "2022-06-18",
       "hour": 8,
       "is_race": true,
@@ -1468,6 +1475,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 168,
       "date": "2022-09-03",
       "hour": 7,
       "is_race": true,
@@ -1631,6 +1639,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 171,
       "date": "2022-09-25",
       "hour": 8,
       "is_race": true,
@@ -1984,6 +1993,7 @@
       "year": 2022
     },
     {
+      "avg_hr": 169,
       "date": "2022-11-24",
       "hour": 8,
       "is_race": true,
@@ -2633,6 +2643,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 172,
       "date": "2023-03-11",
       "hour": 7,
       "is_race": true,
@@ -2644,6 +2655,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 175,
       "date": "2023-03-12",
       "hour": 13,
       "is_race": true,
@@ -2799,6 +2811,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 170,
       "date": "2023-04-08",
       "hour": 8,
       "is_race": true,
@@ -3107,6 +3120,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 166,
       "date": "2023-06-03",
       "hour": 7,
       "is_race": true,
@@ -3279,6 +3293,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 149,
       "date": "2023-07-04",
       "hour": 8,
       "is_race": true,
@@ -3712,6 +3727,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 171,
       "date": "2023-09-09",
       "hour": 7,
       "is_race": true,
@@ -4208,6 +4224,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 166,
       "date": "2023-11-15",
       "hour": 17,
       "is_race": true,
@@ -4264,6 +4281,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 135,
       "date": "2023-11-23",
       "hour": 8,
       "is_race": true,
@@ -4400,6 +4418,7 @@
       "year": 2023
     },
     {
+      "avg_hr": 161,
       "date": "2023-12-16",
       "hour": 8,
       "is_race": true,
@@ -4878,6 +4897,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 170,
       "date": "2024-03-09",
       "hour": 7,
       "is_race": true,
@@ -4888,6 +4908,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 177,
       "date": "2024-03-10",
       "hour": 13,
       "is_race": true,
@@ -5042,6 +5063,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 172,
       "date": "2024-04-06",
       "hour": 8,
       "is_race": true,
@@ -5251,6 +5273,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 172,
       "date": "2024-05-11",
       "hour": 9,
       "is_race": true,
@@ -5369,6 +5392,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 163,
       "date": "2024-06-01",
       "hour": 7,
       "is_race": true,
@@ -5568,6 +5592,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 176,
       "date": "2024-07-04",
       "hour": 8,
       "is_race": true,
@@ -5803,6 +5828,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 145,
       "date": "2024-08-18",
       "hour": 7,
       "is_race": true,
@@ -5921,6 +5947,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 143,
       "date": "2024-09-07",
       "hour": 7,
       "is_race": true,
@@ -6147,6 +6174,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 134,
       "date": "2024-10-13",
       "hour": 11,
       "is_race": true,
@@ -6193,6 +6221,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 166,
       "date": "2024-10-19",
       "hour": 8,
       "is_race": true,
@@ -6428,6 +6457,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 135,
       "date": "2024-11-28",
       "hour": 8,
       "is_race": true,
@@ -6438,6 +6468,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 160,
       "date": "2024-11-30",
       "hour": 9,
       "is_race": true,
@@ -6503,6 +6534,7 @@
       "year": 2024
     },
     {
+      "avg_hr": 174,
       "date": "2024-12-14",
       "hour": 8,
       "is_race": true,
@@ -7062,6 +7094,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 168,
       "date": "2025-03-16",
       "hour": 13,
       "is_race": true,
@@ -7172,6 +7205,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 135,
       "date": "2025-04-05",
       "hour": 8,
       "is_race": true,
@@ -7336,6 +7370,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 173,
       "date": "2025-05-10",
       "hour": 9,
       "is_race": true,
@@ -7491,6 +7526,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 163,
       "date": "2025-06-07",
       "hour": 7,
       "is_race": true,
@@ -7645,6 +7681,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 172,
       "date": "2025-07-04",
       "hour": 8,
       "is_race": true,
@@ -7853,6 +7890,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 173,
       "date": "2025-08-16",
       "hour": 7,
       "is_race": true,
@@ -7926,6 +7964,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 161,
       "date": "2025-08-30",
       "hour": 7,
       "is_race": true,
@@ -8206,6 +8245,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 167,
       "date": "2025-10-18",
       "hour": 8,
       "is_race": true,
@@ -8288,6 +8328,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 163,
       "date": "2025-11-01",
       "hour": 9,
       "is_race": true,
@@ -8443,6 +8484,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 128,
       "date": "2025-11-27",
       "hour": 8,
       "is_race": true,
@@ -8489,6 +8531,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 170,
       "date": "2025-12-07",
       "hour": 8,
       "is_race": true,
@@ -8526,6 +8569,7 @@
       "year": 2025
     },
     {
+      "avg_hr": 152,
       "date": "2025-12-13",
       "hour": 8,
       "is_race": true,
@@ -9004,6 +9048,7 @@
       "year": 2026
     },
     {
+      "avg_hr": 161,
       "date": "2026-03-15",
       "hour": 13,
       "is_race": true,
@@ -9033,6 +9078,7 @@
       "year": 2026
     },
     {
+      "avg_hr": 169,
       "date": "2026-03-21",
       "hour": 7,
       "is_race": true,
@@ -9206,6 +9252,7 @@
       "year": 2026
     },
     {
+      "avg_hr": 171,
       "date": "2026-04-25",
       "hour": 8,
       "is_race": true,
@@ -9280,6 +9327,7 @@
       "year": 2026
     },
     {
+      "avg_hr": 173,
       "date": "2026-05-09",
       "hour": 9,
       "is_race": true,
@@ -18599,7 +18647,7 @@
       }
     }
   },
-  "generated_at": "2026-05-17T11:23:16.043084+00:00",
+  "generated_at": "2026-05-17T11:44:06.816852+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
