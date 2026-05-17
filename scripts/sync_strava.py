@@ -607,10 +607,32 @@ def _enrich_race_details(
     Returns (efforts_enriched, hr_enriched, token).
     """
     activities_path = os.path.join("data", "activities_normalized.json")
-    if not os.path.exists(activities_path):
+    items: List[Dict] = []
+    if os.path.exists(activities_path):
+        items = read_json(activities_path) or []
+    elif os.path.isdir(RAW_DIR):
+        # A full_backfill run deletes activities_normalized.json, and
+        # normalize.py runs *after* sync, so the normalized file does not
+        # exist yet here. Fall back to the raw activities this sync just
+        # wrote so HR/best_efforts still backfill on full-backfill runs.
+        for filename in sorted(os.listdir(RAW_DIR)):
+            if not filename.endswith(".json"):
+                continue
+            try:
+                raw = read_json(os.path.join(RAW_DIR, filename))
+            except Exception:
+                continue
+            if not isinstance(raw, dict):
+                continue
+            items.append({
+                "id": raw.get("id"),
+                "name": raw.get("name"),
+                "distance": raw.get("distance"),
+                "is_race": _is_strava_race(raw),
+            })
+    if not items:
         return 0, 0, token
 
-    items = read_json(activities_path) or []
     efforts_cache = read_json(RACE_BEST_EFFORTS_PATH) if os.path.exists(RACE_BEST_EFFORTS_PATH) else {}
     if not isinstance(efforts_cache, dict):
         efforts_cache = {}
