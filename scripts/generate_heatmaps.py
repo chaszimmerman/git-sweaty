@@ -171,6 +171,10 @@ def _load_activities(
         strava_pr_rank = item.get("strava_pr_rank")
         if strava_pr_rank and int(strava_pr_rank) in (1, 2, 3):
             activity["strava_pr_rank"] = int(strava_pr_rank)
+        if is_race:
+            avg_hr = item.get("avg_hr")
+            if avg_hr:
+                activity["avg_hr"] = int(round(float(avg_hr)))
         if include_provider_activity_urls:
             url = _activity_url_from_id(source, item.get("id"))
             if url:

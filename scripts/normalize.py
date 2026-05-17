@@ -13,6 +13,7 @@ from utils import ensure_dir, load_config, normalize_source, parse_iso_datetime,
 
 OUT_PATH = os.path.join("data", "activities_normalized.json")
 RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
+RACE_HEARTRATE_PATH = os.path.join("data", "race_heartrate.json")
 
 _RACE_NAME_RE = re.compile(
     r"\b(race|races|5k|10k|15k|half|marathon|miler|milers|dash|trot|solstice)\b",
@@ -225,6 +226,13 @@ def normalize() -> List[Dict]:
         except Exception:
             pass
 
+    race_heartrate: Dict[str, Dict] = {}
+    if os.path.exists(RACE_HEARTRATE_PATH):
+        try:
+            race_heartrate = read_json(RACE_HEARTRATE_PATH) or {}
+        except Exception:
+            pass
+
     for item in items:
         if str(item.get("id") or "") in exclude_race_ids:
             item.pop("is_race", None)
@@ -242,6 +250,12 @@ def normalize() -> List[Dict]:
                 item["strava_pr_rank"] = pr_rank
             elif "strava_pr_rank" in item:
                 del item["strava_pr_rank"]
+            hr_entry = race_heartrate.get(activity_id) or {}
+            avg_hr = hr_entry.get("avg") if isinstance(hr_entry, dict) else None
+            if avg_hr:
+                item["avg_hr"] = round(float(avg_hr))
+            elif "avg_hr" in item:
+                del item["avg_hr"]
         raw_activity_type = str(item.get("raw_activity_type") or item.get("raw_type") or item.get("type") or other_bucket)
         raw_type = str(item.get("raw_type") or raw_activity_type or other_bucket)
         item["raw_activity_type"] = raw_activity_type

@@ -77,6 +77,7 @@ New section below all year heatmaps, listing all detected race activities.
 - PR detection: Strava `best_efforts` `pr_rank` for standard distances (5K, 10K, Half-Marathon, Marathon); pace-based fallback for non-standard (4 Mi, 5 Mi, 10 Mi, 12 Mi)
 - PR badges: "PR" (gold `#fee440`), "2nd" (silver `#c0c0c0`), "3rd" (bronze `#cd7f32`)
 - `data/race_best_efforts.json` — persisted to `dashboard-data` branch; re-fetched every sync to stay current when new PRs are set
+- `data/race_heartrate.json` — persisted to `dashboard-data`; `{activity_id: {avg, max}}`. Captured in the same detail fetch as best_efforts (`_enrich_race_details` in `sync_strava.py`). Incremental: a race is fetched for HR only if it has no cached entry yet (HR is immutable once recorded), so the first sync after deploy backfills all history; the `full_backfill` workflow toggle deletes this file to force a full HR re-fetch. `avg_hr` is threaded through `normalize.py` → `data.json` race activities (rounded int). Only present where an HR monitor was worn.
 - Tooltips on all race-day heatmap cells show "Race · pace" in addition to normal activity info
 - Race days get an orange ring border (`#fb5607`, `outline: 2px solid`) on heatmap cells — preserves type color fill
 - False positives (naming errors): add the Strava activity ID to `activities.exclude_race_ids` in `config.yaml`

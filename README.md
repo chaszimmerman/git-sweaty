@@ -105,6 +105,7 @@ A **Races** section appears between Monthly Activity and the year heatmaps, list
 - Year chips filter the table (All / 2026 / 2025 / …); PR ranks are always computed across all-time so filtering to one year doesn't lose historical PR context
 - Race detection uses Strava's `workout_type` flag **and** name-pattern matching (covers older activities before Strava introduced the race tag)
 - PR badges (**PR** / **2nd** / **3rd**) are sourced from Strava's official `best_efforts` API for standard distances (5K, 10K, Half-Marathon, Marathon); pace-based fallback applies to non-standard distances
+- Average heart rate is captured per race (Strava activity detail) and persisted to `data/race_heartrate.json`. It is fetched incrementally — historical races are backfilled on the first sync, and a full-backfill run forces a refresh. HR only exists for races where a heart-rate monitor was worn
 - Race days show an **orange ring border** on heatmap cells (all year heatmaps), preserving the activity-type fill color
 - Race tooltips include average pace
 - To suppress a false-positive (naming error), add the Strava activity ID to `activities.exclude_race_ids` in `config.yaml`

@@ -28,6 +28,7 @@ LEGACY_STATE_PATH = os.path.join("data", "backfill_state.json")
 ATHLETE_PATH = os.path.join("data", "athletes_strava.json")
 LEGACY_ATHLETE_PATH = os.path.join("data", "athletes.json")
 RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
+RACE_HEARTRATE_PATH = os.path.join("data", "race_heartrate.json")
 TRANSIENT_HTTP_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504, 597}
 MAX_REQUEST_ATTEMPTS = 5
 
@@ -590,63 +591,95 @@ def _fetch_detailed_activity(token: str, activity_id: str, limiter: Optional[Rat
     )
 
 
-def _enrich_race_best_efforts(
+def _enrich_race_details(
     config: Dict, token: str, limiter: RateLimiter, dry_run: bool
-) -> Tuple[int, str]:
-    """Fetch Strava best_efforts for standard-distance race activities and persist them."""
+) -> Tuple[int, int, str]:
+    """Fetch Strava detail for race activities to capture best_efforts and heart rate.
+
+    A single detail fetch per race yields both. best_efforts is re-fetched every
+    sync for standard-distance races (PR ranks can change when a new PR is set).
+    Heart rate is immutable once recorded, so it is fetched incrementally: a race
+    is fetched for HR only when it has no cached HR entry yet. The HR cache reads
+    the full normalized history every run, so the first sync after deploy (or any
+    full-backfill reset, which deletes the HR cache) backfills every historical
+    race; steady-state cost then stays flat at the standard-distance PR refreshes.
+
+    Returns (efforts_enriched, hr_enriched, token).
+    """
     activities_path = os.path.join("data", "activities_normalized.json")
     if not os.path.exists(activities_path):
-        return 0, token
+        return 0, 0, token
 
     items = read_json(activities_path) or []
-    existing = read_json(RACE_BEST_EFFORTS_PATH) if os.path.exists(RACE_BEST_EFFORTS_PATH) else {}
-    if not isinstance(existing, dict):
-        existing = {}
+    efforts_cache = read_json(RACE_BEST_EFFORTS_PATH) if os.path.exists(RACE_BEST_EFFORTS_PATH) else {}
+    if not isinstance(efforts_cache, dict):
+        efforts_cache = {}
+    hr_cache = read_json(RACE_HEARTRATE_PATH) if os.path.exists(RACE_HEARTRATE_PATH) else {}
+    if not isinstance(hr_cache, dict):
+        hr_cache = {}
 
-    # Collect IDs for races with a standard Strava effort distance.
-    # Check both the persisted is_race flag and the name pattern so this works
-    # on first run before normalize has had a chance to write is_race flags.
-    to_fetch = []
+    # Decide what to fetch. Check both the persisted is_race flag and the name
+    # pattern so this works on first run before normalize writes is_race flags.
+    #   - standard-distance races: always fetched (best_efforts PR refresh)
+    #   - any race missing a cached HR entry: fetched once for HR backfill
+    to_fetch = []  # (activity_id, is_standard)
     for item in items:
         is_race = item.get("is_race") or bool(_RACE_NAME_RE.search(str(item.get("name") or "")))
         if not is_race:
             continue
+        activity_id = str(item.get("id") or "").strip()
+        if not activity_id:
+            continue
         dist_mi = float(item.get("distance") or 0) * 0.000621371
         badge = _race_badge_label_mi(dist_mi)
-        if badge not in _STRAVA_EFFORT_BY_BADGE:
-            continue
-        activity_id = str(item.get("id") or "").strip()
-        if activity_id:
-            to_fetch.append(activity_id)
+        is_standard = badge in _STRAVA_EFFORT_BY_BADGE
+        needs_hr = activity_id not in hr_cache
+        if is_standard or needs_hr:
+            to_fetch.append((activity_id, is_standard))
 
     if not to_fetch or dry_run:
-        return 0, token
+        return 0, 0, token
 
-    print(f"Enriching best_efforts for {len(to_fetch)} standard-distance race(s)...")
-    enriched = 0
-    updated = dict(existing)
-    for activity_id in to_fetch:
+    print(f"Enriching race detail for {len(to_fetch)} race(s) (efforts + heart rate)...")
+    efforts_enriched = 0
+    hr_enriched = 0
+    updated_efforts = dict(efforts_cache)
+    updated_hr = dict(hr_cache)
+    for activity_id, is_standard in to_fetch:
         try:
             detailed, token = _run_with_token_refresh(
                 config, token, limiter, f"race detail {activity_id}",
                 lambda access_token, aid=activity_id: _fetch_detailed_activity(access_token, aid, limiter),
             )
-            efforts = [
-                {"name": e.get("name"), "elapsed_time": e.get("elapsed_time"), "pr_rank": e.get("pr_rank")}
-                for e in (detailed.get("best_efforts") or [])
-                if e.get("pr_rank") in (1, 2, 3)
-            ]
-            updated[activity_id] = efforts
-            enriched += 1
+            if is_standard:
+                efforts = [
+                    {"name": e.get("name"), "elapsed_time": e.get("elapsed_time"), "pr_rank": e.get("pr_rank")}
+                    for e in (detailed.get("best_efforts") or [])
+                    if e.get("pr_rank") in (1, 2, 3)
+                ]
+                updated_efforts[activity_id] = efforts
+                efforts_enriched += 1
+            avg_hr = detailed.get("average_heartrate")
+            max_hr = detailed.get("max_heartrate")
+            avg_hr = float(avg_hr) if avg_hr else None
+            max_hr = float(max_hr) if max_hr else None
+            # Record presence even when null so we never re-fetch a race that
+            # has no HR data (it will not appear retroactively).
+            updated_hr[activity_id] = {"avg": avg_hr, "max": max_hr}
+            if avg_hr is not None:
+                hr_enriched += 1
         except Exception as exc:
             print(f"Warning: could not fetch detail for activity {activity_id}: {exc}")
 
-    if updated != existing:
+    if updated_efforts != efforts_cache:
         ensure_dir("data")
-        write_json(RACE_BEST_EFFORTS_PATH, updated)
+        write_json(RACE_BEST_EFFORTS_PATH, updated_efforts)
+    if updated_hr != hr_cache:
+        ensure_dir("data")
+        write_json(RACE_HEARTRATE_PATH, updated_hr)
 
-    print(f"Race best_efforts enriched: {enriched}/{len(to_fetch)}")
-    return enriched, token
+    print(f"Race detail enriched: {efforts_enriched} efforts, {hr_enriched} heart rate")
+    return efforts_enriched, hr_enriched, token
 
 
 def _write_activity(activity: Dict) -> bool:
@@ -930,8 +963,11 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
     total_new_or_updated = new_or_updated + int(recent_summary.get("new_or_updated", 0))
 
     race_efforts_enriched = 0
+    race_hr_enriched = 0
     if not rate_limited:
-        race_efforts_enriched, token = _enrich_race_best_efforts(config, token, limiter, dry_run)
+        race_efforts_enriched, race_hr_enriched, token = _enrich_race_details(
+            config, token, limiter, dry_run
+        )
 
     summary = {
         "source": "strava",
@@ -948,6 +984,7 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
     if rate_limited:
         summary["rate_limit_message"] = rate_limit_message
     summary["race_efforts_enriched"] = race_efforts_enriched
+    summary["race_hr_enriched"] = race_hr_enriched
     return summary
 
 
