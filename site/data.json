@@ -8445,7 +8445,8 @@
     {
       "date": "2025-11-27",
       "hour": 8,
-      "name": "Turkiest of Trots",
+      "is_race": true,
+      "name": "Towson Y Turkey Trot",
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/16582163207",
@@ -18598,7 +18599,7 @@
       }
     }
   },
-  "generated_at": "2026-05-17T11:01:04.219910+00:00",
+  "generated_at": "2026-05-17T11:07:51.631770+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
