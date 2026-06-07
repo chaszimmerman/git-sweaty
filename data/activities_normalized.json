@@ -13610,11 +13610,25 @@
     "distance": 16277.8,
     "elevation_gain": 137.0,
     "id": "18809382378",
+    "is_race": true,
     "moving_time": 5341.0,
-    "name": "Morning Run",
+    "name": "Baltimore 10 Miler Race",
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2026-06-06T07:05:24Z",
+    "type": "Run",
+    "year": 2026
+  },
+  {
+    "date": "2026-06-07",
+    "distance": 6577.0,
+    "elevation_gain": 2.0,
+    "id": "18822675305",
+    "moving_time": 2191.0,
+    "name": "Morning Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-06-07T07:00:24Z",
     "type": "Run",
     "year": 2026
   }
