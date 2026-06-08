@@ -9455,6 +9455,7 @@
       "year": 2026
     },
     {
+      "avg_hr": 169,
       "date": "2026-06-06",
       "hour": 7,
       "is_race": true,
@@ -9471,6 +9472,15 @@
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/18822675305",
+      "year": 2026
+    },
+    {
+      "date": "2026-06-08",
+      "hour": 7,
+      "name": "Morning Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/18835786964",
       "year": 2026
     }
   ],
@@ -18813,6 +18823,15 @@
           "distance": 6577.0,
           "elevation_gain": 2.0,
           "moving_time": 2191.0
+        },
+        "2026-06-08": {
+          "activity_ids": [
+            "18835786964"
+          ],
+          "count": 1,
+          "distance": 5065.5,
+          "elevation_gain": 31.0,
+          "moving_time": 1726.0
         }
       },
       "Walk": {
@@ -18828,7 +18847,7 @@
       }
     }
   },
-  "generated_at": "2026-06-07T16:20:02.224130+00:00",
+  "generated_at": "2026-06-08T17:57:28.909407+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",

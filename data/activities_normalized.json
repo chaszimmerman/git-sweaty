@@ -13606,6 +13606,7 @@
     "year": 2026
   },
   {
+    "avg_hr": 169,
     "date": "2026-06-06",
     "distance": 16277.8,
     "elevation_gain": 137.0,
@@ -13629,6 +13630,19 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2026-06-07T07:00:24Z",
+    "type": "Run",
+    "year": 2026
+  },
+  {
+    "date": "2026-06-08",
+    "distance": 5065.5,
+    "elevation_gain": 31.0,
+    "id": "18835786964",
+    "moving_time": 1726.0,
+    "name": "Morning Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-06-08T07:38:39Z",
     "type": "Run",
     "year": 2026
   }
