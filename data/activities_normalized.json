@@ -13743,10 +13743,23 @@
     "elevation_gain": 22.0,
     "id": "19021350819",
     "moving_time": 3825.0,
-    "name": "Morning Runin Rehoboth",
+    "name": "Morning Run in Rehoboth",
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2026-06-22T07:08:25Z",
+    "type": "Run",
+    "year": 2026
+  },
+  {
+    "date": "2026-06-23",
+    "distance": 12115.6,
+    "elevation_gain": 18.0,
+    "id": "19035171532",
+    "moving_time": 4221.0,
+    "name": "Morning Run in Rehoboth",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-06-23T07:23:26Z",
     "type": "Run",
     "year": 2026
   }
