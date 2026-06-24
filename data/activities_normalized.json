@@ -13762,5 +13762,18 @@
     "start_date_local": "2026-06-23T07:23:26Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-06-24",
+    "distance": 12963.2,
+    "elevation_gain": 23.0,
+    "id": "19048548931",
+    "moving_time": 4327.0,
+    "name": "Morning Run in Rehoboth",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-06-24T07:09:38Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
