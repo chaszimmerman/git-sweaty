@@ -9572,6 +9572,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/19048548931",
       "year": 2026
+    },
+    {
+      "date": "2026-06-25",
+      "hour": 7,
+      "name": "Morning Run in Rehoboth",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19061231016",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -19012,6 +19021,15 @@
           "distance": 12963.2,
           "elevation_gain": 23.0,
           "moving_time": 4327.0
+        },
+        "2026-06-25": {
+          "activity_ids": [
+            "19061231016"
+          ],
+          "count": 1,
+          "distance": 12179.3,
+          "elevation_gain": 18.0,
+          "moving_time": 4257.0
         }
       },
       "Walk": {
@@ -19027,7 +19045,7 @@
       }
     }
   },
-  "generated_at": "2026-06-24T17:09:32.112029+00:00",
+  "generated_at": "2026-06-25T17:17:36.847755+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
