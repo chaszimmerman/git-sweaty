@@ -9608,6 +9608,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/19142978609",
       "year": 2026
+    },
+    {
+      "date": "2026-07-02",
+      "hour": 16,
+      "name": "Afternoon Treadmill Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19155949324",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -19084,6 +19093,15 @@
           "distance": 5768.0,
           "elevation_gain": 102.0,
           "moving_time": 2247.0
+        },
+        "2026-07-02": {
+          "activity_ids": [
+            "19155949324"
+          ],
+          "count": 1,
+          "distance": 4854.6,
+          "elevation_gain": 0.0,
+          "moving_time": 1493.0
         }
       },
       "Walk": {
@@ -19099,7 +19117,7 @@
       }
     }
   },
-  "generated_at": "2026-07-02T16:54:32.628431+00:00",
+  "generated_at": "2026-07-02T22:28:51.390644+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
