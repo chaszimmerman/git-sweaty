@@ -608,13 +608,13 @@ def _enrich_race_details(
     """
     activities_path = os.path.join("data", "activities_normalized.json")
     items: List[Dict] = []
-    if os.path.exists(activities_path):
-        items = read_json(activities_path) or []
-    elif os.path.isdir(RAW_DIR):
-        # A full_backfill run deletes activities_normalized.json, and
-        # normalize.py runs *after* sync, so the normalized file does not
-        # exist yet here. Fall back to the raw activities this sync just
-        # wrote so HR/best_efforts still backfill on full-backfill runs.
+    if os.path.isdir(RAW_DIR):
+        # Read from the raw activities this sync just wrote rather than
+        # activities_normalized.json: normalize.py runs *after* sync, so on
+        # the very same run a brand-new race is first fetched, the normalized
+        # file is still one cycle stale and doesn't contain it yet — which
+        # would silently skip HR/best_efforts enrichment for that race until
+        # the next sync. RAW_DIR is always current within this run.
         for filename in sorted(os.listdir(RAW_DIR)):
             if not filename.endswith(".json"):
                 continue
@@ -630,6 +630,8 @@ def _enrich_race_details(
                 "distance": raw.get("distance"),
                 "is_race": _is_strava_race(raw),
             })
+    elif os.path.exists(activities_path):
+        items = read_json(activities_path) or []
     if not items:
         return 0, 0, token
 
