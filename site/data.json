@@ -258,6 +258,7 @@
     },
     {
       "avg_hr": 168,
+      "avg_temp_f": 41,
       "date": "2022-02-26",
       "hour": 15,
       "is_race": true,
@@ -561,6 +562,7 @@
     },
     {
       "avg_hr": 164,
+      "avg_temp_f": 44,
       "date": "2022-04-09",
       "hour": 8,
       "is_race": true,
@@ -1001,6 +1003,7 @@
     },
     {
       "avg_hr": 170,
+      "avg_temp_f": 69,
       "date": "2022-06-18",
       "hour": 8,
       "is_race": true,
@@ -1645,6 +1648,7 @@
     },
     {
       "avg_hr": 171,
+      "avg_temp_f": 59,
       "date": "2022-09-25",
       "hour": 8,
       "is_race": true,
@@ -2650,6 +2654,7 @@
     },
     {
       "avg_hr": 172,
+      "avg_temp_f": 36,
       "date": "2023-03-11",
       "hour": 7,
       "is_race": true,
@@ -2819,6 +2824,7 @@
     },
     {
       "avg_hr": 170,
+      "avg_temp_f": 42,
       "date": "2023-04-08",
       "hour": 8,
       "is_race": true,
@@ -3302,6 +3308,7 @@
     },
     {
       "avg_hr": 149,
+      "avg_temp_f": 75,
       "date": "2023-07-04",
       "hour": 8,
       "is_race": true,
@@ -4234,6 +4241,7 @@
     },
     {
       "avg_hr": 166,
+      "avg_temp_f": 54,
       "date": "2023-11-15",
       "hour": 17,
       "is_race": true,
@@ -4429,6 +4437,7 @@
     },
     {
       "avg_hr": 161,
+      "avg_temp_f": 36,
       "date": "2023-12-16",
       "hour": 8,
       "is_race": true,
@@ -5076,6 +5085,7 @@
     },
     {
       "avg_hr": 172,
+      "avg_temp_f": 42,
       "date": "2024-04-06",
       "hour": 8,
       "is_race": true,
@@ -5286,6 +5296,7 @@
     },
     {
       "avg_hr": 172,
+      "avg_temp_f": 53,
       "date": "2024-05-11",
       "hour": 9,
       "is_race": true,
@@ -5606,6 +5617,7 @@
     },
     {
       "avg_hr": 176,
+      "avg_temp_f": 72,
       "date": "2024-07-04",
       "hour": 8,
       "is_race": true,
@@ -5962,6 +5974,7 @@
     },
     {
       "avg_hr": 143,
+      "avg_temp_f": 62,
       "date": "2024-09-07",
       "hour": 7,
       "is_race": true,
@@ -6237,6 +6250,7 @@
     },
     {
       "avg_hr": 166,
+      "avg_temp_f": 46,
       "date": "2024-10-19",
       "hour": 8,
       "is_race": true,
@@ -6485,6 +6499,7 @@
     },
     {
       "avg_hr": 160,
+      "avg_temp_f": 27,
       "date": "2024-11-30",
       "hour": 9,
       "is_race": true,
@@ -7112,6 +7127,7 @@
     },
     {
       "avg_hr": 168,
+      "avg_temp_f": 64,
       "date": "2025-03-16",
       "hour": 13,
       "is_race": true,
@@ -7389,6 +7405,7 @@
     },
     {
       "avg_hr": 173,
+      "avg_temp_f": 56,
       "date": "2025-05-10",
       "hour": 9,
       "is_race": true,
@@ -7701,6 +7718,7 @@
     },
     {
       "avg_hr": 172,
+      "avg_temp_f": 70,
       "date": "2025-07-04",
       "hour": 8,
       "is_race": true,
@@ -7985,6 +8003,7 @@
     },
     {
       "avg_hr": 161,
+      "avg_temp_f": 54,
       "date": "2025-08-30",
       "hour": 7,
       "is_race": true,
@@ -8350,6 +8369,7 @@
     },
     {
       "avg_hr": 163,
+      "avg_temp_f": 51,
       "date": "2025-11-01",
       "hour": 9,
       "is_race": true,
@@ -8554,6 +8574,7 @@
     },
     {
       "avg_hr": 170,
+      "avg_temp_f": 27,
       "date": "2025-12-07",
       "hour": 8,
       "is_race": true,
@@ -9072,6 +9093,7 @@
     },
     {
       "avg_hr": 161,
+      "avg_temp_f": 49,
       "date": "2026-03-15",
       "hour": 13,
       "is_race": true,
@@ -9277,6 +9299,7 @@
     },
     {
       "avg_hr": 171,
+      "avg_temp_f": 54,
       "date": "2026-04-25",
       "hour": 8,
       "is_race": true,
@@ -9481,6 +9504,7 @@
     },
     {
       "avg_hr": 169,
+      "avg_temp_f": 72,
       "date": "2026-06-06",
       "hour": 7,
       "is_race": true,
@@ -19181,7 +19205,7 @@
       }
     }
   },
-  "generated_at": "2026-07-04T18:11:58.668235+00:00",
+  "generated_at": "2026-07-04T18:53:27.369708+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",

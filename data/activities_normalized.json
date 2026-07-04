@@ -369,6 +369,7 @@
   },
   {
     "avg_hr": 168,
+    "avg_temp_f": 41,
     "date": "2022-02-26",
     "distance": 10504.0,
     "elevation_gain": 135.0,
@@ -804,6 +805,7 @@
   },
   {
     "avg_hr": 164,
+    "avg_temp_f": 44,
     "date": "2022-04-09",
     "distance": 10066.5,
     "elevation_gain": 73.0,
@@ -1436,6 +1438,7 @@
   },
   {
     "avg_hr": 170,
+    "avg_temp_f": 69,
     "date": "2022-06-18",
     "distance": 4992.7,
     "elevation_gain": 54.0,
@@ -2364,6 +2367,7 @@
   },
   {
     "avg_hr": 171,
+    "avg_temp_f": 59,
     "date": "2022-09-25",
     "distance": 5105.3,
     "elevation_gain": 72.0,
@@ -3813,6 +3817,7 @@
   },
   {
     "avg_hr": 172,
+    "avg_temp_f": 36,
     "date": "2023-03-11",
     "distance": 10035.9,
     "elevation_gain": 104.0,
@@ -4054,6 +4059,7 @@
   },
   {
     "avg_hr": 170,
+    "avg_temp_f": 42,
     "date": "2023-04-08",
     "distance": 10022.7,
     "elevation_gain": 66.0,
@@ -4749,6 +4755,7 @@
   },
   {
     "avg_hr": 149,
+    "avg_temp_f": 75,
     "date": "2023-07-04",
     "distance": 6400.6,
     "elevation_gain": 77.0,
@@ -6093,6 +6100,7 @@
   },
   {
     "avg_hr": 166,
+    "avg_temp_f": 54,
     "date": "2023-11-15",
     "distance": 10051.5,
     "elevation_gain": 134.0,
@@ -6372,6 +6380,7 @@
   },
   {
     "avg_hr": 161,
+    "avg_temp_f": 36,
     "date": "2023-12-16",
     "distance": 8238.6,
     "elevation_gain": 92.0,
@@ -7303,6 +7312,7 @@
   },
   {
     "avg_hr": 172,
+    "avg_temp_f": 42,
     "date": "2024-04-06",
     "distance": 10108.5,
     "elevation_gain": 94.0,
@@ -7605,6 +7615,7 @@
   },
   {
     "avg_hr": 172,
+    "avg_temp_f": 53,
     "date": "2024-05-11",
     "distance": 5364.2,
     "elevation_gain": 67.0,
@@ -8065,6 +8076,7 @@
   },
   {
     "avg_hr": 176,
+    "avg_temp_f": 72,
     "date": "2024-07-04",
     "distance": 6443.0,
     "elevation_gain": 80.0,
@@ -8577,6 +8589,7 @@
   },
   {
     "avg_hr": 143,
+    "avg_temp_f": 62,
     "date": "2024-09-07",
     "distance": 19323.5,
     "elevation_gain": 159.0,
@@ -8972,6 +8985,7 @@
   },
   {
     "avg_hr": 166,
+    "avg_temp_f": 46,
     "date": "2024-10-19",
     "distance": 9913.4,
     "elevation_gain": 96.0,
@@ -9328,6 +9342,7 @@
   },
   {
     "avg_hr": 160,
+    "avg_temp_f": 27,
     "date": "2024-11-30",
     "distance": 21268.1,
     "elevation_gain": 57.0,
@@ -10231,6 +10246,7 @@
   },
   {
     "avg_hr": 168,
+    "avg_temp_f": 64,
     "date": "2025-03-16",
     "distance": 5087.2,
     "elevation_gain": 24.0,
@@ -10628,6 +10644,7 @@
   },
   {
     "avg_hr": 173,
+    "avg_temp_f": 56,
     "date": "2025-05-10",
     "distance": 5338.4,
     "elevation_gain": 68.0,
@@ -11076,6 +11093,7 @@
   },
   {
     "avg_hr": 172,
+    "avg_temp_f": 70,
     "date": "2025-07-04",
     "distance": 6199.1,
     "elevation_gain": 79.0,
@@ -11484,6 +11502,7 @@
   },
   {
     "avg_hr": 161,
+    "avg_temp_f": 54,
     "date": "2025-08-30",
     "distance": 19525.1,
     "elevation_gain": 167.0,
@@ -12009,6 +12028,7 @@
   },
   {
     "avg_hr": 163,
+    "avg_temp_f": 51,
     "date": "2025-11-01",
     "distance": 21432.4,
     "elevation_gain": 40.0,
@@ -12301,6 +12321,7 @@
   },
   {
     "avg_hr": 170,
+    "avg_temp_f": 27,
     "date": "2025-12-07",
     "distance": 4999.9,
     "elevation_gain": 65.0,
@@ -13047,6 +13068,7 @@
   },
   {
     "avg_hr": 161,
+    "avg_temp_f": 49,
     "date": "2026-03-15",
     "distance": 5086.7,
     "elevation_gain": 13.0,
@@ -13340,6 +13362,7 @@
   },
   {
     "avg_hr": 171,
+    "avg_temp_f": 54,
     "date": "2026-04-25",
     "distance": 10074.6,
     "elevation_gain": 67.0,
@@ -13632,6 +13655,7 @@
   },
   {
     "avg_hr": 169,
+    "avg_temp_f": 72,
     "date": "2026-06-06",
     "distance": 16277.8,
     "elevation_gain": 137.0,
