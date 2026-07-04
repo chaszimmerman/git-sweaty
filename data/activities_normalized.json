@@ -183,6 +183,7 @@
   },
   {
     "avg_hr": 173,
+    "avg_temp_f": 50,
     "date": "2022-02-12",
     "distance": 5145.1,
     "elevation_gain": 64.0,
@@ -475,6 +476,7 @@
   },
   {
     "avg_hr": 104,
+    "avg_temp_f": 49,
     "date": "2022-03-08",
     "distance": 5459.1,
     "elevation_gain": 72.0,
@@ -1298,6 +1300,7 @@
   },
   {
     "avg_hr": 169,
+    "avg_temp_f": 61,
     "date": "2022-06-04",
     "distance": 16294.6,
     "elevation_gain": 136.0,
@@ -1378,6 +1381,7 @@
   },
   {
     "avg_hr": 139,
+    "avg_temp_f": 67,
     "date": "2022-06-12",
     "distance": 5106.8,
     "elevation_gain": 10.0,
@@ -2123,6 +2127,7 @@
   },
   {
     "avg_hr": 168,
+    "avg_temp_f": 67,
     "date": "2022-09-03",
     "distance": 19333.3,
     "elevation_gain": 155.0,
@@ -2869,6 +2874,7 @@
   },
   {
     "avg_hr": 169,
+    "avg_temp_f": 31,
     "date": "2022-11-24",
     "distance": 5089.1,
     "elevation_gain": 75.0,
@@ -3823,6 +3829,7 @@
   },
   {
     "avg_hr": 175,
+    "avg_temp_f": 40,
     "date": "2023-03-12",
     "distance": 5087.5,
     "elevation_gain": 11.0,
@@ -4492,6 +4499,7 @@
   },
   {
     "avg_hr": 166,
+    "avg_temp_f": 70,
     "date": "2023-06-03",
     "distance": 16250.2,
     "elevation_gain": 128.0,
@@ -5367,6 +5375,7 @@
   },
   {
     "avg_hr": 171,
+    "avg_temp_f": 69,
     "date": "2023-09-09",
     "distance": 19345.2,
     "elevation_gain": 151.0,
@@ -6165,6 +6174,7 @@
   },
   {
     "avg_hr": 135,
+    "avg_temp_f": 39,
     "date": "2023-11-23",
     "distance": 5118.1,
     "elevation_gain": 71.0,
@@ -7053,6 +7063,7 @@
   },
   {
     "avg_hr": 170,
+    "avg_temp_f": 42,
     "date": "2024-03-09",
     "distance": 10019.8,
     "elevation_gain": 93.0,
@@ -7068,6 +7079,7 @@
   },
   {
     "avg_hr": 177,
+    "avg_temp_f": 48,
     "date": "2024-03-10",
     "distance": 5087.9,
     "elevation_gain": 60.0,
@@ -7764,6 +7776,7 @@
   },
   {
     "avg_hr": 163,
+    "avg_temp_f": 59,
     "date": "2024-06-01",
     "distance": 16207.1,
     "elevation_gain": 141.0,
@@ -8392,6 +8405,7 @@
   },
   {
     "avg_hr": 145,
+    "avg_temp_f": 71,
     "date": "2024-08-18",
     "distance": 10087.4,
     "elevation_gain": 195.0,
@@ -8890,6 +8904,7 @@
   },
   {
     "avg_hr": 134,
+    "avg_temp_f": 71,
     "date": "2024-10-13",
     "distance": 4734.4,
     "elevation_gain": 133.0,
@@ -9297,6 +9312,7 @@
   },
   {
     "avg_hr": 135,
+    "avg_temp_f": 45,
     "date": "2024-11-28",
     "distance": 5115.7,
     "elevation_gain": 73.0,
@@ -9406,6 +9422,7 @@
   },
   {
     "avg_hr": 174,
+    "avg_temp_f": 25,
     "date": "2024-12-14",
     "distance": 8243.0,
     "elevation_gain": 88.0,
@@ -10373,6 +10390,7 @@
   },
   {
     "avg_hr": 135,
+    "avg_temp_f": 56,
     "date": "2025-04-05",
     "distance": 10053.5,
     "elevation_gain": 70.0,
@@ -10834,6 +10852,7 @@
   },
   {
     "avg_hr": 163,
+    "avg_temp_f": 69,
     "date": "2025-06-07",
     "distance": 16210.5,
     "elevation_gain": 133.0,
@@ -11358,6 +11377,7 @@
   },
   {
     "avg_hr": 173,
+    "avg_temp_f": 74,
     "date": "2025-08-16",
     "distance": 10072.7,
     "elevation_gain": 200.0,
@@ -11869,6 +11889,7 @@
   },
   {
     "avg_hr": 167,
+    "avg_temp_f": 48,
     "date": "2025-10-18",
     "distance": 9827.2,
     "elevation_gain": 93.0,
@@ -12212,6 +12233,7 @@
   },
   {
     "avg_hr": 128,
+    "avg_temp_f": 37,
     "date": "2025-11-27",
     "distance": 5116.9,
     "elevation_gain": 75.0,
@@ -12333,6 +12355,7 @@
   },
   {
     "avg_hr": 152,
+    "avg_temp_f": 27,
     "date": "2025-12-13",
     "distance": 8205.5,
     "elevation_gain": 98.0,
@@ -13066,6 +13089,7 @@
   },
   {
     "avg_hr": 169,
+    "avg_temp_f": 51,
     "date": "2026-03-21",
     "distance": 10482.3,
     "elevation_gain": 95.0,
@@ -13423,6 +13447,7 @@
   },
   {
     "avg_hr": 173,
+    "avg_temp_f": 58,
     "date": "2026-05-09",
     "distance": 5337.9,
     "elevation_gain": 68.0,
@@ -13856,6 +13881,7 @@
   },
   {
     "avg_hr": 171,
+    "avg_temp_f": 85,
     "date": "2026-07-04",
     "distance": 6407.9,
     "elevation_gain": 81.0,
