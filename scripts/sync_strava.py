@@ -18,7 +18,7 @@ from sync_scope import (
     start_after_ts,
 )
 from utils import ensure_dir, load_config, raw_activity_dir, read_json, utc_now, write_json
-from weather import fetch_race_temperature
+from weather import WeatherLookupError, fetch_race_temperature
 
 TOKEN_CACHE = ".strava_token.json"
 RAW_DIR = raw_activity_dir("strava")
@@ -681,7 +681,14 @@ def _enrich_race_details(
         badge = _race_badge_label_mi(dist_mi)
         is_standard = badge in _STRAVA_EFFORT_BY_BADGE
         needs_hr = not isinstance(hr_cache.get(activity_id), dict)
-        needs_weather = activity_id not in weather_cache
+        # A cached weather entry is "done" only when it has a temperature or is
+        # explicitly marked unavailable (no GPS). A null WITHOUT that marker is a
+        # prior transient failure — retry it (self-heals a bad backfill run).
+        cached_wx = weather_cache.get(activity_id)
+        weather_done = isinstance(cached_wx, dict) and (
+            cached_wx.get("temp_f") is not None or cached_wx.get("unavailable")
+        )
+        needs_weather = not weather_done
         if needs_weather:
             weather_needed.add(activity_id)
         if is_standard or needs_hr or needs_weather:
@@ -719,12 +726,21 @@ def _enrich_race_details(
             if avg_hr is not None:
                 hr_enriched += 1
             if activity_id in weather_needed:
-                wx = _race_weather_from_detail(detailed)
-                # Record even when null so a race with no start coordinates
-                # (indoor/manual/privacy-zone) is not re-attempted every sync.
-                updated_weather[activity_id] = wx or {"temp_f": None, "feels_f": None}
-                if wx and wx.get("temp_f") is not None:
-                    weather_enriched += 1
+                try:
+                    wx = _race_weather_from_detail(detailed)
+                    if wx:
+                        updated_weather[activity_id] = wx
+                        weather_enriched += 1
+                    else:
+                        # Genuinely unavailable (no start coordinates): cache a
+                        # permanent marker so it is never re-attempted.
+                        updated_weather[activity_id] = {
+                            "temp_f": None, "feels_f": None, "unavailable": True,
+                        }
+                except WeatherLookupError as wex:
+                    # Transient weather-API failure: leave uncached so the next
+                    # sync retries instead of caching a bad null.
+                    print(f"Warning: weather lookup failed for {activity_id}, will retry next sync: {wex}")
         except Exception as exc:
             print(f"Warning: could not fetch detail for activity {activity_id}: {exc}")
 
@@ -746,8 +762,9 @@ def _race_weather_from_detail(detailed: Dict) -> Optional[Dict]:
     """Look up real race-day weather for a detailed Strava activity.
 
     Uses the activity's start coordinates and local start hour. Returns
-    {"temp_f", "feels_f"} or None when coordinates are unavailable or the
-    lookup fails.
+    {"temp_f", "feels_f"} on success, or None when the race has no usable start
+    coordinates (genuinely unavailable). Propagates WeatherLookupError when the
+    Open-Meteo request fails transiently so the caller can retry later.
     """
     latlng = detailed.get("start_latlng") or []
     if not (isinstance(latlng, list) and len(latlng) == 2):

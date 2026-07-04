@@ -6,10 +6,16 @@ Open-Meteo exposes two hourly-temperature endpoints we use:
   - api.open-meteo.com/v1/forecast?past_days=N : covers the recent past (up to
     92 days) including today, so it fills the archive's trailing gap.
 
-A race's weather is immutable once run, so callers cache the result forever and
-only ever look up a race that has no cached entry yet.
+A race's weather is immutable once run, so callers cache a successful result
+forever. Two failure modes are kept distinct so the caller can cache correctly:
+  - genuinely unavailable (bad input / no data for the date) -> returns None;
+    the caller caches a permanent "unavailable" marker and never retries.
+  - transient (network error, HTTP 429/5xx from Open-Meteo, which throttles
+    bursts especially from shared CI IPs) -> raises WeatherLookupError after
+    retries; the caller leaves it uncached so the next sync retries it.
 """
 import datetime
+import time
 from typing import Dict, Optional
 
 import requests
@@ -20,6 +26,13 @@ FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 # date yet, so use the forecast endpoint's past_days window instead.
 RECENT_DAYS = 10
 REQUEST_TIMEOUT = 30
+# Retry transient failures (throttling/network) with growing backoff so a burst
+# of race lookups recovers within a single sync instead of caching a bad null.
+RETRY_BACKOFF_SECONDS = (2, 5, 12)
+
+
+class WeatherLookupError(Exception):
+    """Transient failure reaching Open-Meteo; the lookup should be retried."""
 
 
 def _today_utc() -> datetime.date:
@@ -33,8 +46,15 @@ def fetch_race_temperature(
     local_hour: int,
     *,
     today: Optional[datetime.date] = None,
+    attempts: int = 4,
+    sleep=time.sleep,
 ) -> Optional[Dict]:
-    """Return {"temp_f", "feels_f"} for a location/date/hour, or None on failure.
+    """Return {"temp_f", "feels_f"} for a location/date/hour.
+
+    Returns None when the lookup is genuinely unavailable (bad input, or a 200
+    response with no usable temperature). Raises WeatherLookupError when every
+    attempt fails transiently (network / HTTP error) so the caller can retry on
+    a later sync rather than caching a permanent null.
 
     local_date is "YYYY-MM-DD" in the activity's local timezone; local_hour is
     0-23 local. We request with timezone=auto so Open-Meteo returns hourly
@@ -66,12 +86,20 @@ def fetch_race_temperature(
         params["start_date"] = local_date
         params["end_date"] = local_date
 
-    try:
-        resp = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
-        resp.raise_for_status()
-        data = resp.json()
-    except (requests.RequestException, ValueError):
-        return None
+    data = None
+    last_err = None
+    for attempt in range(attempts):
+        try:
+            resp = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
+            resp.raise_for_status()
+            data = resp.json()
+            break
+        except (requests.RequestException, ValueError) as exc:
+            last_err = exc
+            if attempt < attempts - 1:
+                sleep(RETRY_BACKOFF_SECONDS[min(attempt, len(RETRY_BACKOFF_SECONDS) - 1)])
+    if data is None:
+        raise WeatherLookupError(f"Open-Meteo request failed after {attempts} attempts: {last_err}")
 
     hourly = data.get("hourly") or {}
     times = hourly.get("time") or []
