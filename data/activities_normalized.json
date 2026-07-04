@@ -13840,5 +13840,32 @@
     "start_date_local": "2026-07-02T16:59:12Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-07-03",
+    "distance": 5258.7,
+    "elevation_gain": 0.0,
+    "id": "19166884896",
+    "moving_time": 1647.0,
+    "name": "Afternoon Treadmill Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-07-03T14:07:22Z",
+    "type": "Run",
+    "year": 2026
+  },
+  {
+    "date": "2026-07-04",
+    "distance": 6407.9,
+    "elevation_gain": 81.0,
+    "id": "19175932519",
+    "is_race": true,
+    "moving_time": 1947.0,
+    "name": "Towson 4 on the 4th Race",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-07-04T08:16:32Z",
+    "type": "Run",
+    "year": 2026
   }
 ]

@@ -9617,6 +9617,25 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/19155949324",
       "year": 2026
+    },
+    {
+      "date": "2026-07-03",
+      "hour": 14,
+      "name": "Afternoon Treadmill Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19166884896",
+      "year": 2026
+    },
+    {
+      "date": "2026-07-04",
+      "hour": 8,
+      "is_race": true,
+      "name": "Towson 4 on the 4th Race",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19175932519",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -19102,6 +19121,24 @@
           "distance": 4854.6,
           "elevation_gain": 0.0,
           "moving_time": 1493.0
+        },
+        "2026-07-03": {
+          "activity_ids": [
+            "19166884896"
+          ],
+          "count": 1,
+          "distance": 5258.7,
+          "elevation_gain": 0.0,
+          "moving_time": 1647.0
+        },
+        "2026-07-04": {
+          "activity_ids": [
+            "19175932519"
+          ],
+          "count": 1,
+          "distance": 6407.9,
+          "elevation_gain": 81.0,
+          "moving_time": 1947.0
         }
       },
       "Walk": {
@@ -19117,7 +19154,7 @@
       }
     }
   },
-  "generated_at": "2026-07-03T16:29:31.375258+00:00",
+  "generated_at": "2026-07-04T14:48:42.871315+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
