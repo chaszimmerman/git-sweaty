@@ -704,6 +704,10 @@ def _enrich_race_details(
     updated_efforts = dict(efforts_cache)
     updated_hr = dict(hr_cache)
     updated_weather = dict(weather_cache)
+    # Collect weather lookup specs from the Strava detail here, but resolve them
+    # in a separate retry loop below so a transient Open-Meteo failure can be
+    # re-pulled without re-fetching (rate-limited) Strava detail.
+    pending_weather = {}  # activity_id -> (lat, lng, local_date, local_hour)
     for activity_id, is_standard in to_fetch:
         try:
             detailed, token = _run_with_token_refresh(
@@ -726,23 +730,19 @@ def _enrich_race_details(
             if avg_hr is not None:
                 hr_enriched += 1
             if activity_id in weather_needed:
-                try:
-                    wx = _race_weather_from_detail(detailed)
-                    if wx:
-                        updated_weather[activity_id] = wx
-                        weather_enriched += 1
-                    else:
-                        # Genuinely unavailable (no start coordinates): cache a
-                        # permanent marker so it is never re-attempted.
-                        updated_weather[activity_id] = {
-                            "temp_f": None, "feels_f": None, "unavailable": True,
-                        }
-                except WeatherLookupError as wex:
-                    # Transient weather-API failure: leave uncached so the next
-                    # sync retries instead of caching a bad null.
-                    print(f"Warning: weather lookup failed for {activity_id}, will retry next sync: {wex}")
+                spec = _race_weather_spec_from_detail(detailed)
+                if spec is None:
+                    # Genuinely unavailable (no start coordinates): cache a
+                    # permanent marker so it is never re-attempted.
+                    updated_weather[activity_id] = {
+                        "temp_f": None, "feels_f": None, "unavailable": True,
+                    }
+                else:
+                    pending_weather[activity_id] = spec
         except Exception as exc:
             print(f"Warning: could not fetch detail for activity {activity_id}: {exc}")
+
+    weather_enriched = _resolve_pending_weather(pending_weather, updated_weather)
 
     if updated_efforts != efforts_cache:
         ensure_dir("data")
@@ -758,13 +758,12 @@ def _enrich_race_details(
     return efforts_enriched, hr_enriched, weather_enriched, token
 
 
-def _race_weather_from_detail(detailed: Dict) -> Optional[Dict]:
-    """Look up real race-day weather for a detailed Strava activity.
+def _race_weather_spec_from_detail(detailed: Dict) -> Optional[Tuple]:
+    """Extract the weather-lookup spec from a detailed Strava activity.
 
-    Uses the activity's start coordinates and local start hour. Returns
-    {"temp_f", "feels_f"} on success, or None when the race has no usable start
-    coordinates (genuinely unavailable). Propagates WeatherLookupError when the
-    Open-Meteo request fails transiently so the caller can retry later.
+    Returns (lat, lng, local_date, local_hour) usable for an Open-Meteo lookup,
+    or None when the race has no usable start coordinates / start time (weather
+    is genuinely unavailable and should be marked so, never retried).
     """
     latlng = detailed.get("start_latlng") or []
     if not (isinstance(latlng, list) and len(latlng) == 2):
@@ -780,7 +779,54 @@ def _race_weather_from_detail(detailed: Dict) -> Optional[Dict]:
         local_hour = int(sdl[11:13]) if len(sdl) >= 13 else 0
     except ValueError:
         local_hour = 0
-    return fetch_race_temperature(lat, lng, local_date, local_hour)
+    return (lat, lng, local_date, local_hour)
+
+
+def _resolve_pending_weather(
+    pending: Dict, updated_weather: Dict, *, max_rounds: int = 6, per_call_delay: float = 0.6, sleep=time.sleep
+) -> int:
+    """Fetch weather for pending races, looping to re-pull transient failures.
+
+    `pending` maps activity_id -> (lat, lng, local_date, local_hour). Successful
+    lookups are written into `updated_weather`; a 200-with-no-data result is
+    marked permanently unavailable. Races that keep failing transiently are
+    retried over up to `max_rounds` passes (spacing calls by `per_call_delay`
+    and waiting between rounds so Open-Meteo throttling clears); any still
+    failing after the last round are left uncached so a future sync retries them.
+
+    Returns the number of races that got a real temperature.
+    """
+    if not pending:
+        return 0
+    remaining = dict(pending)
+    enriched = 0
+    for rnd in range(1, max_rounds + 1):
+        if not remaining:
+            break
+        if rnd > 1:
+            backoff = min(30, 5 * (2 ** (rnd - 2)))
+            print(f"Weather retry round {rnd}: {len(remaining)} race(s) still pending; waiting {backoff}s...")
+            sleep(backoff)
+        still = {}
+        for activity_id, (lat, lng, local_date, local_hour) in remaining.items():
+            try:
+                wx = fetch_race_temperature(lat, lng, local_date, local_hour)
+                if wx:
+                    updated_weather[activity_id] = wx
+                    enriched += 1
+                else:
+                    updated_weather[activity_id] = {"temp_f": None, "feels_f": None, "unavailable": True}
+            except WeatherLookupError:
+                still[activity_id] = (lat, lng, local_date, local_hour)
+            if per_call_delay:
+                sleep(per_call_delay)
+        remaining = still
+    if remaining:
+        print(
+            f"Weather: {len(remaining)} race(s) still failing after {max_rounds} rounds; "
+            "left uncached to retry on a future sync."
+        )
+    return enriched
 
 
 def _write_activity(activity: Dict) -> bool:

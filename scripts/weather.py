@@ -46,7 +46,7 @@ def fetch_race_temperature(
     local_hour: int,
     *,
     today: Optional[datetime.date] = None,
-    attempts: int = 4,
+    attempts: int = 2,
     sleep=time.sleep,
 ) -> Optional[Dict]:
     """Return {"temp_f", "feels_f"} for a location/date/hour.
