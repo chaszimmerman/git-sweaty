@@ -14,6 +14,7 @@ from utils import ensure_dir, load_config, normalize_source, parse_iso_datetime,
 OUT_PATH = os.path.join("data", "activities_normalized.json")
 RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
 RACE_HEARTRATE_PATH = os.path.join("data", "race_heartrate.json")
+RACE_WEATHER_PATH = os.path.join("data", "race_weather.json")
 
 _RACE_NAME_RE = re.compile(
     r"\b(race|races|5k|10k|15k|half|marathon|miler|milers|dash|trot|solstice)\b",
@@ -233,6 +234,13 @@ def normalize() -> List[Dict]:
         except Exception:
             pass
 
+    race_weather: Dict[str, Dict] = {}
+    if os.path.exists(RACE_WEATHER_PATH):
+        try:
+            race_weather = read_json(RACE_WEATHER_PATH) or {}
+        except Exception:
+            pass
+
     for item in items:
         if str(item.get("id") or "") in exclude_race_ids:
             item.pop("is_race", None)
@@ -256,10 +264,12 @@ def normalize() -> List[Dict]:
                 item["avg_hr"] = round(float(avg_hr))
             elif "avg_hr" in item:
                 del item["avg_hr"]
-            # average_temp is device-recorded °C; convert to °F for display.
-            avg_temp_c = hr_entry.get("temp") if isinstance(hr_entry, dict) else None
-            if avg_temp_c is not None:
-                item["avg_temp_f"] = round(float(avg_temp_c) * 9 / 5 + 32)
+            # Real race-day ambient temperature from the weather service
+            # (Open-Meteo), already in °F; keyed by activity id.
+            wx = race_weather.get(activity_id) or {}
+            temp_f = wx.get("temp_f") if isinstance(wx, dict) else None
+            if temp_f is not None:
+                item["avg_temp_f"] = round(float(temp_f))
             elif "avg_temp_f" in item:
                 del item["avg_temp_f"]
         raw_activity_type = str(item.get("raw_activity_type") or item.get("raw_type") or item.get("type") or other_bucket)

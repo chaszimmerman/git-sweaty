@@ -3889,15 +3889,19 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
   wrap.className = "races-chart-wrap";
   if (pts.length < 2) return wrap;
 
-  // Temperature heat-strip below the x-axis needs extra bottom room; grow H and
-  // mB together so the plot area (pB, pH) is byte-identical to the no-strip layout.
-  const hasTemp = seriesRaces.some((r) => r.avg_temp_f != null);
-  const W = 680, H = hasTemp ? 336 : 300;
-  const mL = 54, mR = 54, mT = 30, mB = hasTemp ? 82 : 46;
+  // Weather heat-strip (one chip per year) below the x-axis needs extra bottom
+  // room; grow H and mB together so the plot area height (pH) is unchanged.
+  const stripHasTemp = pts.some((p) => p.temp != null);
+  const W = 680, H = stripHasTemp ? 340 : 300;
+  const mL = 54, mR = 54, mT = 30, mB = stripHasTemp ? 86 : 46;
   const pL = mL, pR = W - mR, pT = mT, pB = H - mB;
   const pW = pR - pL, pH = pB - pT;
   const n = pts.length;
-  const xFor = (i) => (n === 1 ? pL + pW / 2 : pL + (i / (n - 1)) * pW);
+  // When the strip is shown, inset the data points horizontally so each year's
+  // chip (wider than the gap between chips) fits without overflowing the canvas.
+  const xPad = stripHasTemp ? 40 : 0;
+  const xL = pL + xPad, xR = pR - xPad;
+  const xFor = (i) => (n === 1 ? (pL + pR) / 2 : xL + (i / (n - 1)) * (xR - xL));
 
   const paceVals = pts.map((p) => p.paceSec);
   let minP = Math.min(...paceVals), maxP = Math.max(...paceVals);
@@ -3930,7 +3934,7 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
   pts.forEach((p, i) => {
     const x = xFor(i);
     parts.push(`<line x1="${x.toFixed(1)}" y1="${pT}" x2="${x.toFixed(1)}" y2="${pB}" class="rc-grid"/>`);
-    parts.push(`<text x="${x.toFixed(1)}" y="${pB + 18}" class="rc-xlabel">${p.yr}</text>`);
+    parts.push(`<text x="${x.toFixed(1)}" y="${(pB + (stripHasTemp ? 46 : 18)).toFixed(1)}" class="rc-xlabel">${p.yr}</text>`);
   });
 
   // Per-point value labels below show exact pace/HR, so dedicated numeric
@@ -3964,26 +3968,27 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
     flush();
   }
 
-  // Temperature heat-strip below the x-axis. Absolute color scale so a given
-  // temperature maps to the same color across every race series (comparable at
-  // a glance). Continuous cells butt against each other into a "weather ribbon".
-  const stripHasTemp = pts.some((p) => p.temp != null);
+  // Weather heat-strip: one discrete chip per year, centered on the year and
+  // separated by gaps, temp value centered inside. Absolute color scale so a
+  // given temperature is the same color across every series. A neutral "—" chip
+  // marks a year whose race had no start coordinates (no weather lookup).
   if (stripHasTemp) {
-    const stripY = pB + 28, stripH = 20;
-    parts.push(`<text x="${(pL - 6).toFixed(1)}" y="${(stripY + 14).toFixed(1)}" class="rc-temp-cap">°F</text>`);
+    const spacing = n > 1 ? (xR - xL) / (n - 1) : (xR - xL);
+    const chipW = Math.min(150, spacing * 0.8);
+    const chipH = 22, chipY = pB + 10, rx = 5;
+    const tY = chipY + chipH / 2 + 4; // vertically center text within the chip
     pts.forEach((p, i) => {
-      const left = i === 0 ? pL : (xFor(i - 1) + xFor(i)) / 2;
-      const right = i === n - 1 ? pR : (xFor(i) + xFor(i + 1)) / 2;
-      const w = (right - left).toFixed(1);
+      const cx = xFor(i);
+      const x = cx - chipW / 2;
       if (p.temp == null) {
-        parts.push(`<rect x="${left.toFixed(1)}" y="${stripY}" width="${w}" height="${stripH}" fill="rgba(148,163,184,0.22)"/>`);
-        parts.push(`<text x="${xFor(i).toFixed(1)}" y="${(stripY + 14).toFixed(1)}" class="rc-temp-empty">—</text>`);
+        parts.push(`<rect x="${x.toFixed(1)}" y="${chipY}" width="${chipW.toFixed(1)}" height="${chipH}" rx="${rx}" fill="rgba(148,163,184,0.20)"/>`);
+        parts.push(`<text x="${cx.toFixed(1)}" y="${tY.toFixed(1)}" class="rc-temp-empty">—</text>`);
       } else {
         const rgb = _tempRgbF(p.temp);
         const lum = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
         const txt = lum > 150 ? "#0f172a" : "#ffffff";
-        parts.push(`<rect x="${left.toFixed(1)}" y="${stripY}" width="${w}" height="${stripH}" fill="rgb(${rgb.join(",")})"/>`);
-        parts.push(`<text x="${xFor(i).toFixed(1)}" y="${(stripY + 14).toFixed(1)}" class="rc-temp-val" fill="${txt}">${Math.round(p.temp)}°</text>`);
+        parts.push(`<rect x="${x.toFixed(1)}" y="${chipY}" width="${chipW.toFixed(1)}" height="${chipH}" rx="${rx}" fill="rgb(${rgb.join(",")})"/>`);
+        parts.push(`<text x="${cx.toFixed(1)}" y="${tY.toFixed(1)}" class="rc-temp-val" fill="${txt}">${Math.round(p.temp)}°</text>`);
       }
     });
   }

@@ -18,6 +18,7 @@ from sync_scope import (
     start_after_ts,
 )
 from utils import ensure_dir, load_config, raw_activity_dir, read_json, utc_now, write_json
+from weather import fetch_race_temperature
 
 TOKEN_CACHE = ".strava_token.json"
 RAW_DIR = raw_activity_dir("strava")
@@ -29,6 +30,7 @@ ATHLETE_PATH = os.path.join("data", "athletes_strava.json")
 LEGACY_ATHLETE_PATH = os.path.join("data", "athletes.json")
 RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
 RACE_HEARTRATE_PATH = os.path.join("data", "race_heartrate.json")
+RACE_WEATHER_PATH = os.path.join("data", "race_weather.json")
 TRANSIENT_HTTP_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504, 597}
 MAX_REQUEST_ATTEMPTS = 5
 
@@ -593,29 +595,42 @@ def _fetch_detailed_activity(token: str, activity_id: str, limiter: Optional[Rat
 
 def _enrich_race_details(
     config: Dict, token: str, limiter: RateLimiter, dry_run: bool
-) -> Tuple[int, int, str]:
-    """Fetch Strava detail for race activities to capture best_efforts, heart rate, and temp.
+) -> Tuple[int, int, int, str]:
+    """Fetch Strava detail for race activities to capture best_efforts, HR, and weather.
 
-    A single detail fetch per race yields all three. best_efforts is re-fetched
-    every sync for standard-distance races (PR ranks can change when a new PR is
-    set). Heart rate and average temperature are immutable once recorded, so they
-    are fetched incrementally: a race is fetched only when it has no cached entry
-    yet (or an entry predating temp capture, missing the "temp" key). The cache
-    reads the full history every run, so the first sync after deploy backfills
-    every historical race; steady-state cost then stays flat at the
+    A single detail fetch per race yields best_efforts + heart rate, plus the
+    start coordinates and local start time used to look up real race-day weather
+    from Open-Meteo (device temperature is body-heat-contaminated on wrist
+    devices, so we ignore it and source ambient temp from a weather service).
+
+    best_efforts is re-fetched every sync for standard-distance races (PR ranks
+    can change when a new PR is set). Heart rate and weather are immutable once
+    recorded, so they are fetched incrementally — only for a race with no cached
+    entry yet. The race list is the full persisted history (so every standard
+    race keeps its PR ranks fresh and every historical race is eligible for
+    HR/weather backfill) unioned with the raw activities this sync just wrote (to
+    catch a brand-new race that normalize — which runs after sync — hasn't
+    written to activities_normalized.json yet). The first sync after deploy thus
+    backfills weather for all history; steady-state cost then stays flat at the
     standard-distance PR refreshes.
 
-    Returns (efforts_enriched, hr_enriched, token).
+    Returns (efforts_enriched, hr_enriched, weather_enriched, token).
     """
+    # Full persisted history first, then overlay raw summaries by id so a
+    # brand-new race not yet in the normalized file is still covered.
+    by_id: Dict[str, Dict] = {}
     activities_path = os.path.join("data", "activities_normalized.json")
-    items: List[Dict] = []
+    if os.path.exists(activities_path):
+        for it in (read_json(activities_path) or []):
+            aid = str(it.get("id") or "").strip()
+            if aid:
+                by_id[aid] = {
+                    "id": it.get("id"),
+                    "name": it.get("name"),
+                    "distance": it.get("distance"),
+                    "is_race": it.get("is_race"),
+                }
     if os.path.isdir(RAW_DIR):
-        # Read from the raw activities this sync just wrote rather than
-        # activities_normalized.json: normalize.py runs *after* sync, so on
-        # the very same run a brand-new race is first fetched, the normalized
-        # file is still one cycle stale and doesn't contain it yet — which
-        # would silently skip HR/best_efforts enrichment for that race until
-        # the next sync. RAW_DIR is always current within this run.
         for filename in sorted(os.listdir(RAW_DIR)):
             if not filename.endswith(".json"):
                 continue
@@ -625,16 +640,18 @@ def _enrich_race_details(
                 continue
             if not isinstance(raw, dict):
                 continue
-            items.append({
+            aid = str(raw.get("id") or "").strip()
+            if not aid:
+                continue
+            by_id[aid] = {
                 "id": raw.get("id"),
                 "name": raw.get("name"),
                 "distance": raw.get("distance"),
                 "is_race": _is_strava_race(raw),
-            })
-    elif os.path.exists(activities_path):
-        items = read_json(activities_path) or []
+            }
+    items = list(by_id.values())
     if not items:
-        return 0, 0, token
+        return 0, 0, 0, token
 
     efforts_cache = read_json(RACE_BEST_EFFORTS_PATH) if os.path.exists(RACE_BEST_EFFORTS_PATH) else {}
     if not isinstance(efforts_cache, dict):
@@ -642,12 +659,17 @@ def _enrich_race_details(
     hr_cache = read_json(RACE_HEARTRATE_PATH) if os.path.exists(RACE_HEARTRATE_PATH) else {}
     if not isinstance(hr_cache, dict):
         hr_cache = {}
+    weather_cache = read_json(RACE_WEATHER_PATH) if os.path.exists(RACE_WEATHER_PATH) else {}
+    if not isinstance(weather_cache, dict):
+        weather_cache = {}
 
     # Decide what to fetch. Check both the persisted is_race flag and the name
     # pattern so this works on first run before normalize writes is_race flags.
     #   - standard-distance races: always fetched (best_efforts PR refresh)
-    #   - any race missing a cached HR entry: fetched once for HR backfill
+    #   - race missing a cached HR entry: fetched once for HR backfill
+    #   - race missing a cached weather entry: fetched once for weather backfill
     to_fetch = []  # (activity_id, is_standard)
+    weather_needed = set()
     for item in items:
         is_race = item.get("is_race") or bool(_RACE_NAME_RE.search(str(item.get("name") or "")))
         if not is_race:
@@ -658,21 +680,23 @@ def _enrich_race_details(
         dist_mi = float(item.get("distance") or 0) * 0.000621371
         badge = _race_badge_label_mi(dist_mi)
         is_standard = badge in _STRAVA_EFFORT_BY_BADGE
-        cached = hr_cache.get(activity_id)
-        # Fetch if never seen, or if the cached entry predates temp capture
-        # (missing the "temp" key) so temperature backfills once automatically.
-        needs_detail = not isinstance(cached, dict) or "temp" not in cached
-        if is_standard or needs_detail:
+        needs_hr = not isinstance(hr_cache.get(activity_id), dict)
+        needs_weather = activity_id not in weather_cache
+        if needs_weather:
+            weather_needed.add(activity_id)
+        if is_standard or needs_hr or needs_weather:
             to_fetch.append((activity_id, is_standard))
 
     if not to_fetch or dry_run:
-        return 0, 0, token
+        return 0, 0, 0, token
 
-    print(f"Enriching race detail for {len(to_fetch)} race(s) (efforts + heart rate)...")
+    print(f"Enriching race detail for {len(to_fetch)} race(s) (efforts + heart rate + weather)...")
     efforts_enriched = 0
     hr_enriched = 0
+    weather_enriched = 0
     updated_efforts = dict(efforts_cache)
     updated_hr = dict(hr_cache)
+    updated_weather = dict(weather_cache)
     for activity_id, is_standard in to_fetch:
         try:
             detailed, token = _run_with_token_refresh(
@@ -691,17 +715,16 @@ def _enrich_race_details(
             max_hr = detailed.get("max_heartrate")
             avg_hr = float(avg_hr) if avg_hr else None
             max_hr = float(max_hr) if max_hr else None
-            # average_temp is device-recorded °C (only present when the
-            # recording device has a temp sensor); immutable like HR.
-            avg_temp = detailed.get("average_temp")
-            avg_temp = float(avg_temp) if avg_temp is not None else None
-            # Record presence even when null so we never re-fetch a race that
-            # has no HR/temp data (it will not appear retroactively). "temp"
-            # is a dict key so an entry written before temp capture existed is
-            # detected as stale and re-fetched once (see needs_detail below).
-            updated_hr[activity_id] = {"avg": avg_hr, "max": max_hr, "temp": avg_temp}
+            updated_hr[activity_id] = {"avg": avg_hr, "max": max_hr}
             if avg_hr is not None:
                 hr_enriched += 1
+            if activity_id in weather_needed:
+                wx = _race_weather_from_detail(detailed)
+                # Record even when null so a race with no start coordinates
+                # (indoor/manual/privacy-zone) is not re-attempted every sync.
+                updated_weather[activity_id] = wx or {"temp_f": None, "feels_f": None}
+                if wx and wx.get("temp_f") is not None:
+                    weather_enriched += 1
         except Exception as exc:
             print(f"Warning: could not fetch detail for activity {activity_id}: {exc}")
 
@@ -711,9 +734,36 @@ def _enrich_race_details(
     if updated_hr != hr_cache:
         ensure_dir("data")
         write_json(RACE_HEARTRATE_PATH, updated_hr)
+    if updated_weather != weather_cache:
+        ensure_dir("data")
+        write_json(RACE_WEATHER_PATH, updated_weather)
 
-    print(f"Race detail enriched: {efforts_enriched} efforts, {hr_enriched} heart rate")
-    return efforts_enriched, hr_enriched, token
+    print(f"Race detail enriched: {efforts_enriched} efforts, {hr_enriched} heart rate, {weather_enriched} weather")
+    return efforts_enriched, hr_enriched, weather_enriched, token
+
+
+def _race_weather_from_detail(detailed: Dict) -> Optional[Dict]:
+    """Look up real race-day weather for a detailed Strava activity.
+
+    Uses the activity's start coordinates and local start hour. Returns
+    {"temp_f", "feels_f"} or None when coordinates are unavailable or the
+    lookup fails.
+    """
+    latlng = detailed.get("start_latlng") or []
+    if not (isinstance(latlng, list) and len(latlng) == 2):
+        return None
+    lat, lng = latlng[0], latlng[1]
+    if lat in (None, 0) and lng in (None, 0):
+        return None
+    sdl = str(detailed.get("start_date_local") or "")
+    if len(sdl) < 10:
+        return None
+    local_date = sdl[:10]
+    try:
+        local_hour = int(sdl[11:13]) if len(sdl) >= 13 else 0
+    except ValueError:
+        local_hour = 0
+    return fetch_race_temperature(lat, lng, local_date, local_hour)
 
 
 def _write_activity(activity: Dict) -> bool:
@@ -998,8 +1048,9 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
 
     race_efforts_enriched = 0
     race_hr_enriched = 0
+    race_weather_enriched = 0
     if not rate_limited:
-        race_efforts_enriched, race_hr_enriched, token = _enrich_race_details(
+        race_efforts_enriched, race_hr_enriched, race_weather_enriched, token = _enrich_race_details(
             config, token, limiter, dry_run
         )
 
@@ -1019,6 +1070,7 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
         summary["rate_limit_message"] = rate_limit_message
     summary["race_efforts_enriched"] = race_efforts_enriched
     summary["race_hr_enriched"] = race_hr_enriched
+    summary["race_weather_enriched"] = race_weather_enriched
     return summary
 
 
