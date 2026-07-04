@@ -3875,7 +3875,12 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
     const paceSec = r.movingTime / dist;
     const prev = byYear.get(yr);
     if (!prev || paceSec < prev.paceSec) {
-      byYear.set(yr, { yr, paceSec, hr: Number(r.avg_hr) || null });
+      byYear.set(yr, {
+        yr,
+        paceSec,
+        hr: Number(r.avg_hr) || null,
+        temp: r.avg_temp_f == null ? null : Number(r.avg_temp_f),
+      });
     }
   });
   const pts = [...byYear.values()].sort((a, b) => a.yr - b.yr);
@@ -3884,8 +3889,11 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
   wrap.className = "races-chart-wrap";
   if (pts.length < 2) return wrap;
 
-  const W = 680, H = 300;
-  const mL = 54, mR = 54, mT = 30, mB = 46;
+  // Temperature heat-strip below the x-axis needs extra bottom room; grow H and
+  // mB together so the plot area (pB, pH) is byte-identical to the no-strip layout.
+  const hasTemp = seriesRaces.some((r) => r.avg_temp_f != null);
+  const W = 680, H = hasTemp ? 336 : 300;
+  const mL = 54, mR = 54, mT = 30, mB = hasTemp ? 82 : 46;
   const pL = mL, pR = W - mR, pT = mT, pB = H - mB;
   const pW = pR - pL, pH = pB - pT;
   const n = pts.length;
@@ -3956,6 +3964,30 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
     flush();
   }
 
+  // Temperature heat-strip below the x-axis. Absolute color scale so a given
+  // temperature maps to the same color across every race series (comparable at
+  // a glance). Continuous cells butt against each other into a "weather ribbon".
+  const stripHasTemp = pts.some((p) => p.temp != null);
+  if (stripHasTemp) {
+    const stripY = pB + 28, stripH = 20;
+    parts.push(`<text x="${(pL - 6).toFixed(1)}" y="${(stripY + 14).toFixed(1)}" class="rc-temp-cap">°F</text>`);
+    pts.forEach((p, i) => {
+      const left = i === 0 ? pL : (xFor(i - 1) + xFor(i)) / 2;
+      const right = i === n - 1 ? pR : (xFor(i) + xFor(i + 1)) / 2;
+      const w = (right - left).toFixed(1);
+      if (p.temp == null) {
+        parts.push(`<rect x="${left.toFixed(1)}" y="${stripY}" width="${w}" height="${stripH}" fill="rgba(148,163,184,0.22)"/>`);
+        parts.push(`<text x="${xFor(i).toFixed(1)}" y="${(stripY + 14).toFixed(1)}" class="rc-temp-empty">—</text>`);
+      } else {
+        const rgb = _tempRgbF(p.temp);
+        const lum = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+        const txt = lum > 150 ? "#0f172a" : "#ffffff";
+        parts.push(`<rect x="${left.toFixed(1)}" y="${stripY}" width="${w}" height="${stripH}" fill="rgb(${rgb.join(",")})"/>`);
+        parts.push(`<text x="${xFor(i).toFixed(1)}" y="${(stripY + 14).toFixed(1)}" class="rc-temp-val" fill="${txt}">${Math.round(p.temp)}°</text>`);
+      }
+    });
+  }
+
   parts.push(`</svg>`);
   wrap.innerHTML = parts.join("");
 
@@ -3967,9 +3999,34 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
     `<span class="rc-leg"><span class="rc-swatch" style="background:${PACE_COLOR}"></span>Pace (${esc(unitLabel)}) — faster is higher</span>` +
     (hasHR
       ? `<span class="rc-leg"><span class="rc-swatch" style="background:${HR_COLOR}"></span>Avg HR (bpm)</span>`
-      : `<span class="rc-leg rc-leg-note">No heart rate data for this series</span>`);
+      : `<span class="rc-leg rc-leg-note">No heart rate data for this series</span>`) +
+    (stripHasTemp
+      ? `<span class="rc-leg"><span class="rc-swatch-temp"></span>Race-day temp (cool → hot)</span>`
+      : "");
   wrap.appendChild(legend);
   return wrap;
+}
+
+// Absolute °F → color ramp for the race-progression temperature strip. Fixed
+// anchor stops (cool blue → warm amber → hot red) so the same temperature reads
+// as the same color in every series. Clamps outside the anchor range.
+function _tempRgbF(f) {
+  const stops = [
+    [40, [37, 99, 235]],   // deep blue
+    [60, [16, 185, 129]],  // emerald
+    [75, [245, 158, 11]],  // amber
+    [90, [239, 68, 68]],   // red
+  ];
+  if (f <= stops[0][0]) return stops[0][1].slice();
+  if (f >= stops[stops.length - 1][0]) return stops[stops.length - 1][1].slice();
+  for (let i = 0; i < stops.length - 1; i++) {
+    const [a, ca] = stops[i], [b, cb] = stops[i + 1];
+    if (f >= a && f <= b) {
+      const t = (f - a) / (b - a);
+      return ca.map((v, k) => Math.round(v + (cb[k] - v) * t));
+    }
+  }
+  return stops[stops.length - 1][1].slice();
 }
 
 function buildRacesCard(payload, types, years, units) {

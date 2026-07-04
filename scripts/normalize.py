@@ -256,6 +256,12 @@ def normalize() -> List[Dict]:
                 item["avg_hr"] = round(float(avg_hr))
             elif "avg_hr" in item:
                 del item["avg_hr"]
+            # average_temp is device-recorded °C; convert to °F for display.
+            avg_temp_c = hr_entry.get("temp") if isinstance(hr_entry, dict) else None
+            if avg_temp_c is not None:
+                item["avg_temp_f"] = round(float(avg_temp_c) * 9 / 5 + 32)
+            elif "avg_temp_f" in item:
+                del item["avg_temp_f"]
         raw_activity_type = str(item.get("raw_activity_type") or item.get("raw_type") or item.get("type") or other_bucket)
         raw_type = str(item.get("raw_type") or raw_activity_type or other_bucket)
         item["raw_activity_type"] = raw_activity_type

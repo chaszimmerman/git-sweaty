@@ -594,15 +594,16 @@ def _fetch_detailed_activity(token: str, activity_id: str, limiter: Optional[Rat
 def _enrich_race_details(
     config: Dict, token: str, limiter: RateLimiter, dry_run: bool
 ) -> Tuple[int, int, str]:
-    """Fetch Strava detail for race activities to capture best_efforts and heart rate.
+    """Fetch Strava detail for race activities to capture best_efforts, heart rate, and temp.
 
-    A single detail fetch per race yields both. best_efforts is re-fetched every
-    sync for standard-distance races (PR ranks can change when a new PR is set).
-    Heart rate is immutable once recorded, so it is fetched incrementally: a race
-    is fetched for HR only when it has no cached HR entry yet. The HR cache reads
-    the full normalized history every run, so the first sync after deploy (or any
-    full-backfill reset, which deletes the HR cache) backfills every historical
-    race; steady-state cost then stays flat at the standard-distance PR refreshes.
+    A single detail fetch per race yields all three. best_efforts is re-fetched
+    every sync for standard-distance races (PR ranks can change when a new PR is
+    set). Heart rate and average temperature are immutable once recorded, so they
+    are fetched incrementally: a race is fetched only when it has no cached entry
+    yet (or an entry predating temp capture, missing the "temp" key). The cache
+    reads the full history every run, so the first sync after deploy backfills
+    every historical race; steady-state cost then stays flat at the
+    standard-distance PR refreshes.
 
     Returns (efforts_enriched, hr_enriched, token).
     """
@@ -657,8 +658,11 @@ def _enrich_race_details(
         dist_mi = float(item.get("distance") or 0) * 0.000621371
         badge = _race_badge_label_mi(dist_mi)
         is_standard = badge in _STRAVA_EFFORT_BY_BADGE
-        needs_hr = activity_id not in hr_cache
-        if is_standard or needs_hr:
+        cached = hr_cache.get(activity_id)
+        # Fetch if never seen, or if the cached entry predates temp capture
+        # (missing the "temp" key) so temperature backfills once automatically.
+        needs_detail = not isinstance(cached, dict) or "temp" not in cached
+        if is_standard or needs_detail:
             to_fetch.append((activity_id, is_standard))
 
     if not to_fetch or dry_run:
@@ -687,9 +691,15 @@ def _enrich_race_details(
             max_hr = detailed.get("max_heartrate")
             avg_hr = float(avg_hr) if avg_hr else None
             max_hr = float(max_hr) if max_hr else None
+            # average_temp is device-recorded °C (only present when the
+            # recording device has a temp sensor); immutable like HR.
+            avg_temp = detailed.get("average_temp")
+            avg_temp = float(avg_temp) if avg_temp is not None else None
             # Record presence even when null so we never re-fetch a race that
-            # has no HR data (it will not appear retroactively).
-            updated_hr[activity_id] = {"avg": avg_hr, "max": max_hr}
+            # has no HR/temp data (it will not appear retroactively). "temp"
+            # is a dict key so an entry written before temp capture existed is
+            # detected as stale and re-fetched once (see needs_detail below).
+            updated_hr[activity_id] = {"avg": avg_hr, "max": max_hr, "temp": avg_temp}
             if avg_hr is not None:
                 hr_enriched += 1
         except Exception as exc:

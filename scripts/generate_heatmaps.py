@@ -175,6 +175,9 @@ def _load_activities(
             avg_hr = item.get("avg_hr")
             if avg_hr:
                 activity["avg_hr"] = int(round(float(avg_hr)))
+            avg_temp_f = item.get("avg_temp_f")
+            if avg_temp_f is not None:
+                activity["avg_temp_f"] = int(round(float(avg_temp_f)))
         if include_provider_activity_urls:
             url = _activity_url_from_id(source, item.get("id"))
             if url:
