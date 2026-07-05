@@ -4034,6 +4034,90 @@ function _tempRgbF(f) {
   return stops[stops.length - 1][1].slice();
 }
 
+// Chronological year color for the mile-split bars: light blue (oldest) → deep
+// blue (newest), so left-to-right also reads oldest-to-newest by shade.
+function _yearRampColor(j, n) {
+  const a = [125, 211, 252], b = [3, 105, 161];
+  const t = n <= 1 ? 0 : j / (n - 1);
+  const c = a.map((v, k) => Math.round(v + (b[k] - v) * t));
+  return `rgb(${c.join(",")})`;
+}
+
+// Second visual in the race accordion: a grouped bar chart of per-mile pace,
+// one group per mile, one bar per year (oldest → newest, left → right).
+// Taller = faster (consistent with the progression chart's "up = better").
+// Shared pace scale across all miles so positive/negative splits are visible.
+function buildMileSplitChart(seriesRaces, distUnit) {
+  const KM_PER_MI = 1.60934;
+  // One row per year — mirror the progression chart's "fastest effort per year"
+  // dedup so both charts describe the same race.
+  const byYear = new Map();
+  seriesRaces.forEach((r) => {
+    const miles = Array.isArray(r.mile_paces) ? r.mile_paces.filter((p) => p != null) : [];
+    if (!miles.length) return;
+    const yr = Number(r.year);
+    const dist = distUnit === "km" ? r.distMi * KM_PER_MI : r.distMi;
+    const paceSec = (r.movingTime && dist) ? r.movingTime / dist : Infinity;
+    const prev = byYear.get(yr);
+    if (!prev || paceSec < prev.paceSec) byYear.set(yr, { yr, paceSec, miles });
+  });
+  const rows = [...byYear.values()].sort((a, b) => a.yr - b.yr);
+  // Need ≥2 years with split data to make a cross-year comparison.
+  if (rows.length < 2) return null;
+
+  const nY = rows.length;
+  const maxMiles = Math.max(...rows.map((r) => r.miles.length));
+  const allPaces = [];
+  rows.forEach((r) => r.miles.forEach((p) => allPaces.push(p)));
+  let minP = Math.min(...allPaces), maxP = Math.max(...allPaces);
+  if (minP === maxP) { minP -= 10; maxP += 10; }
+  const padP = (maxP - minP) * 0.15;
+  minP -= padP; maxP += padP;
+
+  const barW = 16, barGap = 3, groupPad = 30, leftPad = 16, rightPad = 16;
+  const groupInner = nY * barW + (nY - 1) * barGap;
+  const groupW = groupInner + groupPad;
+  const baseline = 150, maxBarH = 116, H = 188;
+  const W = leftPad + maxMiles * groupW + rightPad;
+  // Taller = faster: fastest (min pace) → full height.
+  const barH = (p) => maxBarH * (maxP - p) / (maxP - minP);
+
+  const parts = [];
+  parts.push(`<svg viewBox="0 0 ${W} ${H}" width="${W}" class="races-mile-svg" role="img" aria-label="Per-mile pace by year">`);
+  parts.push(`<line x1="${leftPad}" y1="${baseline}" x2="${(W - rightPad).toFixed(1)}" y2="${baseline}" class="rc-axis"/>`);
+  for (let m = 0; m < maxMiles; m++) {
+    const gLeft = leftPad + m * groupW + groupPad / 2;
+    rows.forEach((r, j) => {
+      const p = r.miles[m];
+      if (p == null) return;
+      const x = gLeft + j * (barW + barGap);
+      const h = barH(p);
+      const y = baseline - h;
+      parts.push(`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW}" height="${h.toFixed(1)}" rx="3" fill="${_yearRampColor(j, nY)}"/>`);
+      parts.push(`<text x="${(x + barW / 2).toFixed(1)}" y="${(y - 3).toFixed(1)}" class="rc-mile-val">${_fmtMMSS(p)}</text>`);
+    });
+    const gCenter = gLeft + groupInner / 2;
+    parts.push(`<text x="${gCenter.toFixed(1)}" y="${(baseline + 18).toFixed(1)}" class="rc-mile-xlabel">Mile ${m + 1}</text>`);
+  }
+  parts.push(`</svg>`);
+
+  const wrap = document.createElement("div");
+  wrap.className = "races-chart-wrap races-mile-wrap";
+  const scroll = document.createElement("div");
+  scroll.className = "races-mile-scroll";
+  scroll.innerHTML = parts.join("");
+  wrap.appendChild(scroll);
+
+  const legend = document.createElement("div");
+  legend.className = "races-chart-legend";
+  const unitLabel = distUnit === "km" ? "min/km" : "min/mi";
+  legend.innerHTML =
+    `<span class="rc-leg rc-leg-note">Mile pace (${unitLabel}) — taller is faster</span>` +
+    rows.map((r, j) => `<span class="rc-leg"><span class="rc-swatch" style="background:${_yearRampColor(j, nY)}"></span>${r.yr}</span>`).join("");
+  wrap.appendChild(legend);
+  return wrap;
+}
+
 function buildRacesCard(payload, types, years, units) {
   const typeSet = new Set(Array.isArray(types) ? types : []);
   const yearSet = new Set(Array.isArray(years) ? years.map(Number) : []);
@@ -4267,9 +4351,10 @@ function buildRacesCard(payload, types, years, units) {
         if (chartableSeries.has(seriesKey)) {
           const chartRow = document.createElement("div");
           chartRow.className = "races-chart-row";
-          chartRow.appendChild(
-            buildRaceProgressionChart(seriesMap.get(seriesKey) || [], distUnit)
-          );
+          const series = seriesMap.get(seriesKey) || [];
+          chartRow.appendChild(buildRaceProgressionChart(series, distUnit));
+          const mileChart = buildMileSplitChart(series, distUnit);
+          if (mileChart) chartRow.appendChild(mileChart);
           table.appendChild(chartRow);
         }
       }

@@ -216,8 +216,9 @@ jobs:
             rm -f data/source_state.json
             rm -f data/race_heartrate.json
             rm -f data/race_weather.json
+            rm -f data/race_splits.json
             rm -f site/data.json
-            echo "Full backfill requested: reset persisted pipeline outputs, backfill cursor, and race heart-rate + weather caches."
+            echo "Full backfill requested: reset persisted pipeline outputs, backfill cursor, and race heart-rate + weather + splits caches."
           fi
 
       - name: Run pipeline

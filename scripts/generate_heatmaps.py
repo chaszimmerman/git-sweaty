@@ -178,6 +178,9 @@ def _load_activities(
             avg_temp_f = item.get("avg_temp_f")
             if avg_temp_f is not None:
                 activity["avg_temp_f"] = int(round(float(avg_temp_f)))
+            mile_paces = item.get("mile_paces")
+            if isinstance(mile_paces, list) and mile_paces:
+                activity["mile_paces"] = [int(round(float(p))) for p in mile_paces]
         if include_provider_activity_urls:
             url = _activity_url_from_id(source, item.get("id"))
             if url:

@@ -15,6 +15,13 @@ OUT_PATH = os.path.join("data", "activities_normalized.json")
 RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
 RACE_HEARTRATE_PATH = os.path.join("data", "race_heartrate.json")
 RACE_WEATHER_PATH = os.path.join("data", "race_weather.json")
+RACE_SPLITS_PATH = os.path.join("data", "race_splits.json")
+# The final split of a race is included as a full "mile" only when it covers at
+# least this fraction of a mile (drops a 5K's 0.1 and a 10K's 0.2, keeps a
+# ~4-miler's 0.8). Pace is always normalized per mile, so a partial still shows
+# a true per-mile pace.
+PARTIAL_MILE_MIN = 0.75
+_METERS_PER_MILE = 1609.344
 
 _RACE_NAME_RE = re.compile(
     r"\b(race|races|5k|10k|15k|half|marathon|miler|milers|dash|trot|solstice)\b",
@@ -52,6 +59,36 @@ def _extract_strava_pr_rank(dist_meters: float, best_efforts: List[Dict]) -> int
             if rank in (1, 2, 3):
                 return int(rank)
     return 0
+
+
+def _mile_paces_from_splits(splits: Any) -> List[int]:
+    """Per-mile pace (whole seconds/mile), indexed by mile, from raw splits.
+
+    Each split is {"dist_m", "moving_s", ...}. All splits are full miles except
+    possibly the last; the final split is included only when it covers at least
+    PARTIAL_MILE_MIN of a mile. Pace is normalized per mile (moving_s / miles),
+    so a partial final split still yields a comparable per-mile pace.
+    """
+    if not isinstance(splits, list) or not splits:
+        return []
+    paces: List[int] = []
+    last_idx = len(splits) - 1
+    for i, s in enumerate(splits):
+        if not isinstance(s, dict):
+            continue
+        dist_m = s.get("dist_m")
+        moving_s = s.get("moving_s")
+        if not dist_m or not moving_s:
+            continue
+        miles = float(dist_m) / _METERS_PER_MILE
+        # Tolerance absorbs the 0.1m rounding of dist_m so an exactly-0.75-mile
+        # final split is inclusive (matches "at least 0.75").
+        if i == last_idx and miles < PARTIAL_MILE_MIN - 1e-4:
+            continue
+        if miles <= 0:
+            continue
+        paces.append(round(float(moving_s) / miles))
+    return paces
 
 
 def _coalesce(*values: Any) -> Any:
@@ -241,6 +278,13 @@ def normalize() -> List[Dict]:
         except Exception:
             pass
 
+    race_splits: Dict[str, List] = {}
+    if os.path.exists(RACE_SPLITS_PATH):
+        try:
+            race_splits = read_json(RACE_SPLITS_PATH) or {}
+        except Exception:
+            pass
+
     for item in items:
         if str(item.get("id") or "") in exclude_race_ids:
             item.pop("is_race", None)
@@ -272,6 +316,13 @@ def normalize() -> List[Dict]:
                 item["avg_temp_f"] = round(float(temp_f))
             elif "avg_temp_f" in item:
                 del item["avg_temp_f"]
+            # Per-mile pace (seconds/mile), indexed by mile. Drops a too-short
+            # final partial split (see PARTIAL_MILE_MIN).
+            mile_paces = _mile_paces_from_splits(race_splits.get(activity_id))
+            if mile_paces:
+                item["mile_paces"] = mile_paces
+            elif "mile_paces" in item:
+                del item["mile_paces"]
         raw_activity_type = str(item.get("raw_activity_type") or item.get("raw_type") or item.get("type") or other_bucket)
         raw_type = str(item.get("raw_type") or raw_activity_type or other_bucket)
         item["raw_activity_type"] = raw_activity_type

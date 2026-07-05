@@ -31,6 +31,7 @@ LEGACY_ATHLETE_PATH = os.path.join("data", "athletes.json")
 RACE_BEST_EFFORTS_PATH = os.path.join("data", "race_best_efforts.json")
 RACE_HEARTRATE_PATH = os.path.join("data", "race_heartrate.json")
 RACE_WEATHER_PATH = os.path.join("data", "race_weather.json")
+RACE_SPLITS_PATH = os.path.join("data", "race_splits.json")
 TRANSIENT_HTTP_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504, 597}
 MAX_REQUEST_ATTEMPTS = 5
 
@@ -595,26 +596,27 @@ def _fetch_detailed_activity(token: str, activity_id: str, limiter: Optional[Rat
 
 def _enrich_race_details(
     config: Dict, token: str, limiter: RateLimiter, dry_run: bool
-) -> Tuple[int, int, int, str]:
-    """Fetch Strava detail for race activities to capture best_efforts, HR, and weather.
+) -> Tuple[int, int, int, int, str]:
+    """Fetch Strava detail for race activities to capture best_efforts, HR, weather, splits.
 
-    A single detail fetch per race yields best_efforts + heart rate, plus the
-    start coordinates and local start time used to look up real race-day weather
-    from Open-Meteo (device temperature is body-heat-contaminated on wrist
-    devices, so we ignore it and source ambient temp from a weather service).
+    A single detail fetch per race yields best_efforts + heart rate + per-mile
+    splits, plus the start coordinates and local start time used to look up real
+    race-day weather from Open-Meteo (device temperature is body-heat-
+    contaminated on wrist devices, so we ignore it and source ambient temp from a
+    weather service).
 
     best_efforts is re-fetched every sync for standard-distance races (PR ranks
-    can change when a new PR is set). Heart rate and weather are immutable once
-    recorded, so they are fetched incrementally — only for a race with no cached
-    entry yet. The race list is the full persisted history (so every standard
-    race keeps its PR ranks fresh and every historical race is eligible for
-    HR/weather backfill) unioned with the raw activities this sync just wrote (to
-    catch a brand-new race that normalize — which runs after sync — hasn't
-    written to activities_normalized.json yet). The first sync after deploy thus
-    backfills weather for all history; steady-state cost then stays flat at the
-    standard-distance PR refreshes.
+    can change when a new PR is set). Heart rate, weather, and mile splits are
+    immutable once recorded, so they are fetched incrementally — only for a race
+    with no cached entry yet. The race list is the full persisted history (so
+    every standard race keeps its PR ranks fresh and every historical race is
+    eligible for HR/weather/split backfill) unioned with the raw activities this
+    sync just wrote (to catch a brand-new race that normalize — which runs after
+    sync — hasn't written to activities_normalized.json yet). The first sync
+    after deploy thus backfills all history; steady-state cost then stays flat at
+    the standard-distance PR refreshes.
 
-    Returns (efforts_enriched, hr_enriched, weather_enriched, token).
+    Returns (efforts_enriched, hr_enriched, weather_enriched, splits_enriched, token).
     """
     # Full persisted history first, then overlay raw summaries by id so a
     # brand-new race not yet in the normalized file is still covered.
@@ -651,7 +653,7 @@ def _enrich_race_details(
             }
     items = list(by_id.values())
     if not items:
-        return 0, 0, 0, token
+        return 0, 0, 0, 0, token
 
     efforts_cache = read_json(RACE_BEST_EFFORTS_PATH) if os.path.exists(RACE_BEST_EFFORTS_PATH) else {}
     if not isinstance(efforts_cache, dict):
@@ -662,14 +664,19 @@ def _enrich_race_details(
     weather_cache = read_json(RACE_WEATHER_PATH) if os.path.exists(RACE_WEATHER_PATH) else {}
     if not isinstance(weather_cache, dict):
         weather_cache = {}
+    splits_cache = read_json(RACE_SPLITS_PATH) if os.path.exists(RACE_SPLITS_PATH) else {}
+    if not isinstance(splits_cache, dict):
+        splits_cache = {}
 
     # Decide what to fetch. Check both the persisted is_race flag and the name
     # pattern so this works on first run before normalize writes is_race flags.
     #   - standard-distance races: always fetched (best_efforts PR refresh)
     #   - race missing a cached HR entry: fetched once for HR backfill
     #   - race missing a cached weather entry: fetched once for weather backfill
+    #   - race missing cached mile splits: fetched once for split backfill
     to_fetch = []  # (activity_id, is_standard)
     weather_needed = set()
+    splits_needed = set()
     for item in items:
         is_race = item.get("is_race") or bool(_RACE_NAME_RE.search(str(item.get("name") or "")))
         if not is_race:
@@ -691,19 +698,26 @@ def _enrich_race_details(
         needs_weather = not weather_done
         if needs_weather:
             weather_needed.add(activity_id)
-        if is_standard or needs_hr or needs_weather:
+        # Mile splits are immutable — fetch once. An entry (even an empty list)
+        # means we've already looked.
+        needs_splits = activity_id not in splits_cache
+        if needs_splits:
+            splits_needed.add(activity_id)
+        if is_standard or needs_hr or needs_weather or needs_splits:
             to_fetch.append((activity_id, is_standard))
 
     if not to_fetch or dry_run:
-        return 0, 0, 0, token
+        return 0, 0, 0, 0, token
 
-    print(f"Enriching race detail for {len(to_fetch)} race(s) (efforts + heart rate + weather)...")
+    print(f"Enriching race detail for {len(to_fetch)} race(s) (efforts + heart rate + weather + splits)...")
     efforts_enriched = 0
     hr_enriched = 0
     weather_enriched = 0
+    splits_enriched = 0
     updated_efforts = dict(efforts_cache)
     updated_hr = dict(hr_cache)
     updated_weather = dict(weather_cache)
+    updated_splits = dict(splits_cache)
     # Collect weather lookup specs from the Strava detail here, but resolve them
     # in a separate retry loop below so a transient Open-Meteo failure can be
     # re-pulled without re-fetching (rate-limited) Strava detail.
@@ -739,6 +753,13 @@ def _enrich_race_details(
                     }
                 else:
                     pending_weather[activity_id] = spec
+            if activity_id in splits_needed:
+                splits = _race_splits_from_detail(detailed)
+                # Cache the list (possibly empty for a no-GPS/manual race) so we
+                # never re-fetch; splits are immutable once recorded.
+                updated_splits[activity_id] = splits
+                if splits:
+                    splits_enriched += 1
         except Exception as exc:
             print(f"Warning: could not fetch detail for activity {activity_id}: {exc}")
 
@@ -753,9 +774,37 @@ def _enrich_race_details(
     if updated_weather != weather_cache:
         ensure_dir("data")
         write_json(RACE_WEATHER_PATH, updated_weather)
+    if updated_splits != splits_cache:
+        ensure_dir("data")
+        write_json(RACE_SPLITS_PATH, updated_splits)
 
-    print(f"Race detail enriched: {efforts_enriched} efforts, {hr_enriched} heart rate, {weather_enriched} weather")
-    return efforts_enriched, hr_enriched, weather_enriched, token
+    print(f"Race detail enriched: {efforts_enriched} efforts, {hr_enriched} heart rate, "
+          f"{weather_enriched} weather, {splits_enriched} splits")
+    return efforts_enriched, hr_enriched, weather_enriched, splits_enriched, token
+
+
+def _race_splits_from_detail(detailed: Dict) -> List[Dict]:
+    """Extract per-mile splits from a detailed Strava activity.
+
+    `splits_standard` is the imperial (per-mile) split array; each entry has a
+    `distance` (meters, ~1609 for a full mile, less for a partial final mile),
+    `moving_time`, and `elapsed_time` (seconds). We keep the raw distance + times
+    per split and let normalize.py compute per-mile pace and apply the
+    partial-mile inclusion rule. Returns [] when the activity has no splits
+    (e.g. a manual/no-GPS entry) so it is cached and not re-fetched.
+    """
+    out: List[Dict] = []
+    for s in (detailed.get("splits_standard") or []):
+        dist = s.get("distance")
+        moving = s.get("moving_time")
+        if dist is None or moving is None:
+            continue
+        out.append({
+            "dist_m": round(float(dist), 1),
+            "moving_s": int(moving),
+            "elapsed_s": int(s.get("elapsed_time") or moving),
+        })
+    return out
 
 
 def _race_weather_spec_from_detail(detailed: Dict) -> Optional[Tuple]:
@@ -1112,8 +1161,10 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
     race_efforts_enriched = 0
     race_hr_enriched = 0
     race_weather_enriched = 0
+    race_splits_enriched = 0
     if not rate_limited:
-        race_efforts_enriched, race_hr_enriched, race_weather_enriched, token = _enrich_race_details(
+        (race_efforts_enriched, race_hr_enriched, race_weather_enriched,
+         race_splits_enriched, token) = _enrich_race_details(
             config, token, limiter, dry_run
         )
 
@@ -1134,6 +1185,7 @@ def sync_strava(dry_run: bool, prune_deleted: bool) -> Dict:
     summary["race_efforts_enriched"] = race_efforts_enriched
     summary["race_hr_enriched"] = race_hr_enriched
     summary["race_weather_enriched"] = race_weather_enriched
+    summary["race_splits_enriched"] = race_splits_enriched
     return summary
 
 
