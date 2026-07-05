@@ -698,9 +698,15 @@ def _enrich_race_details(
         needs_weather = not weather_done
         if needs_weather:
             weather_needed.add(activity_id)
-        # Mile splits are immutable — fetch once. An entry (even an empty list)
-        # means we've already looked.
-        needs_splits = activity_id not in splits_cache
+        # Mile splits are immutable — fetch once. "Done" means we have real
+        # splits OR the race is marked genuinely split-less (no GPS track). An
+        # empty result on a GPS race is left uncached so it retries next sync
+        # (self-heals, mirroring the weather cache).
+        cached_sp = splits_cache.get(activity_id)
+        splits_done = (isinstance(cached_sp, list) and len(cached_sp) > 0) or (
+            isinstance(cached_sp, dict) and cached_sp.get("unavailable")
+        )
+        needs_splits = not splits_done
         if needs_splits:
             splits_needed.add(activity_id)
         if is_standard or needs_hr or needs_weather or needs_splits:
@@ -755,11 +761,15 @@ def _enrich_race_details(
                     pending_weather[activity_id] = spec
             if activity_id in splits_needed:
                 splits = _race_splits_from_detail(detailed)
-                # Cache the list (possibly empty for a no-GPS/manual race) so we
-                # never re-fetch; splits are immutable once recorded.
-                updated_splits[activity_id] = splits
                 if splits:
+                    updated_splits[activity_id] = splits
                     splits_enriched += 1
+                elif not _detail_has_gps(detailed):
+                    # Genuinely split-less (manual / no-GPS): cache a permanent
+                    # marker so it is never re-fetched.
+                    updated_splits[activity_id] = {"unavailable": True}
+                # else: empty splits on a GPS race — leave uncached so a future
+                # sync retries (a real GPS race should have splits).
         except Exception as exc:
             print(f"Warning: could not fetch detail for activity {activity_id}: {exc}")
 
@@ -790,8 +800,8 @@ def _race_splits_from_detail(detailed: Dict) -> List[Dict]:
     `distance` (meters, ~1609 for a full mile, less for a partial final mile),
     `moving_time`, and `elapsed_time` (seconds). We keep the raw distance + times
     per split and let normalize.py compute per-mile pace and apply the
-    partial-mile inclusion rule. Returns [] when the activity has no splits
-    (e.g. a manual/no-GPS entry) so it is cached and not re-fetched.
+    partial-mile inclusion rule. Returns [] when the activity has no splits (the
+    caller decides whether that is terminal or worth retrying).
     """
     out: List[Dict] = []
     for s in (detailed.get("splits_standard") or []):
@@ -805,6 +815,20 @@ def _race_splits_from_detail(detailed: Dict) -> List[Dict]:
             "elapsed_s": int(s.get("elapsed_time") or moving),
         })
     return out
+
+
+def _detail_has_gps(detailed: Dict) -> bool:
+    """True when a detailed activity has usable start coordinates (a GPS track).
+
+    A GPS race should have per-mile splits, so an empty `splits_standard` on one
+    is treated as a transient gap to retry; a no-GPS activity (manual/treadmill)
+    genuinely has none.
+    """
+    latlng = detailed.get("start_latlng") or []
+    if not (isinstance(latlng, list) and len(latlng) == 2):
+        return False
+    lat, lng = latlng[0], latlng[1]
+    return not (lat in (None, 0) and lng in (None, 0))
 
 
 def _race_weather_spec_from_detail(detailed: Dict) -> Optional[Tuple]:
