@@ -189,6 +189,11 @@
     "elevation_gain": 64.0,
     "id": "6672089271",
     "is_race": true,
+    "mile_paces": [
+      493,
+      523,
+      526
+    ],
     "moving_time": 1635.0,
     "name": "Morning 5K Run",
     "raw_activity_type": "Run",
@@ -375,6 +380,14 @@
     "elevation_gain": 135.0,
     "id": "6742892892",
     "is_race": true,
+    "mile_paces": [
+      517,
+      531,
+      556,
+      570,
+      560,
+      558
+    ],
     "moving_time": 3555.0,
     "name": "Afternoon Run 10k",
     "raw_activity_type": "Run",
@@ -483,6 +496,11 @@
     "elevation_gain": 72.0,
     "id": "6794512419",
     "is_race": true,
+    "mile_paces": [
+      991,
+      982,
+      975
+    ],
     "moving_time": 3334.0,
     "name": "Afternoon Walk 5K",
     "raw_activity_type": "Walk",
@@ -811,6 +829,14 @@
     "elevation_gain": 73.0,
     "id": "6954248592",
     "is_race": true,
+    "mile_paces": [
+      578,
+      545,
+      538,
+      540,
+      556,
+      501
+    ],
     "moving_time": 3381.0,
     "name": "Sole of the City 10K Race",
     "raw_activity_type": "Run",
@@ -1308,6 +1334,18 @@
     "elevation_gain": 136.0,
     "id": "7253187271",
     "is_race": true,
+    "mile_paces": [
+      559,
+      561,
+      557,
+      551,
+      564,
+      573,
+      594,
+      587,
+      617,
+      613
+    ],
     "moving_time": 5837.0,
     "name": "Baltimore 10 Miler Race",
     "raw_activity_type": "Run",
@@ -1389,6 +1427,11 @@
     "elevation_gain": 10.0,
     "id": "7296827611",
     "is_race": true,
+    "mile_paces": [
+      606,
+      717,
+      732
+    ],
     "moving_time": 2152.0,
     "name": "Four Seasons Hotel Beat Cancer 5K with Elise",
     "raw_activity_type": "Run",
@@ -1444,6 +1487,11 @@
     "elevation_gain": 54.0,
     "id": "7328511331",
     "is_race": true,
+    "mile_paces": [
+      498,
+      531,
+      507
+    ],
     "moving_time": 1577.0,
     "name": "Dads Day 5K Race in Patterson Park",
     "raw_activity_type": "Run",
@@ -2136,6 +2184,20 @@
     "elevation_gain": 155.0,
     "id": "7747291527",
     "is_race": true,
+    "mile_paces": [
+      565,
+      528,
+      578,
+      585,
+      560,
+      542,
+      541,
+      547,
+      566,
+      582,
+      612,
+      612
+    ],
     "moving_time": 6826.0,
     "name": "Charles Street 12 Miler Race #chuck12 #chas12",
     "raw_activity_type": "Run",
@@ -2373,6 +2435,11 @@
     "elevation_gain": 72.0,
     "id": "7864882107",
     "is_race": true,
+    "mile_paces": [
+      455,
+      513,
+      511
+    ],
     "moving_time": 1560.0,
     "name": "NDP Blazer Dash 5K Race",
     "raw_activity_type": "Run",
@@ -2884,6 +2951,11 @@
     "elevation_gain": 75.0,
     "id": "8162012356",
     "is_race": true,
+    "mile_paces": [
+      531,
+      534,
+      508
+    ],
     "moving_time": 1637.0,
     "name": "Towson Y Turkey Trot",
     "raw_activity_type": "Run",
@@ -3823,6 +3895,14 @@
     "elevation_gain": 104.0,
     "id": "8695989789",
     "is_race": true,
+    "mile_paces": [
+      540,
+      505,
+      511,
+      523,
+      524,
+      529
+    ],
     "moving_time": 3245.0,
     "name": "Annapolis Running Festival 10K Race",
     "raw_activity_type": "Run",
@@ -3840,6 +3920,11 @@
     "elevation_gain": 11.0,
     "id": "8703944482",
     "is_race": true,
+    "mile_paces": [
+      465,
+      480,
+      479
+    ],
     "moving_time": 1497.0,
     "name": "Baltimore Shamrock 5K Race",
     "raw_activity_type": "Run",
@@ -4065,6 +4150,14 @@
     "elevation_gain": 66.0,
     "id": "8853844731",
     "is_race": true,
+    "mile_paces": [
+      556,
+      509,
+      495,
+      538,
+      487,
+      479
+    ],
     "moving_time": 3161.0,
     "name": "Sole of the City 10K Race",
     "raw_activity_type": "Run",
@@ -4511,6 +4604,18 @@
     "elevation_gain": 128.0,
     "id": "9193994983",
     "is_race": true,
+    "mile_paces": [
+      517,
+      541,
+      541,
+      547,
+      548,
+      563,
+      572,
+      574,
+      603,
+      577
+    ],
     "moving_time": 5628.0,
     "name": "Baltimore 10 Miler Race",
     "raw_activity_type": "Run",
@@ -4761,6 +4866,12 @@
     "elevation_gain": 77.0,
     "id": "9386306143",
     "is_race": true,
+    "mile_paces": [
+      559,
+      667,
+      600,
+      673
+    ],
     "moving_time": 2484.0,
     "name": "Towson 4 on the 4th Race",
     "raw_activity_type": "Run",
@@ -5388,6 +5499,20 @@
     "elevation_gain": 151.0,
     "id": "9814635879",
     "is_race": true,
+    "mile_paces": [
+      566,
+      528,
+      576,
+      579,
+      563,
+      566,
+      555,
+      555,
+      570,
+      567,
+      596,
+      568
+    ],
     "moving_time": 6802.0,
     "name": "Charles Street 12 Miler Race #chuck12 #chas12",
     "raw_activity_type": "Run",
@@ -6106,6 +6231,14 @@
     "elevation_gain": 134.0,
     "id": "10225961237",
     "is_race": true,
+    "mile_paces": [
+      512,
+      529,
+      523,
+      516,
+      541,
+      507
+    ],
     "moving_time": 3234.0,
     "name": "Yahoo Run in the Dark 10k Fundraiser",
     "raw_activity_type": "Run",
@@ -6188,6 +6321,11 @@
     "elevation_gain": 71.0,
     "id": "10268234049",
     "is_race": true,
+    "mile_paces": [
+      634,
+      648,
+      584
+    ],
     "moving_time": 1941.0,
     "name": "Towson Y Turkey Trot",
     "raw_activity_type": "Run",
@@ -6386,6 +6524,13 @@
     "elevation_gain": 92.0,
     "id": "10389272190",
     "is_race": true,
+    "mile_paces": [
+      527,
+      519,
+      544,
+      556,
+      521
+    ],
     "moving_time": 2725.0,
     "name": "Celtic Solstice 5 Miler",
     "raw_activity_type": "Run",
@@ -7078,6 +7223,14 @@
     "elevation_gain": 93.0,
     "id": "10922653697",
     "is_race": true,
+    "mile_paces": [
+      534,
+      513,
+      537,
+      549,
+      558,
+      536
+    ],
     "moving_time": 3341.0,
     "name": "Annapolis Running Festival 10K Race",
     "raw_activity_type": "Run",
@@ -7094,6 +7247,11 @@
     "elevation_gain": 60.0,
     "id": "10931957670",
     "is_race": true,
+    "mile_paces": [
+      512,
+      506,
+      512
+    ],
     "moving_time": 1611.0,
     "name": "Baltimore Shamrock 5K Race",
     "raw_activity_type": "Run",
@@ -7318,6 +7476,14 @@
     "elevation_gain": 94.0,
     "id": "11119015720",
     "is_race": true,
+    "mile_paces": [
+      520,
+      509,
+      519,
+      553,
+      511,
+      517
+    ],
     "moving_time": 3266.0,
     "name": "Sole of the City 10K Race",
     "raw_activity_type": "Run",
@@ -7621,6 +7787,11 @@
     "elevation_gain": 67.0,
     "id": "11385127097",
     "is_race": true,
+    "mile_paces": [
+      485,
+      480,
+      530
+    ],
     "moving_time": 1659.0,
     "name": "Every Hour Every Day 5K(+)ish Race",
     "raw_activity_type": "Run",
@@ -7793,6 +7964,18 @@
     "elevation_gain": 141.0,
     "id": "11547181598",
     "is_race": true,
+    "mile_paces": [
+      556,
+      538,
+      539,
+      526,
+      531,
+      548,
+      540,
+      564,
+      580,
+      536
+    ],
     "moving_time": 5492.0,
     "name": "Baltimore 10 Miler Race",
     "raw_activity_type": "Run",
@@ -8082,6 +8265,12 @@
     "elevation_gain": 80.0,
     "id": "11806092760",
     "is_race": true,
+    "mile_paces": [
+      458,
+      529,
+      500,
+      551
+    ],
     "moving_time": 2040.0,
     "name": "Towson 4 on the 4th Race",
     "raw_activity_type": "Run",
@@ -8423,6 +8612,14 @@
     "elevation_gain": 195.0,
     "id": "12178820957",
     "is_race": true,
+    "mile_paces": [
+      554,
+      579,
+      583,
+      571,
+      617,
+      536
+    ],
     "moving_time": 3569.0,
     "name": "Dreaded Druid Hills 10k Race",
     "raw_activity_type": "Run",
@@ -8595,6 +8792,20 @@
     "elevation_gain": 159.0,
     "id": "12349241162",
     "is_race": true,
+    "mile_paces": [
+      530,
+      496,
+      551,
+      548,
+      534,
+      525,
+      532,
+      531,
+      544,
+      530,
+      566,
+      529
+    ],
     "moving_time": 6422.0,
     "name": "Charles Street 12 Miler Race #chuck12 #chas12",
     "raw_activity_type": "Run",
@@ -8923,6 +9134,11 @@
     "elevation_gain": 133.0,
     "id": "12647055157",
     "is_race": true,
+    "mile_paces": [
+      722,
+      896,
+      898
+    ],
     "moving_time": 2464.0,
     "name": "Trucktoberfest 5K Run w/ Lori",
     "raw_activity_type": "Run",
@@ -8991,6 +9207,14 @@
     "elevation_gain": 96.0,
     "id": "12692344509",
     "is_race": true,
+    "mile_paces": [
+      581,
+      532,
+      509,
+      472,
+      499,
+      483
+    ],
     "moving_time": 3146.0,
     "name": "Baltimore Running Festival 10k Race",
     "raw_activity_type": "Run",
@@ -9332,6 +9556,11 @@
     "elevation_gain": 73.0,
     "id": "13002008413",
     "is_race": true,
+    "mile_paces": [
+      554,
+      554,
+      526
+    ],
     "moving_time": 1719.0,
     "name": "Towson Y Turkey Trot",
     "raw_activity_type": "Run",
@@ -9348,6 +9577,21 @@
     "elevation_gain": 57.0,
     "id": "13017203518",
     "is_race": true,
+    "mile_paces": [
+      561,
+      550,
+      541,
+      543,
+      535,
+      546,
+      543,
+      544,
+      547,
+      550,
+      550,
+      545,
+      535
+    ],
     "moving_time": 7192.0,
     "name": "NCR Half Marathon Race",
     "raw_activity_type": "Run",
@@ -9443,6 +9687,13 @@
     "elevation_gain": 88.0,
     "id": "13113997383",
     "is_race": true,
+    "mile_paces": [
+      480,
+      484,
+      509,
+      521,
+      505
+    ],
     "moving_time": 2559.0,
     "name": "Celtic Solstice 5 Miler",
     "raw_activity_type": "Run",
@@ -10252,6 +10503,11 @@
     "elevation_gain": 24.0,
     "id": "13901186663",
     "is_race": true,
+    "mile_paces": [
+      466,
+      481,
+      478
+    ],
     "moving_time": 1499.0,
     "name": "Baltimore Shamrock 5K Race",
     "raw_activity_type": "Run",
@@ -10412,6 +10668,14 @@
     "elevation_gain": 70.0,
     "id": "14087179982",
     "is_race": true,
+    "mile_paces": [
+      476,
+      482,
+      491,
+      519,
+      487,
+      472
+    ],
     "moving_time": 3040.0,
     "name": "Sole of the City 10k Race",
     "raw_activity_type": "Run",
@@ -10650,6 +10914,11 @@
     "elevation_gain": 68.0,
     "id": "14435646140",
     "is_race": true,
+    "mile_paces": [
+      453,
+      469,
+      518
+    ],
     "moving_time": 1586.0,
     "name": "Every Hour Every Day 5K(+)ish Race",
     "raw_activity_type": "Run",
@@ -10875,6 +11144,18 @@
     "elevation_gain": 133.0,
     "id": "14723210848",
     "is_race": true,
+    "mile_paces": [
+      511,
+      534,
+      523,
+      514,
+      525,
+      540,
+      527,
+      533,
+      544,
+      511
+    ],
     "moving_time": 5296.0,
     "name": "Baltimore 10 Miler Race",
     "raw_activity_type": "Run",
@@ -11099,6 +11380,12 @@
     "elevation_gain": 79.0,
     "id": "15004139134",
     "is_race": true,
+    "mile_paces": [
+      432,
+      491,
+      466,
+      496
+    ],
     "moving_time": 1811.0,
     "name": "Towson 4 on the 4th Race",
     "raw_activity_type": "Run",
@@ -11401,6 +11688,14 @@
     "elevation_gain": 200.0,
     "id": "15477869216",
     "is_race": true,
+    "mile_paces": [
+      513,
+      518,
+      524,
+      565,
+      619,
+      535
+    ],
     "moving_time": 3391.0,
     "name": "Dreaded Druid Hills 10k Race",
     "raw_activity_type": "Run",
@@ -11508,6 +11803,20 @@
     "elevation_gain": 167.0,
     "id": "15637089224",
     "is_race": true,
+    "mile_paces": [
+      494,
+      467,
+      508,
+      502,
+      487,
+      483,
+      487,
+      475,
+      490,
+      472,
+      498,
+      498
+    ],
     "moving_time": 5920.0,
     "name": "Charles Street 12 Miler Race #chuck12 #chas12",
     "raw_activity_type": "Run",
@@ -11914,6 +12223,14 @@
     "elevation_gain": 93.0,
     "id": "16179911104",
     "is_race": true,
+    "mile_paces": [
+      495,
+      484,
+      476,
+      463,
+      483,
+      459
+    ],
     "moving_time": 2901.0,
     "name": "Baltimore Running Festival 10k Race",
     "raw_activity_type": "Run",
@@ -12034,6 +12351,21 @@
     "elevation_gain": 40.0,
     "id": "16322508516",
     "is_race": true,
+    "mile_paces": [
+      500,
+      490,
+      496,
+      492,
+      503,
+      506,
+      508,
+      503,
+      511,
+      504,
+      529,
+      544,
+      549
+    ],
     "moving_time": 6798.0,
     "name": "Ocean City Maryland Half Marathon Race",
     "raw_activity_type": "Run",
@@ -12259,6 +12591,11 @@
     "elevation_gain": 75.0,
     "id": "16582163207",
     "is_race": true,
+    "mile_paces": [
+      774,
+      814,
+      733
+    ],
     "moving_time": 2432.0,
     "name": "Towson Y Turkey Trot",
     "raw_activity_type": "Run",
@@ -12327,6 +12664,11 @@
     "elevation_gain": 65.0,
     "id": "16675979885",
     "is_race": true,
+    "mile_paces": [
+      477,
+      489,
+      498
+    ],
     "moving_time": 1513.0,
     "name": "Angel Park 5K",
     "raw_activity_type": "Run",
@@ -12382,6 +12724,13 @@
     "elevation_gain": 98.0,
     "id": "16731442193",
     "is_race": true,
+    "mile_paces": [
+      587,
+      584,
+      567,
+      565,
+      536
+    ],
     "moving_time": 2887.0,
     "name": "Celtic Solstice 5 Miler",
     "raw_activity_type": "Run",
@@ -13074,6 +13423,11 @@
     "elevation_gain": 13.0,
     "id": "17734659294",
     "is_race": true,
+    "mile_paces": [
+      438,
+      450,
+      449
+    ],
     "moving_time": 1406.0,
     "name": "Baltimore Shamrock 5K Race",
     "raw_activity_type": "Run",
@@ -13117,6 +13471,14 @@
     "elevation_gain": 95.0,
     "id": "17801732870",
     "is_race": true,
+    "mile_paces": [
+      481,
+      460,
+      479,
+      481,
+      508,
+      477
+    ],
     "moving_time": 3123.0,
     "name": "Annapolis Running Festival 10K Race",
     "raw_activity_type": "Run",
@@ -13368,6 +13730,14 @@
     "elevation_gain": 67.0,
     "id": "18252142978",
     "is_race": true,
+    "mile_paces": [
+      454,
+      460,
+      467,
+      504,
+      475,
+      456
+    ],
     "moving_time": 2931.0,
     "name": "Sole of the City 10K Race",
     "raw_activity_type": "Run",
@@ -13476,6 +13846,11 @@
     "elevation_gain": 68.0,
     "id": "18438774389",
     "is_race": true,
+    "mile_paces": [
+      437,
+      454,
+      506
+    ],
     "moving_time": 1541.0,
     "name": "Every Hour Every Day 5K(+)ish Race",
     "raw_activity_type": "Run",
@@ -13661,6 +14036,18 @@
     "elevation_gain": 137.0,
     "id": "18809382378",
     "is_race": true,
+    "mile_paces": [
+      516,
+      499,
+      508,
+      491,
+      516,
+      546,
+      542,
+      555,
+      568,
+      542
+    ],
     "moving_time": 5341.0,
     "name": "Baltimore 10 Miler Race",
     "raw_activity_type": "Run",
@@ -13911,6 +14298,12 @@
     "elevation_gain": 81.0,
     "id": "19175932519",
     "is_race": true,
+    "mile_paces": [
+      436,
+      503,
+      487,
+      530
+    ],
     "moving_time": 1947.0,
     "name": "Towson 4 on the 4th Race",
     "raw_activity_type": "Run",
