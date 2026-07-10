@@ -182,6 +182,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 45,
     "avg_hr": 173,
     "avg_temp_f": 50,
     "date": "2022-02-12",
@@ -373,6 +374,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 35,
     "avg_hr": 168,
     "avg_temp_f": 41,
     "date": "2022-02-26",
@@ -489,6 +491,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 42,
     "avg_hr": 104,
     "avg_temp_f": 49,
     "date": "2022-03-08",
@@ -822,6 +825,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 40,
     "avg_hr": 164,
     "avg_temp_f": 44,
     "date": "2022-04-09",
@@ -1327,6 +1331,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 60,
     "avg_hr": 169,
     "avg_temp_f": 61,
     "date": "2022-06-04",
@@ -1420,6 +1425,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 70,
     "avg_hr": 139,
     "avg_temp_f": 67,
     "date": "2022-06-12",
@@ -1480,6 +1486,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 63,
     "avg_hr": 170,
     "avg_temp_f": 69,
     "date": "2022-06-18",
@@ -2177,6 +2184,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 71,
     "avg_hr": 168,
     "avg_temp_f": 67,
     "date": "2022-09-03",
@@ -2428,6 +2436,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 58,
     "avg_hr": 171,
     "avg_temp_f": 59,
     "date": "2022-09-25",
@@ -2944,6 +2953,7 @@
     "year": 2022
   },
   {
+    "avg_feels_f": 25,
     "avg_hr": 169,
     "avg_temp_f": 31,
     "date": "2022-11-24",
@@ -3888,6 +3898,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 25,
     "avg_hr": 172,
     "avg_temp_f": 36,
     "date": "2023-03-11",
@@ -3913,6 +3924,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 34,
     "avg_hr": 175,
     "avg_temp_f": 40,
     "date": "2023-03-12",
@@ -4143,6 +4155,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 33,
     "avg_hr": 170,
     "avg_temp_f": 42,
     "date": "2023-04-08",
@@ -4597,6 +4610,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 69,
     "avg_hr": 166,
     "avg_temp_f": 70,
     "date": "2023-06-03",
@@ -4859,6 +4873,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 84,
     "avg_hr": 149,
     "avg_temp_f": 75,
     "date": "2023-07-04",
@@ -5492,6 +5507,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 76,
     "avg_hr": 171,
     "avg_temp_f": 69,
     "date": "2023-09-09",
@@ -6224,6 +6240,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 48,
     "avg_hr": 166,
     "avg_temp_f": 54,
     "date": "2023-11-15",
@@ -6314,6 +6331,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 32,
     "avg_hr": 135,
     "avg_temp_f": 39,
     "date": "2023-11-23",
@@ -6517,6 +6535,7 @@
     "year": 2023
   },
   {
+    "avg_feels_f": 29,
     "avg_hr": 161,
     "avg_temp_f": 36,
     "date": "2023-12-16",
@@ -7216,6 +7235,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 35,
     "avg_hr": 170,
     "avg_temp_f": 42,
     "date": "2024-03-09",
@@ -7240,6 +7260,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 34,
     "avg_hr": 177,
     "avg_temp_f": 48,
     "date": "2024-03-10",
@@ -7469,6 +7490,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 31,
     "avg_hr": 172,
     "avg_temp_f": 42,
     "date": "2024-04-06",
@@ -7780,6 +7802,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 50,
     "avg_hr": 172,
     "avg_temp_f": 53,
     "date": "2024-05-11",
@@ -7957,6 +7980,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 55,
     "avg_hr": 163,
     "avg_temp_f": 59,
     "date": "2024-06-01",
@@ -8258,6 +8282,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 77,
     "avg_hr": 176,
     "avg_temp_f": 72,
     "date": "2024-07-04",
@@ -8605,6 +8630,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 78,
     "avg_hr": 145,
     "avg_temp_f": 71,
     "date": "2024-08-18",
@@ -8785,6 +8811,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 64,
     "avg_hr": 143,
     "avg_temp_f": 62,
     "date": "2024-09-07",
@@ -9127,6 +9154,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 70,
     "avg_hr": 134,
     "avg_temp_f": 71,
     "date": "2024-10-13",
@@ -9200,6 +9228,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 41,
     "avg_hr": 166,
     "avg_temp_f": 46,
     "date": "2024-10-19",
@@ -9549,6 +9578,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 41,
     "avg_hr": 135,
     "avg_temp_f": 45,
     "date": "2024-11-28",
@@ -9570,6 +9600,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 18,
     "avg_hr": 160,
     "avg_temp_f": 27,
     "date": "2024-11-30",
@@ -9680,6 +9711,7 @@
     "year": 2024
   },
   {
+    "avg_feels_f": 17,
     "avg_hr": 174,
     "avg_temp_f": 25,
     "date": "2024-12-14",
@@ -10496,6 +10528,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 62,
     "avg_hr": 168,
     "avg_temp_f": 64,
     "date": "2025-03-16",
@@ -10661,6 +10694,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 52,
     "avg_hr": 135,
     "avg_temp_f": 56,
     "date": "2025-04-05",
@@ -10907,6 +10941,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 50,
     "avg_hr": 173,
     "avg_temp_f": 56,
     "date": "2025-05-10",
@@ -11137,6 +11172,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 76,
     "avg_hr": 163,
     "avg_temp_f": 69,
     "date": "2025-06-07",
@@ -11373,6 +11409,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 71,
     "avg_hr": 172,
     "avg_temp_f": 70,
     "date": "2025-07-04",
@@ -11681,6 +11718,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 82,
     "avg_hr": 173,
     "avg_temp_f": 74,
     "date": "2025-08-16",
@@ -11796,6 +11834,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 50,
     "avg_hr": 161,
     "avg_temp_f": 54,
     "date": "2025-08-30",
@@ -12216,6 +12255,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 46,
     "avg_hr": 167,
     "avg_temp_f": 48,
     "date": "2025-10-18",
@@ -12344,6 +12384,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 45,
     "avg_hr": 163,
     "avg_temp_f": 51,
     "date": "2025-11-01",
@@ -12584,6 +12625,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 30,
     "avg_hr": 128,
     "avg_temp_f": 37,
     "date": "2025-11-27",
@@ -12657,6 +12699,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 21,
     "avg_hr": 170,
     "avg_temp_f": 27,
     "date": "2025-12-07",
@@ -12717,6 +12760,7 @@
     "year": 2025
   },
   {
+    "avg_feels_f": 20,
     "avg_hr": 152,
     "avg_temp_f": 27,
     "date": "2025-12-13",
@@ -13416,6 +13460,7 @@
     "year": 2026
   },
   {
+    "avg_feels_f": 42,
     "avg_hr": 161,
     "avg_temp_f": 49,
     "date": "2026-03-15",
@@ -13464,6 +13509,7 @@
     "year": 2026
   },
   {
+    "avg_feels_f": 47,
     "avg_hr": 169,
     "avg_temp_f": 51,
     "date": "2026-03-21",
@@ -13723,6 +13769,7 @@
     "year": 2026
   },
   {
+    "avg_feels_f": 49,
     "avg_hr": 171,
     "avg_temp_f": 54,
     "date": "2026-04-25",
@@ -13839,6 +13886,7 @@
     "year": 2026
   },
   {
+    "avg_feels_f": 55,
     "avg_hr": 173,
     "avg_temp_f": 58,
     "date": "2026-05-09",
@@ -14029,6 +14077,7 @@
     "year": 2026
   },
   {
+    "avg_feels_f": 73,
     "avg_hr": 169,
     "avg_temp_f": 72,
     "date": "2026-06-06",
@@ -14291,6 +14340,7 @@
     "year": 2026
   },
   {
+    "avg_feels_f": 90,
     "avg_hr": 171,
     "avg_temp_f": 85,
     "date": "2026-07-04",
@@ -14361,6 +14411,19 @@
     "raw_activity_type": "Run",
     "raw_type": "Run",
     "start_date_local": "2026-07-08T17:20:45Z",
+    "type": "Run",
+    "year": 2026
+  },
+  {
+    "date": "2026-07-09",
+    "distance": 4962.2,
+    "elevation_gain": 0.0,
+    "id": "19249112503",
+    "moving_time": 1588.0,
+    "name": "Evening Treadmill Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-07-09T18:36:06Z",
     "type": "Run",
     "year": 2026
   }
