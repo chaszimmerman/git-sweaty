@@ -4198,6 +4198,22 @@ function buildRacesCard(payload, types, years, units) {
   seriesMap.forEach((list, key) => {
     if (new Set(list.map((r) => Number(r.year))).size >= 2) chartableSeries.add(key);
   });
+
+  // Per-series medal rank: within each race series (2+ runnings), the fastest
+  // three runnings by pace get 🥇/🥈/🥉. This ranks each running against your
+  // OTHER runnings of that same named race — distinct from the PR badge, which
+  // ranks against all efforts at that distance. Computed across all time so it
+  // stays correct under the year-chip filter. Ranks every running (no per-year
+  // dedup). Ties broken by earlier date.
+  seriesMap.forEach((list) => {
+    list.forEach((r) => { r.medalRank = 0; });
+    if (list.length < 2) return;
+    const ranked = list
+      .filter((r) => r.movingTime > 0 && r.distMi > 0)
+      .map((r) => ({ r, secPerMi: r.movingTime / r.distMi }))
+      .sort((a, b) => a.secPerMi - b.secPerMi || a.r.date.localeCompare(b.r.date));
+    ranked.slice(0, 3).forEach((item, i) => { item.r.medalRank = i + 1; });
+  });
   // data.json activities carry no id, so identify a row by date + name
   // (unique per race). Accordion: one chart open at a time.
   const rowKeyFor = (r) => `${r.date}::${r.name || displayType(r.type)}`;
@@ -4262,6 +4278,19 @@ function buildRacesCard(payload, types, years, units) {
 
     const nameEl = document.createElement("div");
     nameEl.className = "races-name";
+    if (race.medalRank >= 1 && race.medalRank <= 3) {
+      const seriesCount = (seriesMap.get(seriesKey) || []).length;
+      const raceName = race.name || displayType(race.type);
+      const ord = race.medalRank === 1 ? "fastest"
+        : race.medalRank === 2 ? "2nd-fastest" : "3rd-fastest";
+      const medalEl = document.createElement("span");
+      medalEl.className = "races-medal";
+      medalEl.textContent = race.medalRank === 1 ? "🥇"
+        : race.medalRank === 2 ? "🥈" : "🥉";
+      medalEl.title = `Your ${ord} of ${seriesCount} ${raceName} runnings`;
+      medalEl.setAttribute("aria-label", medalEl.title);
+      nameEl.appendChild(medalEl);
+    }
     if (isChartable) {
       const chev = document.createElement("span");
       chev.className = "races-chevron" + (isExpanded ? " open" : "");
