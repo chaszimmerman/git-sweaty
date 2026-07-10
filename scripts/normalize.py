@@ -316,6 +316,12 @@ def normalize() -> List[Dict]:
                 item["avg_temp_f"] = round(float(temp_f))
             elif "avg_temp_f" in item:
                 del item["avg_temp_f"]
+            # Feels-like (humidity/wind-adjusted) °F for the tooltip.
+            feels_f = wx.get("feels_f") if isinstance(wx, dict) else None
+            if feels_f is not None:
+                item["avg_feels_f"] = round(float(feels_f))
+            elif "avg_feels_f" in item:
+                del item["avg_feels_f"]
             # Per-mile pace (seconds/mile), indexed by mile. Drops a too-short
             # final partial split (see PARTIAL_MILE_MIN).
             mile_paces = _mile_paces_from_splits(race_splits.get(activity_id))

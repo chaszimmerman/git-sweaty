@@ -3880,6 +3880,7 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
         paceSec,
         hr: Number(r.avg_hr) || null,
         temp: r.avg_temp_f == null ? null : Number(r.avg_temp_f),
+        feels: r.avg_feels_f == null ? null : Number(r.avg_feels_f),
       });
     }
   });
@@ -3980,6 +3981,16 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
     pts.forEach((p, i) => {
       const cx = xFor(i);
       const x = cx - chipW / 2;
+      // Hover tooltip: the chip shows air temp; the title adds feels-like.
+      let tip;
+      if (p.temp == null) {
+        tip = `${p.yr} · No weather data`;
+      } else if (p.feels != null) {
+        tip = `${p.yr} · ${Math.round(p.temp)}°F air · feels-like ${Math.round(p.feels)}°F`;
+      } else {
+        tip = `${p.yr} · ${Math.round(p.temp)}°F air`;
+      }
+      parts.push(`<g class="rc-temp-chip"><title>${esc(tip)}</title>`);
       if (p.temp == null) {
         parts.push(`<rect x="${x.toFixed(1)}" y="${chipY}" width="${chipW.toFixed(1)}" height="${chipH}" rx="${rx}" fill="rgba(148,163,184,0.20)"/>`);
         parts.push(`<text x="${cx.toFixed(1)}" y="${tY.toFixed(1)}" class="rc-temp-empty">—</text>`);
@@ -3990,6 +4001,7 @@ function buildRaceProgressionChart(seriesRaces, distUnit) {
         parts.push(`<rect x="${x.toFixed(1)}" y="${chipY}" width="${chipW.toFixed(1)}" height="${chipH}" rx="${rx}" fill="rgb(${rgb.join(",")})"/>`);
         parts.push(`<text x="${cx.toFixed(1)}" y="${tY.toFixed(1)}" class="rc-temp-val" fill="${txt}">${Math.round(p.temp)}°</text>`);
       }
+      parts.push(`</g>`);
     });
   }
 

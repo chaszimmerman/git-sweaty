@@ -178,6 +178,9 @@ def _load_activities(
             avg_temp_f = item.get("avg_temp_f")
             if avg_temp_f is not None:
                 activity["avg_temp_f"] = int(round(float(avg_temp_f)))
+            avg_feels_f = item.get("avg_feels_f")
+            if avg_feels_f is not None:
+                activity["avg_feels_f"] = int(round(float(avg_feels_f)))
             mile_paces = item.get("mile_paces")
             if isinstance(mile_paces, list) and mile_paces:
                 activity["mile_paces"] = [int(round(float(p))) for p in mile_paces]
