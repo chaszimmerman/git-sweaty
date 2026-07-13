@@ -14452,5 +14452,18 @@
     "start_date_local": "2026-07-11T10:21:49Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-07-12",
+    "distance": 4943.0,
+    "elevation_gain": 0.0,
+    "id": "19284816115",
+    "moving_time": 1546.0,
+    "name": "Lunch Treadmill Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-07-12T12:16:57Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
