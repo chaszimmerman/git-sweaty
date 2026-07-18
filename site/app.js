@@ -16,6 +16,7 @@ let TYPE_META = {};
 let OTHER_BUCKET = "OtherSports";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_INDICES = MONTHS.map((_, index) => index);
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const WEEK_START_SUNDAY = "sunday";
 const WEEK_START_MONDAY = "monday";
@@ -35,19 +36,25 @@ const PAGE_TITLE_SUFFIX = " | git-sweaty";
 
 const typeButtons = document.getElementById("typeButtons");
 const yearButtons = document.getElementById("yearButtons");
+const monthButtons = document.getElementById("monthButtons");
 const typeMenu = document.getElementById("typeMenu");
 const yearMenu = document.getElementById("yearMenu");
+const monthMenu = document.getElementById("monthMenu");
 const typeMenuButton = document.getElementById("typeMenuButton");
 const yearMenuButton = document.getElementById("yearMenuButton");
+const monthMenuButton = document.getElementById("monthMenuButton");
 const typeMenuLabel = document.getElementById("typeMenuLabel");
 const yearMenuLabel = document.getElementById("yearMenuLabel");
+const monthMenuLabel = document.getElementById("monthMenuLabel");
 const typeClearButton = document.getElementById("typeClearButton");
 const yearClearButton = document.getElementById("yearClearButton");
+const monthClearButton = document.getElementById("monthClearButton");
 const resetAllButton = document.getElementById("resetAllButton");
 const imperialUnitsButton = document.getElementById("imperialUnitsButton");
 const metricUnitsButton = document.getElementById("metricUnitsButton");
 const typeMenuOptions = document.getElementById("typeMenuOptions");
 const yearMenuOptions = document.getElementById("yearMenuOptions");
+const monthMenuOptions = document.getElementById("monthMenuOptions");
 const heatmaps = document.getElementById("heatmaps");
 const tooltip = document.getElementById("tooltip");
 const summary = document.getElementById("summary");
@@ -690,6 +697,13 @@ function selectedYearsListForState(state, visibleYears) {
   return visibleYears.filter((year) => state.selectedValues.has(Number(year)));
 }
 
+function selectedMonthsListForState(state) {
+  if (!state || state.allMode) {
+    return MONTH_INDICES.slice();
+  }
+  return MONTH_INDICES.filter((month) => state.selectedValues.has(month));
+}
+
 function updateButtonState(container, selectedValues, isAllSelected, allValues, normalizeValue) {
   if (!container) return;
   const hasExplicitAllSelection = allValues.length > 0
@@ -716,6 +730,12 @@ function getYearMenuText(years, allYearsSelected) {
   if (allYearsSelected) return "All Years";
   if (years.length) return years.map((year) => String(year)).join(", ");
   return "No Years Selected";
+}
+
+function getMonthMenuText(months, allMonthsSelected) {
+  if (allMonthsSelected) return "All Months";
+  if (months.length) return months.map((month) => MONTHS[month]).join(", ");
+  return "No Months Selected";
 }
 
 function setMenuLabel(labelEl, text, fallbackText) {
@@ -788,6 +808,7 @@ function applyFilterMenuMaxHeight(menuEl, triggerButtonEl, optionsEl) {
 function syncOpenFilterMenuMaxHeights() {
   applyFilterMenuMaxHeight(typeMenu, typeMenuButton, typeMenuOptions);
   applyFilterMenuMaxHeight(yearMenu, yearMenuButton, yearMenuOptions);
+  applyFilterMenuMaxHeight(monthMenu, monthMenuButton, monthMenuOptions);
 }
 
 function renderFilterButtons(container, options, onSelect) {
@@ -884,29 +905,41 @@ function renderFilterMenuDoneButton(container, onDone) {
 function syncFilterControlState({
   typeButtons,
   yearButtons,
+  monthButtons,
   selectedTypes,
   selectedYears,
+  selectedMonths,
   allTypeValues,
   allYearValues,
+  allMonthValues,
   allTypesSelected,
   allYearsSelected,
+  allMonthsSelected,
   typeMenuTypes,
   yearMenuYears,
+  monthMenuMonths,
   typeMenuSelection,
   yearMenuSelection,
+  monthMenuSelection,
   typeMenuLabel,
   yearMenuLabel,
+  monthMenuLabel,
   typeClearButton,
   yearClearButton,
+  monthClearButton,
   keepTypeMenuOpen,
   keepYearMenuOpen,
+  keepMonthMenuOpen,
   typeMenu,
   yearMenu,
+  monthMenu,
   typeMenuButton,
   yearMenuButton,
+  monthMenuButton,
 }) {
   updateButtonState(typeButtons, selectedTypes, allTypesSelected, allTypeValues);
   updateButtonState(yearButtons, selectedYears, allYearsSelected, allYearValues, (v) => Number(v));
+  updateButtonState(monthButtons, selectedMonths, allMonthsSelected, allMonthValues, (v) => Number(v));
   const typeMenuText = getTypeMenuText(
     typeMenuTypes,
     typeMenuSelection.allMode || typeMenuTypes.length === allTypeValues.length,
@@ -914,6 +947,10 @@ function syncFilterControlState({
   const yearMenuText = getYearMenuText(
     yearMenuYears,
     yearMenuSelection.allMode || yearMenuYears.length === allYearValues.length,
+  );
+  const monthMenuText = getMonthMenuText(
+    monthMenuMonths,
+    monthMenuSelection.allMode || monthMenuMonths.length === allMonthValues.length,
   );
   setMenuLabel(
     typeMenuLabel,
@@ -933,6 +970,15 @@ function syncFilterControlState({
       ? "Multiple Years Selected"
       : "",
   );
+  setMenuLabel(
+    monthMenuLabel,
+    monthMenuText,
+    !monthMenuSelection.allMode
+    && monthMenuMonths.length > 1
+    && monthMenuMonths.length < allMonthValues.length
+      ? "Multiple Months Selected"
+      : "",
+  );
   if (typeClearButton) {
     if (allTypesSelected) {
       typeClearButton.textContent = "Select All";
@@ -945,11 +991,17 @@ function syncFilterControlState({
   if (yearClearButton) {
     yearClearButton.disabled = allYearsSelected;
   }
+  if (monthClearButton) {
+    monthClearButton.disabled = allMonthsSelected;
+  }
   if (keepTypeMenuOpen) {
     setMenuOpenState(typeMenu, typeMenuButton, true);
   }
   if (keepYearMenuOpen) {
     setMenuOpenState(yearMenu, yearMenuButton, true);
+  }
+  if (keepMonthMenuOpen) {
+    setMenuOpenState(monthMenu, monthMenuButton, true);
   }
 }
 
@@ -1359,6 +1411,10 @@ function isDateKeyElapsed(dateKey, todayDateKey = getLocalTodayDateKey()) {
   return Boolean(normalizedDateKey) && normalizedDateKey <= todayDateKey;
 }
 
+function monthIndexFromDateKey(dateKey) {
+  return Number(String(dateKey || "").slice(5, 7)) - 1;
+}
+
 function getElapsedDayCountForYear(year, referenceDate = new Date()) {
   const normalizedYear = Number(year);
   if (!Number.isFinite(normalizedYear)) return 0;
@@ -1376,6 +1432,34 @@ function getElapsedDayCountForYear(year, referenceDate = new Date()) {
   );
   const yearStartUtc = Date.UTC(normalizedYear, 0, 1);
   return Math.max(0, Math.floor((currentDayUtc - yearStartUtc) / MS_PER_DAY) + 1);
+}
+
+function getElapsedDayCountForYearInMonths(year, monthSet, referenceDate = new Date()) {
+  if (!(monthSet instanceof Set)) {
+    return getElapsedDayCountForYear(year, referenceDate);
+  }
+  const normalizedYear = Number(year);
+  if (!Number.isFinite(normalizedYear)) return 0;
+  const currentYear = referenceDate.getFullYear();
+  if (normalizedYear > currentYear) return 0;
+  const currentDayUtc = Date.UTC(
+    referenceDate.getFullYear(),
+    referenceDate.getMonth(),
+    referenceDate.getDate(),
+  );
+  let total = 0;
+  monthSet.forEach((month) => {
+    const monthStart = Date.UTC(normalizedYear, month, 1);
+    const nextMonthStart = Date.UTC(normalizedYear, month + 1, 1);
+    const daysInMonth = Math.round((nextMonthStart - monthStart) / MS_PER_DAY);
+    if (normalizedYear < currentYear || currentDayUtc >= nextMonthStart) {
+      total += daysInMonth;
+      return;
+    }
+    if (currentDayUtc < monthStart) return;
+    total += Math.floor((currentDayUtc - monthStart) / MS_PER_DAY) + 1;
+  });
+  return total;
 }
 
 function localDayNumber(date) {
@@ -2729,13 +2813,13 @@ function formatTooltipBreakdown(total, breakdown, types) {
   return lines.join("\n");
 }
 
-function buildCombinedTypeDetailsByDate(payload, types, years) {
+function buildCombinedTypeDetailsByDate(payload, types, years, monthSet) {
   const detailsByDate = {};
   const typeBreakdownsByDate = {};
   const activityLinksByDateType = {};
   const typeMetricsByDateType = {};
   const raceDateKeys = new Set();
-  const activities = getFilteredActivities(payload, types, years);
+  const activities = getFilteredActivities(payload, types, years, monthSet);
 
   activities.forEach((activity) => {
     const dateStr = String(activity.date || "");
@@ -2943,6 +3027,7 @@ function buildSummary(
   payload,
   types,
   years,
+  monthSet,
   units,
   showTypeBreakdown,
   showActiveDays,
@@ -2996,6 +3081,7 @@ function buildSummary(
         typeTotals[type] = { count: 0 };
       }
       Object.entries(entries || {}).forEach(([dateStr, entry]) => {
+        if (monthSet && !monthSet.has(monthIndexFromDateKey(dateStr))) return;
         if (includeTotals && (entry.count || 0) > 0) {
           activeDays.add(dateStr);
         }
@@ -3014,7 +3100,7 @@ function buildSummary(
 
   visibleTypeCardsList.sort((a, b) => (typeTotals[b]?.count || 0) - (typeTotals[a]?.count || 0));
   const elapsedDays = years.reduce(
-    (sum, year) => sum + getElapsedDayCountForYear(Number(year)),
+    (sum, year) => sum + getElapsedDayCountForYearInMonths(Number(year), monthSet),
     0,
   );
   let elapsedActiveDays = 0;
@@ -3172,6 +3258,7 @@ function buildHeatmapArea(aggregates, year, units, colors, type, layout, options
   const metricHeatmapActive = Boolean(metricHeatmapKey) && metricHeatmapMax > 0;
   const metricHeatmapColor = options.metricHeatmapColor || colors[4];
   const metricHeatmapEmptyColor = options.metricHeatmapEmptyColor || DEFAULT_COLORS[0];
+  const selectedMonthSet = options.selectedMonthSet instanceof Set ? options.selectedMonthSet : null;
   const todayDateKey = getLocalTodayDateKey();
 
   const monthRow = document.createElement("div");
@@ -3236,6 +3323,14 @@ function buildHeatmapArea(aggregates, year, units, colors, type, layout, options
 
     if (!inYear) {
       cell.classList.add("outside");
+      grid.appendChild(cell);
+      continue;
+    }
+
+    if (selectedMonthSet && !selectedMonthSet.has(day.getUTCMonth())) {
+      cell.classList.add("month-muted");
+      cell.style.backgroundImage = "none";
+      cell.style.background = metricHeatmapActive ? metricHeatmapEmptyColor : colors[0];
       grid.appendChild(cell);
       continue;
     }
@@ -3569,7 +3664,10 @@ function buildCard(type, year, aggregates, units, options = {}) {
       elapsedActiveDays += 1;
     }
   });
-  const elapsedDaysInYear = getElapsedDayCountForYear(year);
+  const elapsedDaysInYear = getElapsedDayCountForYearInMonths(
+    year,
+    options.selectedMonthSet instanceof Set ? options.selectedMonthSet : null,
+  );
   const daysOffInYear = Math.max(0, elapsedDaysInYear - elapsedActiveDays);
   metricMaxByKey[ACTIVE_DAYS_METRIC_KEY] = totals.count > 0 ? 1 : 0;
   metricMaxByKey[DAYS_OFF_METRIC_KEY] = daysOffInYear > 0 ? 1 : 0;
@@ -3709,11 +3807,23 @@ function buildLabeledCardRow(label, card, kind) {
   return row;
 }
 
-function combineYearAggregates(yearData, types) {
+function filterAggregatesByMonths(aggregates, monthSet) {
+  if (!monthSet) return aggregates || {};
+  const result = {};
+  Object.entries(aggregates || {}).forEach(([dateStr, entry]) => {
+    if (monthSet.has(monthIndexFromDateKey(dateStr))) {
+      result[dateStr] = entry;
+    }
+  });
+  return result;
+}
+
+function combineYearAggregates(yearData, types, monthSet) {
   const combined = {};
   types.forEach((type) => {
     const entries = yearData?.[type] || {};
     Object.entries(entries).forEach(([dateStr, entry]) => {
+      if (monthSet && !monthSet.has(monthIndexFromDateKey(dateStr))) return;
       if (!combined[dateStr]) {
         combined[dateStr] = {
           count: 0,
@@ -3746,22 +3856,25 @@ function combineYearAggregates(yearData, types) {
   return result;
 }
 
-function getFilteredActivities(payload, types, years) {
+function getFilteredActivities(payload, types, years, monthSet) {
   const activities = payload.activities || [];
   if (!activities.length) return [];
   const yearSet = new Set(years.map(Number));
   const typeSet = new Set(types);
   return activities.filter((activity) => (
-    typeSet.has(activity.type) && yearSet.has(Number(activity.year))
+    typeSet.has(activity.type)
+    && yearSet.has(Number(activity.year))
+    && (!monthSet || monthSet.has(monthIndexFromDateKey(activity.date)))
   ));
 }
 
-function getTypeYearTotals(payload, type, years) {
+function getTypeYearTotals(payload, type, years, monthSet) {
   const totals = new Map();
   years.forEach((year) => {
     const entries = payload.aggregates?.[String(year)]?.[type] || {};
     let total = 0;
-    Object.values(entries).forEach((entry) => {
+    Object.entries(entries).forEach(([dateStr, entry]) => {
+      if (monthSet && !monthSet.has(monthIndexFromDateKey(dateStr))) return;
       total += entry.count || 0;
     });
     totals.set(year, total);
@@ -3769,16 +3882,17 @@ function getTypeYearTotals(payload, type, years) {
   return totals;
 }
 
-function getTypesYearTotals(payload, types, years) {
+function getTypesYearTotals(payload, types, years, monthSet) {
   if (types.length === 1) {
-    return getTypeYearTotals(payload, types[0], years);
+    return getTypeYearTotals(payload, types[0], years, monthSet);
   }
   const totals = new Map();
   years.forEach((year) => {
     const yearData = payload.aggregates?.[String(year)] || {};
     let total = 0;
     types.forEach((type) => {
-      Object.values(yearData?.[type] || {}).forEach((entry) => {
+      Object.entries(yearData?.[type] || {}).forEach(([dateStr, entry]) => {
+        if (monthSet && !monthSet.has(monthIndexFromDateKey(dateStr))) return;
         total += entry.count || 0;
       });
     });
@@ -4130,7 +4244,7 @@ function buildMileSplitChart(seriesRaces, distUnit) {
   return wrap;
 }
 
-function buildRacesCard(payload, types, years, units) {
+function buildRacesCard(payload, types, years, units, monthSet) {
   const typeSet = new Set(Array.isArray(types) ? types : []);
   const yearSet = new Set(Array.isArray(years) ? years.map(Number) : []);
   const distUnit = (units || {}).distance || "mi";
@@ -4139,7 +4253,10 @@ function buildRacesCard(payload, types, years, units) {
   const M_PER_FT = 0.3048;
 
   const allRaceActivities = (payload.activities || []).filter(
-    (a) => a.is_race && typeSet.has(a.type) && yearSet.has(Number(a.year))
+    (a) => a.is_race
+      && typeSet.has(a.type)
+      && yearSet.has(Number(a.year))
+      && (!monthSet || monthSet.has(monthIndexFromDateKey(a.date)))
   );
 
   const card = document.createElement("div");
@@ -4407,8 +4524,11 @@ function buildRacesCard(payload, types, years, units) {
   return card;
 }
 
-function buildMonthlyHeatmap(payload, types, years, units) {
+function buildMonthlyHeatmap(payload, types, years, units, monthIndices) {
   const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const activeMonths = Array.isArray(monthIndices) && monthIndices.length
+    ? monthIndices.slice().sort((a, b) => a - b)
+    : MONTH_INDICES.slice();
 
   const card = document.createElement("div");
   card.className = "card monthly-heatmap-card";
@@ -4506,7 +4626,10 @@ function buildMonthlyHeatmap(payload, types, years, units) {
 
     const activeTypes = types.filter((type) => {
       const monthly = getMonthlyTotals(activeYear, type);
-      return monthly.some((md) => md && (md.count > 0 || md.distance > 0));
+      return activeMonths.some((m) => {
+        const md = monthly[m];
+        return md && (md.count > 0 || md.distance > 0);
+      });
     });
 
     if (!activeTypes.length) {
@@ -4522,8 +4645,9 @@ function buildMonthlyHeatmap(payload, types, years, units) {
     const typeStats = {};
     activeTypes.forEach((type) => {
       let min = Infinity, max = 0;
-      getMonthlyTotals(activeYear, type).forEach((md) => {
-        const v = metricVal(md);
+      const monthly = getMonthlyTotals(activeYear, type);
+      activeMonths.forEach((m) => {
+        const v = metricVal(monthly[m]);
         if (v > 0) { if (v > max) max = v; if (v < min) min = v; }
       });
       typeStats[type] = { min: min === Infinity ? 0 : min, max };
@@ -4537,10 +4661,10 @@ function buildMonthlyHeatmap(payload, types, years, units) {
     header.appendChild(spacer);
     const headerCells = document.createElement("div");
     headerCells.className = "monthly-cells";
-    MONTH_LABELS.forEach((name) => {
+    activeMonths.forEach((m) => {
       const el = document.createElement("div");
       el.className = "monthly-month-label";
-      el.textContent = name;
+      el.textContent = MONTH_LABELS[m];
       headerCells.appendChild(el);
     });
     header.appendChild(headerCells);
@@ -4569,7 +4693,7 @@ function buildMonthlyHeatmap(payload, types, years, units) {
       const cells = document.createElement("div");
       cells.className = "monthly-cells";
 
-      for (let m = 0; m < 12; m++) {
+      activeMonths.forEach((m) => {
         const md = monthly[m];
         const val = metricVal(md);
         const cell = document.createElement("div");
@@ -4644,7 +4768,7 @@ function buildMonthlyHeatmap(payload, types, years, units) {
         }
 
         cells.appendChild(cell);
-      }
+      });
 
       row.appendChild(cells);
       gridWrap.appendChild(row);
@@ -4730,8 +4854,9 @@ function buildStatsOverview(payload, types, years, color, options = {}) {
   let activeMetricKey = typeof options.initialMetricKey === "string"
     ? options.initialMetricKey
     : null;
+  const monthSet = options.monthSet instanceof Set ? options.monthSet : null;
   const aggregateYears = payload.aggregates || {};
-  const activities = getFilteredActivities(payload, types, yearsDesc)
+  const activities = getFilteredActivities(payload, types, yearsDesc, monthSet)
     .map((activity) => {
       const dateStr = String(activity.date || "");
       const date = new Date(`${dateStr}T00:00:00`);
@@ -4788,6 +4913,7 @@ function buildStatsOverview(payload, types, years, color, options = {}) {
     for (let dayOffset = 0; dayOffset < elapsedDaysInYear; dayOffset += 1) {
       const dayUtc = new Date(yearStartUtc.getTime());
       dayUtc.setUTCDate(dayUtc.getUTCDate() + dayOffset);
+      if (monthSet && !monthSet.has(dayUtc.getUTCMonth())) continue;
       const dateKey = formatUtcDateKey(dayUtc);
       if (activeDateKeys.has(dateKey)) continue;
       const date = new Date(`${dateKey}T00:00:00`);
@@ -5417,6 +5543,10 @@ async function init() {
     { value: "all", label: "All Activities" },
     ...payload.types.map((type) => ({ value: type, label: displayType(type) })),
   ];
+  const monthOptions = [
+    { value: "all", label: "All Months" },
+    ...MONTH_INDICES.map((month) => ({ value: String(month), label: MONTHS[month] })),
+  ];
   const setupUnits = normalizeUnits(payload.units || DEFAULT_UNITS);
   const setupWeekStart = normalizeWeekStart(payload.week_start || payload.weekStart);
 
@@ -5428,6 +5558,8 @@ async function init() {
   let selectedTypes = new Set();
   let allYearsMode = true;
   let selectedYears = new Set();
+  let allMonthsMode = true;
+  let selectedMonths = new Set();
   let currentUnitSystem = getUnitSystemFromUnits(setupUnits);
   let currentUnits = getUnitsForSystem(currentUnitSystem);
   let currentVisibleYears = payload.years.slice().sort((a, b) => b - a);
@@ -5442,6 +5574,7 @@ async function init() {
   let visibleFrequencyFilterableMetricKeys = new Set();
   let draftTypeMenuSelection = null;
   let draftYearMenuSelection = null;
+  let draftMonthMenuSelection = null;
 
   function hasAnyYearMetricSelection() {
     for (const metricKey of selectedYearMetricByYear.values()) {
@@ -5457,6 +5590,7 @@ async function init() {
   function isDefaultFilterState() {
     return areAllTypesSelected()
       && areAllYearsSelected()
+      && areAllMonthsSelected()
       && !hasAnyYearMetricSelection()
       && !selectedFrequencyFactKey
       && !hasAnyFrequencyMetricSelection();
@@ -5546,6 +5680,10 @@ async function init() {
     return allYearsMode;
   }
 
+  function areAllMonthsSelected() {
+    return allMonthsMode;
+  }
+
   function selectedTypesList() {
     if (areAllTypesSelected()) {
       return payload.types.slice();
@@ -5558,6 +5696,13 @@ async function init() {
       return visibleYears.slice();
     }
     return visibleYears.filter((year) => selectedYears.has(Number(year)));
+  }
+
+  function selectedMonthsList() {
+    if (areAllMonthsSelected()) {
+      return MONTH_INDICES.slice();
+    }
+    return MONTH_INDICES.filter((month) => selectedMonths.has(month));
   }
 
   function toggleType(value) {
@@ -5619,11 +5764,43 @@ async function init() {
     draftTypeMenuSelection = null;
   }
 
+  function toggleMonth(value) {
+    const nextState = reduceTopButtonSelection({
+      rawValue: value,
+      allMode: allMonthsMode,
+      selectedValues: selectedMonths,
+      allValues: MONTH_INDICES,
+      normalizeValue: (rawValue) => Number(rawValue),
+    });
+    allMonthsMode = nextState.allMode;
+    selectedMonths = nextState.selectedValues;
+  }
+
+  function toggleMonthMenu(value) {
+    const selection = draftMonthMenuSelection || cloneSelectionState(allMonthsMode, selectedMonths);
+    const nextState = reduceMenuSelection({
+      rawValue: value,
+      allMode: selection.allMode,
+      selectedValues: selection.selectedValues,
+      allValues: MONTH_INDICES,
+      normalizeValue: (rawValue) => Number(rawValue),
+      allowToggleOffAll: true,
+    });
+    draftMonthMenuSelection = nextState;
+  }
+
   function commitYearMenuSelection() {
     if (!draftYearMenuSelection) return;
     allYearsMode = draftYearMenuSelection.allMode;
     selectedYears = new Set(draftYearMenuSelection.selectedValues);
     draftYearMenuSelection = null;
+  }
+
+  function commitMonthMenuSelection() {
+    if (!draftMonthMenuSelection) return;
+    allMonthsMode = draftMonthMenuSelection.allMode;
+    selectedMonths = new Set(draftMonthMenuSelection.selectedValues);
+    draftMonthMenuSelection = null;
   }
 
   function finalizeTypeSelection() {
@@ -5638,6 +5815,13 @@ async function init() {
     }
   }
 
+  function finalizeMonthSelection() {
+    if (!areAllMonthsSelected() && selectedMonths.size === MONTH_INDICES.length) {
+      allMonthsMode = true;
+      selectedMonths.clear();
+    }
+  }
+
   function setCardScrollKey(card, key) {
     if (!card || !card.dataset) return;
     card.dataset.scrollKey = String(key || "");
@@ -5646,8 +5830,10 @@ async function init() {
   function update(options = {}) {
     const keepTypeMenuOpen = Boolean(options.keepTypeMenuOpen);
     const keepYearMenuOpen = Boolean(options.keepYearMenuOpen);
+    const keepMonthMenuOpen = Boolean(options.keepMonthMenuOpen);
     const resetTypeMenuScroll = Boolean(options.resetTypeMenuScroll);
     const resetYearMenuScroll = Boolean(options.resetYearMenuScroll);
+    const resetMonthMenuScroll = Boolean(options.resetMonthMenuScroll);
     const menuOnly = Boolean(options.menuOnly);
     const resetCardScroll = Boolean(options.resetCardScroll);
     const resetViewport = Boolean(options.resetViewport);
@@ -5664,15 +5850,18 @@ async function init() {
       });
     }
     const allYearsSelected = areAllYearsSelected();
+    const allMonthsSelected = areAllMonthsSelected();
     const yearOptions = [
       { value: "all", label: "All Years" },
       ...visibleYears.map((year) => ({ value: String(year), label: String(year) })),
     ];
     const typeMenuSelection = draftTypeMenuSelection || { allMode: allTypesMode, selectedValues: selectedTypes };
     const yearMenuSelection = draftYearMenuSelection || { allMode: allYearsMode, selectedValues: selectedYears };
+    const monthMenuSelection = draftMonthMenuSelection || { allMode: allMonthsMode, selectedValues: selectedMonths };
     const typeMenuTypes = selectedTypesListForState(typeMenuSelection, payload.types);
     const yearMenuYears = selectedYearsListForState(yearMenuSelection, visibleYears);
     yearMenuYears.sort((a, b) => b - a);
+    const monthMenuMonths = selectedMonthsListForState(monthMenuSelection);
 
     renderFilterButtons(yearButtons, yearOptions, (value) => {
       draftYearMenuSelection = null;
@@ -5713,30 +5902,58 @@ async function init() {
       setMenuOpenState(yearMenu, yearMenuButton, false);
       update();
     });
+    renderFilterMenuOptions(
+      monthMenuOptions,
+      monthOptions,
+      monthMenuSelection.selectedValues,
+      monthMenuSelection.allMode,
+      (value) => {
+        toggleMonthMenu(value);
+        update({ keepMonthMenuOpen: true, menuOnly: true });
+      },
+      (v) => Number(v),
+    );
+    renderFilterMenuDoneButton(monthMenuOptions, () => {
+      commitMonthMenuSelection();
+      finalizeMonthSelection();
+      setMenuOpenState(monthMenu, monthMenuButton, false);
+      update();
+    });
 
     syncFilterControlState({
       typeButtons,
       yearButtons,
+      monthButtons,
       selectedTypes,
       selectedYears,
+      selectedMonths,
       allTypeValues: payload.types,
       allYearValues: currentVisibleYears,
+      allMonthValues: MONTH_INDICES,
       allTypesSelected,
       allYearsSelected,
+      allMonthsSelected,
       typeMenuTypes,
       yearMenuYears,
+      monthMenuMonths,
       typeMenuSelection,
       yearMenuSelection,
+      monthMenuSelection,
       typeMenuLabel,
       yearMenuLabel,
+      monthMenuLabel,
       typeClearButton,
       yearClearButton,
+      monthClearButton,
       keepTypeMenuOpen,
       keepYearMenuOpen,
+      keepMonthMenuOpen,
       typeMenu,
       yearMenu,
+      monthMenu,
       typeMenuButton,
       yearMenuButton,
+      monthMenuButton,
     });
 
     syncOpenFilterMenuMaxHeights();
@@ -5745,6 +5962,9 @@ async function init() {
     }
     if (resetYearMenuScroll) {
       resetFilterMenuScroll(yearMenuOptions);
+    }
+    if (resetMonthMenuScroll) {
+      resetFilterMenuScroll(monthMenuOptions);
     }
 
     if (menuOnly) {
@@ -5755,6 +5975,9 @@ async function init() {
 
     const years = selectedYearsList(visibleYears);
     years.sort((a, b) => b - a);
+    const months = selectedMonthsList();
+    const monthSet = months.length === MONTH_INDICES.length ? null : new Set(months);
+    const monthKeySegment = monthSet ? months.join(",") : "all";
     const previousSummaryYearMetricKey = getActiveSummaryYearMetricKey();
     const initialFrequencyMetricKey = selectedFrequencyMetricKey;
     const getInitialYearMetricKey = (year) => {
@@ -5825,20 +6048,21 @@ async function init() {
         activityLinksByDateType,
         typeMetricsByDateType,
         raceDateKeys,
-      } = buildCombinedTypeDetailsByDate(payload, types, years);
+      } = buildCombinedTypeDetailsByDate(payload, types, years, monthSet);
       if (showCombinedTypes) {
         const section = document.createElement("div");
         section.className = "type-section";
         const list = document.createElement("div");
         list.className = "type-list";
-        const yearTotals = getTypesYearTotals(payload, types, years);
+        const yearTotals = getTypesYearTotals(payload, types, years, monthSet);
         const cardYears = years.filter((year) => (yearTotals.get(year) || 0) > 0);
-        const combinedSelectionKey = `combined:${types.join("|")}`;
+        const combinedSelectionKey = `combined:${types.join("|")}:m:${monthKeySegment}`;
         let frequencyCardRow = null;
         const yearCardRows = [];
         if (showMoreStats) {
           const frequencyCard = buildStatsOverview(payload, types, cardYears, frequencyCardColor, {
             units: currentUnits,
+            monthSet,
             initialFactKey: selectedFrequencyFactKey,
             initialMetricKey: initialFrequencyMetricKey,
             onFactStateChange: onFrequencyFactStateChange,
@@ -5849,7 +6073,7 @@ async function init() {
         }
         cardYears.forEach((year) => {
           const yearData = payload.aggregates?.[String(year)] || {};
-          const aggregates = combineYearAggregates(yearData, types);
+          const aggregates = combineYearAggregates(yearData, types, monthSet);
           const colorForEntry = (entry) => {
             if (!entry.types || entry.types.length === 0) {
               return {
@@ -5880,6 +6104,7 @@ async function init() {
               cardMetricYear: year,
               initialMetricKey: getInitialYearMetricKey(year),
               onYearMetricStateChange,
+              selectedMonthSet: monthSet,
               selectedTypes: types,
               typeBreakdownsByDate,
               typeLabelsByDate,
@@ -5896,12 +6121,12 @@ async function init() {
           list.appendChild(frequencyCardRow);
         }
         if (cardYears.length) {
-          const monthlyCard = buildMonthlyHeatmap(payload, types, cardYears, currentUnits);
+          const monthlyCard = buildMonthlyHeatmap(payload, types, cardYears, currentUnits, months);
           list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
         }
         yearCardRows.forEach((row) => list.appendChild(row));
         if (cardYears.length) {
-          const racesCard = buildRacesCard(payload, types, years, currentUnits);
+          const racesCard = buildRacesCard(payload, types, years, currentUnits, monthSet);
           list.appendChild(buildLabeledCardRow("Races", racesCard, "races"));
         }
         section.appendChild(list);
@@ -5913,14 +6138,15 @@ async function init() {
 
           const list = document.createElement("div");
           list.className = "type-list";
-          const yearTotals = getTypeYearTotals(payload, type, years);
+          const yearTotals = getTypeYearTotals(payload, type, years, monthSet);
           const cardYears = years.filter((year) => (yearTotals.get(year) || 0) > 0);
-          const typeCardKey = `type:${type}`;
+          const typeCardKey = `type:${type}:m:${monthKeySegment}`;
           let typeFrequencyCardRow = null;
           const typeYearCardRows = [];
           if (showMoreStats) {
             const frequencyCard = buildStatsOverview(payload, [type], cardYears, frequencyCardColor, {
               units: currentUnits,
+              monthSet,
               initialFactKey: selectedFrequencyFactKey,
               initialMetricKey: initialFrequencyMetricKey,
               onFactStateChange: onFrequencyFactStateChange,
@@ -5930,13 +6156,17 @@ async function init() {
             typeFrequencyCardRow = buildLabeledCardRow("Activity Frequency", frequencyCard, "frequency");
           }
           cardYears.forEach((year) => {
-            const aggregates = payload.aggregates?.[String(year)]?.[type] || {};
+            const aggregates = filterAggregatesByMonths(
+              payload.aggregates?.[String(year)]?.[type] || {},
+              monthSet,
+            );
             const card = buildCard(type, year, aggregates, currentUnits, {
               metricHeatmapColor: getColors(type)[4],
               weekStart: setupWeekStart,
               cardMetricYear: year,
               initialMetricKey: getInitialYearMetricKey(year),
               onYearMetricStateChange,
+              selectedMonthSet: monthSet,
               activityLinksByDateType,
             });
             setCardScrollKey(card, `${typeCardKey}:year:${year}`);
@@ -5947,12 +6177,12 @@ async function init() {
             list.appendChild(typeFrequencyCardRow);
           }
           if (cardYears.length) {
-            const monthlyCard = buildMonthlyHeatmap(payload, [type], cardYears, currentUnits);
+            const monthlyCard = buildMonthlyHeatmap(payload, [type], cardYears, currentUnits, months);
             list.appendChild(buildLabeledCardRow("Monthly Activity", monthlyCard, "monthly"));
           }
           typeYearCardRows.forEach((row) => list.appendChild(row));
           if (cardYears.length) {
-            const racesCard = buildRacesCard(payload, [type], years, currentUnits);
+            const racesCard = buildRacesCard(payload, [type], years, currentUnits, monthSet);
             list.appendChild(buildLabeledCardRow("Races", racesCard, "races"));
           }
           if (!list.childElementCount) {
@@ -5987,6 +6217,7 @@ async function init() {
       payload,
       types,
       years,
+      monthSet,
       currentUnits,
       showTypeBreakdown,
       showActiveDays,
@@ -6054,6 +6285,12 @@ async function init() {
     toggleType(value);
     update();
   });
+  renderFilterButtons(monthButtons, monthOptions, (value) => {
+    draftMonthMenuSelection = null;
+    setMenuOpenState(monthMenu, monthMenuButton, false);
+    toggleMonth(value);
+    update();
+  });
   if (typeMenuButton) {
     typeMenuButton.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -6064,8 +6301,10 @@ async function init() {
         draftTypeMenuSelection = null;
       }
       draftYearMenuSelection = null;
+      draftMonthMenuSelection = null;
       setMenuOpenState(typeMenu, typeMenuButton, open);
       setMenuOpenState(yearMenu, yearMenuButton, false);
+      setMenuOpenState(monthMenu, monthMenuButton, false);
       update({ keepTypeMenuOpen: open, menuOnly: true, resetTypeMenuScroll: open });
     });
   }
@@ -6079,9 +6318,28 @@ async function init() {
         draftYearMenuSelection = null;
       }
       draftTypeMenuSelection = null;
+      draftMonthMenuSelection = null;
       setMenuOpenState(yearMenu, yearMenuButton, open);
       setMenuOpenState(typeMenu, typeMenuButton, false);
+      setMenuOpenState(monthMenu, monthMenuButton, false);
       update({ keepYearMenuOpen: open, menuOnly: true, resetYearMenuScroll: open });
+    });
+  }
+  if (monthMenuButton) {
+    monthMenuButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const open = !monthMenu?.classList.contains("open");
+      if (open) {
+        draftMonthMenuSelection = cloneSelectionState(allMonthsMode, selectedMonths);
+      } else {
+        draftMonthMenuSelection = null;
+      }
+      draftTypeMenuSelection = null;
+      draftYearMenuSelection = null;
+      setMenuOpenState(monthMenu, monthMenuButton, open);
+      setMenuOpenState(typeMenu, typeMenuButton, false);
+      setMenuOpenState(yearMenu, yearMenuButton, false);
+      update({ keepMonthMenuOpen: open, menuOnly: true, resetMonthMenuScroll: open });
     });
   }
   if (typeClearButton) {
@@ -6116,6 +6374,16 @@ async function init() {
       update();
     });
   }
+  if (monthClearButton) {
+    monthClearButton.addEventListener("click", () => {
+      if (areAllMonthsSelected()) return;
+      draftMonthMenuSelection = null;
+      setMenuOpenState(monthMenu, monthMenuButton, false);
+      allMonthsMode = true;
+      selectedMonths.clear();
+      update();
+    });
+  }
   if (imperialUnitsButton) {
     imperialUnitsButton.addEventListener("click", () => {
       setUnitSystem("imperial");
@@ -6133,12 +6401,16 @@ async function init() {
       }
       draftTypeMenuSelection = null;
       draftYearMenuSelection = null;
+      draftMonthMenuSelection = null;
       setMenuOpenState(typeMenu, typeMenuButton, false);
       setMenuOpenState(yearMenu, yearMenuButton, false);
+      setMenuOpenState(monthMenu, monthMenuButton, false);
       allTypesMode = true;
       selectedTypes.clear();
       allYearsMode = true;
       selectedYears.clear();
+      allMonthsMode = true;
+      selectedMonths.clear();
       selectedYearMetricByYear.clear();
       visibleYearMetricYears.clear();
       filterableYearMetricsByYear.clear();
@@ -6175,6 +6447,16 @@ async function init() {
       }
       if (draftYearMenuSelection) {
         draftYearMenuSelection = null;
+        shouldRefreshMenus = true;
+      }
+    }
+    if (monthMenu && !monthMenu.contains(target)) {
+      if (monthMenu.classList.contains("open")) {
+        setMenuOpenState(monthMenu, monthMenuButton, false);
+        shouldRefreshMenus = true;
+      }
+      if (draftMonthMenuSelection) {
+        draftMonthMenuSelection = null;
         shouldRefreshMenus = true;
       }
     }

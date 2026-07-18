@@ -153,7 +153,7 @@
       .header-top {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto;
+        grid-template-rows: auto auto auto auto auto;
         align-items: center;
         column-gap: var(--space-5);
         row-gap: var(--space-3);
@@ -511,10 +511,14 @@
         grid-row: 3;
       }
 
+      #monthButtons {
+        grid-row: 4;
+      }
+
       #resetAllRow {
         grid-column: 1 / -1;
         justify-self: center;
-        grid-row: 4;
+        grid-row: 5;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
@@ -1342,6 +1346,10 @@
         pointer-events: none;
       }
 
+      .cell.month-muted {
+        pointer-events: none;
+      }
+
       @media (hover: hover) and (pointer: fine) {
         .cell:hover:not(.outside) {
           box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 14px rgba(56, 189, 248, 0.75);
@@ -1917,9 +1925,9 @@
           --desktop-header-stack-gap: var(--space-3);
           --desktop-header-edge-pad: var(--space-3);
           --desktop-header-bottom-pad: calc(var(--desktop-header-edge-pad) + 2px);
-          --desktop-filter-width: 260px;
-          --desktop-action-width: 86px;
-          --desktop-reset-width: 96px;
+          --desktop-filter-width: 150px;
+          --desktop-action-width: 62px;
+          --desktop-reset-width: 78px;
           --desktop-control-col-gap: var(--space-2);
           position: relative;
           padding: var(--desktop-header-edge-pad) var(--space-8) var(--desktop-header-bottom-pad);
@@ -1930,9 +1938,12 @@
             minmax(0, 1fr)
             var(--desktop-filter-width)
             var(--desktop-action-width)
-            var(--desktop-reset-width)
             var(--desktop-filter-width)
             var(--desktop-action-width)
+            var(--desktop-filter-width)
+            var(--desktop-action-width)
+            var(--desktop-reset-width)
+            max-content
             minmax(0, 1fr);
           grid-template-rows: auto auto;
           justify-items: stretch;
@@ -1948,14 +1959,14 @@
         }
 
         h1 {
-          grid-column: 2 / 7;
+          grid-column: 2 / 10;
           grid-row: 1;
           text-align: center;
           white-space: nowrap;
         }
 
         .header-links {
-          grid-column: 7;
+          grid-column: 10;
           grid-row: 1;
           align-items: flex-end;
           justify-self: end;
@@ -1976,7 +1987,12 @@
         }
 
         #yearMenu {
-          grid-column: 5;
+          grid-column: 4;
+          grid-row: 2;
+        }
+
+        #monthMenu {
+          grid-column: 6;
           grid-row: 2;
         }
 
@@ -1986,12 +2002,23 @@
         }
 
         #yearClearButton {
-          grid-column: 6;
+          grid-column: 5;
           grid-row: 2;
+        }
+
+        #monthClearButton {
+          grid-column: 7;
+          grid-row: 2;
+        }
+
+        .filter-menu {
+          min-width: 0;
+          width: 100%;
         }
 
         #typeClearButton,
         #yearClearButton,
+        #monthClearButton,
         #resetAllRow .filter-clear-button {
           width: 100%;
           min-width: 0;
@@ -1999,22 +2026,18 @@
         }
 
         #typeClearButton,
-        #yearClearButton {
-          padding: 8px 6px;
-          font-size: 13px;
+        #yearClearButton,
+        #monthClearButton {
+          padding: 8px 4px;
+          font-size: 12px;
         }
 
         #resetAllRow {
-          display: block;
-          grid-column: 4;
-          grid-row: 2;
-          width: auto;
-          max-width: 100%;
-          justify-self: center;
-          align-self: center;
-          margin-bottom: 0;
+          display: contents;
         }
         #resetAllRow .filter-clear-button {
+          grid-column: 8;
+          grid-row: 2;
           width: 100%;
           min-width: 0;
           padding: 8px 6px;
@@ -2031,9 +2054,11 @@
           min-width: 54px;
         }
         #resetAllRow .units-toggle {
-          position: absolute;
-          right: var(--space-8);
-          bottom: var(--desktop-header-bottom-pad);
+          display: inline-flex;
+          grid-column: 9;
+          grid-row: 2;
+          justify-self: start;
+          align-self: center;
           width: auto;
           border-radius: 999px;
           border: 1px solid rgba(148, 163, 184, 0.55);
@@ -2075,6 +2100,14 @@
         }
       }
 
+      @media (min-width: 1156px) {
+        header {
+          --desktop-filter-width: 200px;
+          --desktop-action-width: 72px;
+          --desktop-reset-width: 90px;
+        }
+      }
+
       @media (min-width: 901px) and (max-width: 1155px) and (hover: none), (min-width: 901px) and (max-width: 1155px) and (pointer: coarse), (hover: hover) and (pointer: fine) and (min-width: 721px) and (max-width: 924px) {
         header {
           --mobile-header-padding-inline: var(--space-7);
@@ -2100,7 +2133,7 @@
 
         .header-top {
           grid-template-columns: minmax(0, 1fr) var(--mobile-action-width);
-          grid-template-rows: auto auto auto auto auto;
+          grid-template-rows: auto auto auto auto auto auto;
           justify-items: stretch;
           justify-content: center;
           row-gap: var(--mobile-header-row-gap);
@@ -2118,6 +2151,11 @@
           grid-row: 4;
         }
 
+        #monthMenu {
+          grid-column: 1;
+          grid-row: 5;
+        }
+
         #typeClearButton {
           grid-column: 2;
           grid-row: 3;
@@ -2128,8 +2166,14 @@
           grid-row: 4;
         }
 
+        #monthClearButton {
+          grid-column: 2;
+          grid-row: 5;
+        }
+
         #typeClearButton,
         #yearClearButton,
+        #monthClearButton,
         #resetAllRow .filter-clear-button {
           width: 100%;
           min-width: 0;
@@ -2137,7 +2181,8 @@
         }
 
         #typeClearButton,
-        #yearClearButton {
+        #yearClearButton,
+        #monthClearButton {
           min-width: 0;
           padding: var(--mobile-action-pad-block) 4px;
           font-size: 13px;
@@ -2186,7 +2231,7 @@
 
         #resetAllRow .filter-clear-button {
           grid-column: 1;
-          grid-row: 5;
+          grid-row: 6;
           width: 100%;
           max-width: 100%;
           justify-self: stretch;
@@ -2205,7 +2250,7 @@
           right: auto;
           bottom: auto;
           grid-column: 2;
-          grid-row: 5;
+          grid-row: 6;
           justify-self: center;
           align-self: center;
           margin: 0;
@@ -2297,7 +2342,7 @@
         }
         .header-top {
           grid-template-columns: minmax(0, 1fr) var(--mobile-action-width);
-          grid-template-rows: auto auto auto auto auto;
+          grid-template-rows: auto auto auto auto auto auto;
           justify-items: stretch;
           justify-content: center;
           row-gap: var(--mobile-header-row-gap);
@@ -2323,6 +2368,10 @@
           grid-column: 1;
           grid-row: 4;
         }
+        #monthMenu {
+          grid-column: 1;
+          grid-row: 5;
+        }
         #typeClearButton {
           grid-column: 2;
           grid-row: 3;
@@ -2331,15 +2380,21 @@
           grid-column: 2;
           grid-row: 4;
         }
+        #monthClearButton {
+          grid-column: 2;
+          grid-row: 5;
+        }
         #typeClearButton,
         #yearClearButton,
+        #monthClearButton,
         #resetAllRow .filter-clear-button {
           width: 100%;
           min-width: 0;
           justify-self: stretch;
         }
         #typeClearButton,
-        #yearClearButton {
+        #yearClearButton,
+        #monthClearButton {
           min-width: 0;
           padding: var(--mobile-action-pad-block) 4px;
           font-size: 13px;
@@ -2383,7 +2438,7 @@
         }
         #resetAllRow .filter-clear-button {
           grid-column: 1;
-          grid-row: 5;
+          grid-row: 6;
           width: 100%;
           max-width: 100%;
           justify-self: stretch;
@@ -2397,7 +2452,7 @@
           right: auto;
           bottom: auto;
           grid-column: 2;
-          grid-row: 5;
+          grid-row: 6;
           justify-self: center;
           align-self: center;
           margin: 0;
@@ -2579,6 +2634,7 @@
           <h1 id="dashboardTitle">Activity Heatmaps</h1>
           <div class="button-row" id="typeButtons"></div>
           <div class="button-row" id="yearButtons"></div>
+          <div class="button-row" id="monthButtons"></div>
           <div class="button-row" id="resetAllRow">
             <div class="units-toggle" id="unitsToggle" role="group" aria-label="Units">
               <button type="button" class="units-toggle-button" id="imperialUnitsButton" aria-pressed="false">mi</button>
@@ -2604,6 +2660,15 @@
                 <div class="filter-menu-options" id="yearMenuOptions"></div>
               </div>
               <button type="button" class="filter-clear-button" id="yearClearButton" disabled>Clear</button>
+            </div>
+            <div class="filter-control-row">
+              <div class="filter-menu" id="monthMenu">
+                <button type="button" class="filter-menu-button" id="monthMenuButton" aria-expanded="false">
+                  <span id="monthMenuLabel">All Months</span>
+                </button>
+                <div class="filter-menu-options" id="monthMenuOptions"></div>
+              </div>
+              <button type="button" class="filter-clear-button" id="monthClearButton" disabled>Clear</button>
             </div>
           </div>
           <div class="header-links">

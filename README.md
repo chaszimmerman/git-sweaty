@@ -85,6 +85,16 @@ A new **Monthly Activity** section appears between the Activity Frequency chart 
 - **Hover tooltip** shows full detail: count + distance for the month, each with its own vs-prior-year delta
 - A legend below the grid explains the gradient scale and the YoY badge convention
 
+### Month Filter
+
+A third **Month** filter joins the Activities and Year filters in the top filter bar (desktop order left → right: Activities · Year · Month · Reset All · units toggle). All three controls are identical in size and behave the same way — dropdown with draft-until-Done selection, a Clear action button, and Reset All integration.
+
+- Months are **calendar months** (Jan–Dec): selecting "Jul" shows July activity from every selected year, composing cleanly with the year filter
+- Applies everywhere the year filter does: summary totals, Activity Frequency, the Monthly Activity heatmap (only selected months' columns render, YoY badges intact), year heatmaps, and the Races table
+- Year contribution grids keep their full Jan–Dec shape — days outside the selected months render as empty, non-interactive cells, and all stats (including Days Off, which only counts elapsed days inside the selected months) reflect the month selection
+- A year with no activity in the selected months drops its year card, just like an empty year
+- Races' PR badges, medals, and progression charts are unaffected by the month filter (they remain all-time computations)
+
 ### Activity Type Color Overrides
 
 The upstream color assignments produced visually similar colors for some activity type pairs. This fork adds explicit accent color overrides:
