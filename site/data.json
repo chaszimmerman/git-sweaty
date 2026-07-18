@@ -10238,6 +10238,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/19342480095",
       "year": 2026
+    },
+    {
+      "date": "2026-07-17",
+      "hour": 11,
+      "name": "Lunch Treadmill Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19351833658",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -19840,6 +19849,15 @@
           "distance": 5138.0,
           "elevation_gain": 0.0,
           "moving_time": 1593.0
+        },
+        "2026-07-17": {
+          "activity_ids": [
+            "19351833658"
+          ],
+          "count": 1,
+          "distance": 5327.1,
+          "elevation_gain": 0.0,
+          "moving_time": 1664.0
         }
       },
       "Walk": {
@@ -19864,7 +19882,7 @@
       }
     }
   },
-  "generated_at": "2026-07-17T16:23:21.450495+00:00",
+  "generated_at": "2026-07-18T14:02:44.482213+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
