@@ -14634,5 +14634,18 @@
     "start_date_local": "2026-07-25T09:52:51Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-07-26",
+    "distance": 3569.5,
+    "elevation_gain": 0.0,
+    "id": "19476560297",
+    "moving_time": 1218.0,
+    "name": "Afternoon Treadmill Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-07-26T13:30:39Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
