@@ -10314,7 +10314,7 @@
     {
       "date": "2026-07-25",
       "hour": 9,
-      "name": "Morning Run",
+      "name": "Morning Long Run",
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/19460930204",
@@ -20026,7 +20026,7 @@
       }
     }
   },
-  "generated_at": "2026-07-25T16:08:52.477572+00:00",
+  "generated_at": "2026-07-26T16:06:04.229962+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
