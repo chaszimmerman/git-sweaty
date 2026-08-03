@@ -10373,6 +10373,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/19544574734",
       "year": 2026
+    },
+    {
+      "date": "2026-08-02",
+      "hour": 10,
+      "name": "Morning Long Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19572425117",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -20110,6 +20119,15 @@
           "distance": 4983.8,
           "elevation_gain": 68.0,
           "moving_time": 1801.0
+        },
+        "2026-08-02": {
+          "activity_ids": [
+            "19572425117"
+          ],
+          "count": 1,
+          "distance": 18031.5,
+          "elevation_gain": 296.0,
+          "moving_time": 6480.0
         }
       },
       "Walk": {
@@ -20134,7 +20152,7 @@
       }
     }
   },
-  "generated_at": "2026-08-02T16:05:07.586703+00:00",
+  "generated_at": "2026-08-03T17:13:59.255776+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
