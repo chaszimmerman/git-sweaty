@@ -10400,6 +10400,24 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/19627095844",
       "year": 2026
+    },
+    {
+      "date": "2026-08-08",
+      "hour": 12,
+      "name": "Lunch Treadmill Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19657765902",
+      "year": 2026
+    },
+    {
+      "date": "2026-08-09",
+      "hour": 8,
+      "name": "Morning Long Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/19669303511",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -20164,6 +20182,24 @@
           "distance": 6491.3,
           "elevation_gain": 119.0,
           "moving_time": 2157.0
+        },
+        "2026-08-08": {
+          "activity_ids": [
+            "19657765902"
+          ],
+          "count": 1,
+          "distance": 3805.1,
+          "elevation_gain": 0.0,
+          "moving_time": 1366.0
+        },
+        "2026-08-09": {
+          "activity_ids": [
+            "19669303511"
+          ],
+          "count": 1,
+          "distance": 18668.6,
+          "elevation_gain": 281.0,
+          "moving_time": 6751.0
         }
       },
       "Walk": {
@@ -20188,7 +20224,7 @@
       }
     }
   },
-  "generated_at": "2026-08-08T15:32:59.227147+00:00",
+  "generated_at": "2026-08-09T15:35:30.463958+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
