@@ -1222,6 +1222,73 @@
       "moving_s": 520
     }
   ],
+  "20046944018": [
+    {
+      "dist_m": 1611.3,
+      "elapsed_s": 486,
+      "moving_s": 486
+    },
+    {
+      "dist_m": 1609.8,
+      "elapsed_s": 461,
+      "moving_s": 461
+    },
+    {
+      "dist_m": 1607.0,
+      "elapsed_s": 511,
+      "moving_s": 511
+    },
+    {
+      "dist_m": 1611.6,
+      "elapsed_s": 519,
+      "moving_s": 519
+    },
+    {
+      "dist_m": 1609.9,
+      "elapsed_s": 497,
+      "moving_s": 497
+    },
+    {
+      "dist_m": 1608.0,
+      "elapsed_s": 493,
+      "moving_s": 493
+    },
+    {
+      "dist_m": 1608.1,
+      "elapsed_s": 512,
+      "moving_s": 512
+    },
+    {
+      "dist_m": 1611.6,
+      "elapsed_s": 513,
+      "moving_s": 513
+    },
+    {
+      "dist_m": 1609.0,
+      "elapsed_s": 537,
+      "moving_s": 537
+    },
+    {
+      "dist_m": 1607.5,
+      "elapsed_s": 567,
+      "moving_s": 567
+    },
+    {
+      "dist_m": 1610.8,
+      "elapsed_s": 586,
+      "moving_s": 586
+    },
+    {
+      "dist_m": 1608.0,
+      "elapsed_s": 640,
+      "moving_s": 640
+    },
+    {
+      "dist_m": 179.9,
+      "elapsed_s": 63,
+      "moving_s": 63
+    }
+  ],
   "6672089271": [
     {
       "dist_m": 1610.3,

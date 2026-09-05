@@ -14933,5 +14933,36 @@
     "start_date_local": "2026-09-02T17:50:07Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "avg_feels_f": 77,
+    "avg_hr": 166,
+    "avg_temp_f": 71,
+    "date": "2026-09-05",
+    "distance": 19490.6,
+    "elevation_gain": 174.0,
+    "id": "20046944018",
+    "is_race": true,
+    "mile_paces": [
+      485,
+      461,
+      512,
+      518,
+      497,
+      493,
+      512,
+      512,
+      537,
+      568,
+      585,
+      641
+    ],
+    "moving_time": 6385.0,
+    "name": "Charles Street 12 Miler Race #chuck12 #chas12",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-09-05T07:30:14Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
