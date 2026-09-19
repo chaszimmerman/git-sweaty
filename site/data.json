@@ -10607,6 +10607,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/20229235523",
       "year": 2026
+    },
+    {
+      "date": "2026-09-19",
+      "hour": 6,
+      "name": "Morning Campus Joggy Round",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/20239522701",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -20560,6 +20569,15 @@
           "distance": 5435.6,
           "elevation_gain": 105.0,
           "moving_time": 1801.0
+        },
+        "2026-09-19": {
+          "activity_ids": [
+            "20239522701"
+          ],
+          "count": 1,
+          "distance": 10746.4,
+          "elevation_gain": 138.0,
+          "moving_time": 3948.0
         }
       },
       "Walk": {
@@ -20584,7 +20602,7 @@
       }
     }
   },
-  "generated_at": "2026-09-18T18:10:48.419888+00:00",
+  "generated_at": "2026-09-19T17:52:09.554888+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",

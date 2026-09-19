@@ -15042,5 +15042,18 @@
     "start_date_local": "2026-09-18T11:54:23Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-09-19",
+    "distance": 10746.4,
+    "elevation_gain": 138.0,
+    "id": "20239522701",
+    "moving_time": 3948.0,
+    "name": "Morning Campus Joggy Round",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-09-19T06:52:54Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
