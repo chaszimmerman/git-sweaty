@@ -10643,6 +10643,15 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/20302846337",
       "year": 2026
+    },
+    {
+      "date": "2026-09-25",
+      "hour": 11,
+      "name": "Lunch Progression Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/20325983005",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -20623,6 +20632,15 @@
           "distance": 11901.2,
           "elevation_gain": 220.0,
           "moving_time": 3887.0
+        },
+        "2026-09-25": {
+          "activity_ids": [
+            "20325983005"
+          ],
+          "count": 1,
+          "distance": 5716.9,
+          "elevation_gain": 113.0,
+          "moving_time": 1801.0
         }
       },
       "Walk": {
@@ -20656,7 +20674,7 @@
       }
     }
   },
-  "generated_at": "2026-09-24T18:55:56.848163+00:00",
+  "generated_at": "2026-09-25T19:13:27.896022+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
