@@ -184,6 +184,12 @@ def _load_activities(
             mile_paces = item.get("mile_paces")
             if isinstance(mile_paces, list) and mile_paces:
                 activity["mile_paces"] = [int(round(float(p))) for p in mile_paces]
+            # The race's own totals. The per-day aggregate also counts any other
+            # same-type activity that day (e.g. a separate warmup/cooldown run).
+            for metric_key in ("distance", "moving_time", "elevation_gain"):
+                value = item.get(metric_key)
+                if value is not None:
+                    activity[metric_key] = round(float(value), 1)
         if include_provider_activity_urls:
             url = _activity_url_from_id(source, item.get("id"))
             if url:

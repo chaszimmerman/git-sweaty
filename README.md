@@ -122,7 +122,16 @@ A **Races** section appears below all year heatmaps, listing all detected race a
 - **Per-mile split bars**: stacked below the trend chart, a grouped bar chart compares your pace for each mile across years — one group per mile, one bar per year (oldest → newest, left → right), taller = faster. Sourced from Strava's per-mile splits (`splits_standard`), cached in `data/race_splits.json`. The final partial mile is included only when it's at least 0.75 mi (so a 5K shows Miles 1–3, a ~4-miler keeps its final 0.8 as Mile 4). Long races scroll horizontally
 - Race days show an **orange ring border** on heatmap cells (all year heatmaps), preserving the activity-type fill color
 - Race tooltips include average pace
+- Race distance, time, pace and elevation come from the race activity alone — a warmup or cooldown run logged separately the same day isn't counted
 - To suppress a false-positive (naming error), add the Strava activity ID to `activities.exclude_race_ids` in `config.yaml`
+
+### Year Card Metric Reset
+
+The **Total Activities** stat on each year card is a button. It highlights when the default count view is showing; when Distance, Time, or Elevation is selected, clicking Total Activities switches back to the count view (same as clicking the selected metric again).
+
+### Layout Centering
+
+Year card heatmaps and the Activity Frequency graphs are centered within their cards on wide screens. Mobile layouts are unchanged.
 
 ### Section Order
 

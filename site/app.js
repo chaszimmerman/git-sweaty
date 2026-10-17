@@ -2819,11 +2819,21 @@ function buildCombinedTypeDetailsByDate(payload, types, years, monthSet) {
   const activityLinksByDateType = {};
   const typeMetricsByDateType = {};
   const raceDateKeys = new Set();
+  // Race-only distance/time per date, so the tooltip pace excludes other
+  // activities that day (warmup/cooldown runs). Absent for older data.json.
+  const raceTotalsByDate = {};
   const activities = getFilteredActivities(payload, types, years, monthSet);
 
   activities.forEach((activity) => {
     const dateStr = String(activity.date || "");
-    if (activity.is_race && dateStr) raceDateKeys.add(dateStr);
+    if (activity.is_race && dateStr) {
+      raceDateKeys.add(dateStr);
+      if (activity.distance != null && activity.moving_time != null) {
+        const totals = raceTotalsByDate[dateStr] || (raceTotalsByDate[dateStr] = { distance: 0, moving_time: 0 });
+        totals.distance += Number(activity.distance || 0);
+        totals.moving_time += Number(activity.moving_time || 0);
+      }
+    }
     if (!dateStr) return;
     if (!detailsByDate[dateStr]) {
       detailsByDate[dateStr] = {
@@ -2929,6 +2939,7 @@ function buildCombinedTypeDetailsByDate(payload, types, years, monthSet) {
     activityLinksByDateType,
     typeMetricsByDateType,
     raceDateKeys,
+    raceTotalsByDate,
   };
 }
 
@@ -3381,7 +3392,8 @@ function buildHeatmapArea(aggregates, year, units, colors, type, layout, options
     let renderedTypeBreakdown = false;
     const lines = [createTooltipTextLine(dateStr)];
     if (isRaceDate) {
-      const pace = formatPace(Number(entry.moving_time || 0), Number(entry.distance || 0), units?.distance);
+      const raceTotals = options.raceTotalsByDate?.[dateStr] || entry;
+      const pace = formatPace(Number(raceTotals.moving_time || 0), Number(raceTotals.distance || 0), units?.distance);
       lines.push(createTooltipTextLine(pace ? `Race · ${pace}` : "Race"));
     }
     if (singleTypeLabel) {
@@ -4273,7 +4285,11 @@ function buildRacesCard(payload, types, years, units, monthSet) {
   // Enrich all races — PR ranks always computed across all time, not just visible year.
   const enrichedAll = allRaceActivities.map((a) => {
     const dateStr = String(a.date || "");
-    const agg = payload.aggregates?.[String(a.year)]?.[a.type]?.[dateStr] || {};
+    // Prefer the race's own totals; the day aggregate also includes any other
+    // same-type activity that day (e.g. a cooldown run). Fallback covers an
+    // older data.json generated before races carried their own totals.
+    const dayAgg = payload.aggregates?.[String(a.year)]?.[a.type]?.[dateStr] || {};
+    const agg = a.distance != null && a.moving_time != null ? a : dayAgg;
     const distMeters = Number(agg.distance || 0);
     const distMi = distMeters * 0.000621371;
     const distDisplay = distUnit === "km"
@@ -6048,6 +6064,7 @@ async function init() {
         activityLinksByDateType,
         typeMetricsByDateType,
         raceDateKeys,
+        raceTotalsByDate,
       } = buildCombinedTypeDetailsByDate(payload, types, years, monthSet);
       if (showCombinedTypes) {
         const section = document.createElement("div");
@@ -6111,6 +6128,7 @@ async function init() {
               activityLinksByDateType,
               typeMetricsByDateType,
               raceDateKeys,
+              raceTotalsByDate,
             },
           );
           setCardScrollKey(card, `${combinedSelectionKey}:year:${year}`);
