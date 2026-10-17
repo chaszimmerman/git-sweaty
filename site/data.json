@@ -131,6 +131,8 @@
       "avg_hr": 173,
       "avg_temp_f": 50,
       "date": "2022-02-12",
+      "distance": 5145.1,
+      "elevation_gain": 64.0,
       "hour": 10,
       "is_race": true,
       "mile_paces": [
@@ -138,6 +140,7 @@
         523,
         526
       ],
+      "moving_time": 1635.0,
       "name": "Morning 5K Run",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -267,6 +270,8 @@
       "avg_hr": 168,
       "avg_temp_f": 41,
       "date": "2022-02-26",
+      "distance": 10504.0,
+      "elevation_gain": 135.0,
       "hour": 15,
       "is_race": true,
       "mile_paces": [
@@ -277,6 +282,7 @@
         560,
         558
       ],
+      "moving_time": 3555.0,
       "name": "Afternoon Run 10k",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -352,6 +358,8 @@
       "avg_hr": 104,
       "avg_temp_f": 49,
       "date": "2022-03-08",
+      "distance": 5459.1,
+      "elevation_gain": 72.0,
       "hour": 16,
       "is_race": true,
       "mile_paces": [
@@ -359,6 +367,7 @@
         982,
         975
       ],
+      "moving_time": 3334.0,
       "name": "Afternoon Walk 5K",
       "subtype": "Walk",
       "type": "Walk",
@@ -586,6 +595,8 @@
       "avg_hr": 164,
       "avg_temp_f": 44,
       "date": "2022-04-09",
+      "distance": 10066.5,
+      "elevation_gain": 73.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -596,6 +607,7 @@
         556,
         501
       ],
+      "moving_time": 3381.0,
       "name": "Sole of the City 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -940,6 +952,8 @@
       "avg_hr": 169,
       "avg_temp_f": 61,
       "date": "2022-06-04",
+      "distance": 16294.6,
+      "elevation_gain": 136.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -954,6 +968,7 @@
         617,
         613
       ],
+      "moving_time": 5837.0,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -1010,6 +1025,8 @@
       "avg_hr": 139,
       "avg_temp_f": 67,
       "date": "2022-06-12",
+      "distance": 5106.8,
+      "elevation_gain": 10.0,
       "hour": 9,
       "is_race": true,
       "mile_paces": [
@@ -1017,6 +1034,7 @@
         717,
         732
       ],
+      "moving_time": 2152.0,
       "name": "Four Seasons Hotel Beat Cancer 5K with Elise",
       "subtype": "Run",
       "type": "Run",
@@ -1055,6 +1073,8 @@
       "avg_hr": 170,
       "avg_temp_f": 69,
       "date": "2022-06-18",
+      "distance": 4992.7,
+      "elevation_gain": 54.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -1062,6 +1082,7 @@
         531,
         507
       ],
+      "moving_time": 1577.0,
       "name": "Dads Day 5K Race in Patterson Park",
       "subtype": "Run",
       "type": "Run",
@@ -1541,6 +1562,8 @@
       "avg_hr": 168,
       "avg_temp_f": 67,
       "date": "2022-09-03",
+      "distance": 19333.3,
+      "elevation_gain": 155.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -1557,6 +1580,7 @@
         612,
         612
       ],
+      "moving_time": 6826.0,
       "name": "Charles Street 12 Miler Race #chuck12 #chas12",
       "subtype": "Run",
       "type": "Run",
@@ -1721,6 +1745,8 @@
       "avg_hr": 171,
       "avg_temp_f": 59,
       "date": "2022-09-25",
+      "distance": 5105.3,
+      "elevation_gain": 72.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -1728,6 +1754,7 @@
         513,
         511
       ],
+      "moving_time": 1560.0,
       "name": "NDP Blazer Dash 5K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -2082,6 +2109,8 @@
       "avg_hr": 169,
       "avg_temp_f": 31,
       "date": "2022-11-24",
+      "distance": 5089.1,
+      "elevation_gain": 75.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -2089,6 +2118,7 @@
         534,
         508
       ],
+      "moving_time": 1637.0,
       "name": "Towson Y Turkey Trot",
       "subtype": "Run",
       "type": "Run",
@@ -2739,6 +2769,8 @@
       "avg_hr": 172,
       "avg_temp_f": 36,
       "date": "2023-03-11",
+      "distance": 10035.9,
+      "elevation_gain": 104.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -2749,6 +2781,7 @@
         524,
         529
       ],
+      "moving_time": 3245.0,
       "name": "Annapolis Running Festival 10K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -2761,6 +2794,8 @@
       "avg_hr": 175,
       "avg_temp_f": 40,
       "date": "2023-03-12",
+      "distance": 5087.5,
+      "elevation_gain": 11.0,
       "hour": 13,
       "is_race": true,
       "mile_paces": [
@@ -2768,6 +2803,7 @@
         480,
         479
       ],
+      "moving_time": 1497.0,
       "name": "Baltimore Shamrock 5K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -2924,6 +2960,8 @@
       "avg_hr": 170,
       "avg_temp_f": 42,
       "date": "2023-04-08",
+      "distance": 10022.7,
+      "elevation_gain": 66.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -2934,6 +2972,7 @@
         487,
         479
       ],
+      "moving_time": 3161.0,
       "name": "Sole of the City 10K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -3243,6 +3282,8 @@
       "avg_hr": 166,
       "avg_temp_f": 70,
       "date": "2023-06-03",
+      "distance": 16250.2,
+      "elevation_gain": 128.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -3257,6 +3298,7 @@
         603,
         577
       ],
+      "moving_time": 5628.0,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -3430,6 +3472,8 @@
       "avg_hr": 149,
       "avg_temp_f": 75,
       "date": "2023-07-04",
+      "distance": 6400.6,
+      "elevation_gain": 77.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -3438,6 +3482,7 @@
         600,
         673
       ],
+      "moving_time": 2484.0,
       "name": "Towson 4 on the 4th Race",
       "subtype": "Run",
       "type": "Run",
@@ -3872,6 +3917,8 @@
       "avg_hr": 171,
       "avg_temp_f": 69,
       "date": "2023-09-09",
+      "distance": 19345.2,
+      "elevation_gain": 151.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -3888,6 +3935,7 @@
         596,
         568
       ],
+      "moving_time": 6802.0,
       "name": "Charles Street 12 Miler Race #chuck12 #chas12",
       "subtype": "Run",
       "type": "Run",
@@ -4385,6 +4433,8 @@
       "avg_hr": 166,
       "avg_temp_f": 54,
       "date": "2023-11-15",
+      "distance": 10051.5,
+      "elevation_gain": 134.0,
       "hour": 17,
       "is_race": true,
       "mile_paces": [
@@ -4395,6 +4445,7 @@
         541,
         507
       ],
+      "moving_time": 3234.0,
       "name": "Yahoo Run in the Dark 10k Fundraiser",
       "strava_pr_rank": 2,
       "subtype": "Run",
@@ -4452,6 +4503,8 @@
       "avg_hr": 135,
       "avg_temp_f": 39,
       "date": "2023-11-23",
+      "distance": 5118.1,
+      "elevation_gain": 71.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -4459,6 +4512,7 @@
         648,
         584
       ],
+      "moving_time": 1941.0,
       "name": "Towson Y Turkey Trot",
       "subtype": "Run",
       "type": "Run",
@@ -4596,6 +4650,8 @@
       "avg_hr": 161,
       "avg_temp_f": 36,
       "date": "2023-12-16",
+      "distance": 8238.6,
+      "elevation_gain": 92.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -4605,6 +4661,7 @@
         556,
         521
       ],
+      "moving_time": 2725.0,
       "name": "Celtic Solstice 5 Miler",
       "subtype": "Run",
       "type": "Run",
@@ -5084,6 +5141,8 @@
       "avg_hr": 170,
       "avg_temp_f": 42,
       "date": "2024-03-09",
+      "distance": 10019.8,
+      "elevation_gain": 93.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -5094,6 +5153,7 @@
         558,
         536
       ],
+      "moving_time": 3341.0,
       "name": "Annapolis Running Festival 10K Race",
       "subtype": "Run",
       "type": "Run",
@@ -5105,6 +5165,8 @@
       "avg_hr": 177,
       "avg_temp_f": 48,
       "date": "2024-03-10",
+      "distance": 5087.9,
+      "elevation_gain": 60.0,
       "hour": 13,
       "is_race": true,
       "mile_paces": [
@@ -5112,6 +5174,7 @@
         506,
         512
       ],
+      "moving_time": 1611.0,
       "name": "Baltimore Shamrock 5K Race",
       "subtype": "Run",
       "type": "Run",
@@ -5267,6 +5330,8 @@
       "avg_hr": 172,
       "avg_temp_f": 42,
       "date": "2024-04-06",
+      "distance": 10108.5,
+      "elevation_gain": 94.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -5277,6 +5342,7 @@
         511,
         517
       ],
+      "moving_time": 3266.0,
       "name": "Sole of the City 10K Race",
       "strava_pr_rank": 3,
       "subtype": "Run",
@@ -5487,6 +5553,8 @@
       "avg_hr": 172,
       "avg_temp_f": 53,
       "date": "2024-05-11",
+      "distance": 5364.2,
+      "elevation_gain": 67.0,
       "hour": 9,
       "is_race": true,
       "mile_paces": [
@@ -5494,6 +5562,7 @@
         480,
         530
       ],
+      "moving_time": 1659.0,
       "name": "Every Hour Every Day 5K(+)ish Race",
       "subtype": "Run",
       "type": "Run",
@@ -5613,6 +5682,8 @@
       "avg_hr": 163,
       "avg_temp_f": 59,
       "date": "2024-06-01",
+      "distance": 16207.1,
+      "elevation_gain": 141.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -5627,6 +5698,7 @@
         580,
         536
       ],
+      "moving_time": 5492.0,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -5827,6 +5899,8 @@
       "avg_hr": 176,
       "avg_temp_f": 72,
       "date": "2024-07-04",
+      "distance": 6443.0,
+      "elevation_gain": 80.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -5835,6 +5909,7 @@
         500,
         551
       ],
+      "moving_time": 2040.0,
       "name": "Towson 4 on the 4th Race",
       "subtype": "Run",
       "type": "Run",
@@ -6071,6 +6146,8 @@
       "avg_hr": 145,
       "avg_temp_f": 71,
       "date": "2024-08-18",
+      "distance": 10087.4,
+      "elevation_gain": 195.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -6081,6 +6158,7 @@
         617,
         536
       ],
+      "moving_time": 3569.0,
       "name": "Dreaded Druid Hills 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -6200,6 +6278,8 @@
       "avg_hr": 143,
       "avg_temp_f": 62,
       "date": "2024-09-07",
+      "distance": 19323.5,
+      "elevation_gain": 159.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -6216,6 +6296,7 @@
         566,
         529
       ],
+      "moving_time": 6422.0,
       "name": "Charles Street 12 Miler Race #chuck12 #chas12",
       "subtype": "Run",
       "type": "Run",
@@ -6443,6 +6524,8 @@
       "avg_hr": 134,
       "avg_temp_f": 71,
       "date": "2024-10-13",
+      "distance": 4734.4,
+      "elevation_gain": 133.0,
       "hour": 11,
       "is_race": true,
       "mile_paces": [
@@ -6450,6 +6533,7 @@
         896,
         898
       ],
+      "moving_time": 2464.0,
       "name": "Trucktoberfest 5K Run w/ Lori",
       "subtype": "Run",
       "type": "Run",
@@ -6497,6 +6581,8 @@
       "avg_hr": 166,
       "avg_temp_f": 46,
       "date": "2024-10-19",
+      "distance": 9913.4,
+      "elevation_gain": 96.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -6507,6 +6593,7 @@
         499,
         483
       ],
+      "moving_time": 3146.0,
       "name": "Baltimore Running Festival 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -6743,6 +6830,8 @@
       "avg_hr": 135,
       "avg_temp_f": 45,
       "date": "2024-11-28",
+      "distance": 5115.7,
+      "elevation_gain": 73.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -6750,6 +6839,7 @@
         554,
         526
       ],
+      "moving_time": 1719.0,
       "name": "Towson Y Turkey Trot",
       "subtype": "Run",
       "type": "Run",
@@ -6761,6 +6851,8 @@
       "avg_hr": 160,
       "avg_temp_f": 27,
       "date": "2024-11-30",
+      "distance": 21268.1,
+      "elevation_gain": 57.0,
       "hour": 9,
       "is_race": true,
       "mile_paces": [
@@ -6778,6 +6870,7 @@
         545,
         535
       ],
+      "moving_time": 7192.0,
       "name": "NCR Half Marathon Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -6844,6 +6937,8 @@
       "avg_hr": 174,
       "avg_temp_f": 25,
       "date": "2024-12-14",
+      "distance": 8243.0,
+      "elevation_gain": 88.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -6853,6 +6948,7 @@
         521,
         505
       ],
+      "moving_time": 2559.0,
       "name": "Celtic Solstice 5 Miler",
       "subtype": "Run",
       "type": "Run",
@@ -7413,6 +7509,8 @@
       "avg_hr": 168,
       "avg_temp_f": 64,
       "date": "2025-03-16",
+      "distance": 5087.2,
+      "elevation_gain": 24.0,
       "hour": 13,
       "is_race": true,
       "mile_paces": [
@@ -7420,6 +7518,7 @@
         481,
         478
       ],
+      "moving_time": 1499.0,
       "name": "Baltimore Shamrock 5K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -7531,6 +7630,8 @@
       "avg_hr": 135,
       "avg_temp_f": 56,
       "date": "2025-04-05",
+      "distance": 10053.5,
+      "elevation_gain": 70.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -7541,6 +7642,7 @@
         487,
         472
       ],
+      "moving_time": 3040.0,
       "name": "Sole of the City 10k Race",
       "strava_pr_rank": 2,
       "subtype": "Run",
@@ -7706,6 +7808,8 @@
       "avg_hr": 173,
       "avg_temp_f": 56,
       "date": "2025-05-10",
+      "distance": 5338.4,
+      "elevation_gain": 68.0,
       "hour": 9,
       "is_race": true,
       "mile_paces": [
@@ -7713,6 +7817,7 @@
         469,
         518
       ],
+      "moving_time": 1586.0,
       "name": "Every Hour Every Day 5K(+)ish Race",
       "strava_pr_rank": 3,
       "subtype": "Run",
@@ -7869,6 +7974,8 @@
       "avg_hr": 163,
       "avg_temp_f": 69,
       "date": "2025-06-07",
+      "distance": 16210.5,
+      "elevation_gain": 133.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -7883,6 +7990,7 @@
         544,
         511
       ],
+      "moving_time": 5296.0,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -8038,6 +8146,8 @@
       "avg_hr": 172,
       "avg_temp_f": 70,
       "date": "2025-07-04",
+      "distance": 6199.1,
+      "elevation_gain": 79.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -8046,6 +8156,7 @@
         466,
         496
       ],
+      "moving_time": 1811.0,
       "name": "Towson 4 on the 4th Race",
       "subtype": "Run",
       "type": "Run",
@@ -8255,6 +8366,8 @@
       "avg_hr": 173,
       "avg_temp_f": 74,
       "date": "2025-08-16",
+      "distance": 10072.7,
+      "elevation_gain": 200.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -8265,6 +8378,7 @@
         619,
         535
       ],
+      "moving_time": 3391.0,
       "name": "Dreaded Druid Hills 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -8339,6 +8453,8 @@
       "avg_hr": 161,
       "avg_temp_f": 54,
       "date": "2025-08-30",
+      "distance": 19525.1,
+      "elevation_gain": 167.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -8355,6 +8471,7 @@
         498,
         498
       ],
+      "moving_time": 5920.0,
       "name": "Charles Street 12 Miler Race #chuck12 #chas12",
       "subtype": "Run",
       "type": "Run",
@@ -8636,6 +8753,8 @@
       "avg_hr": 167,
       "avg_temp_f": 48,
       "date": "2025-10-18",
+      "distance": 9827.2,
+      "elevation_gain": 93.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -8646,6 +8765,7 @@
         483,
         459
       ],
+      "moving_time": 2901.0,
       "name": "Baltimore Running Festival 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -8729,6 +8849,8 @@
       "avg_hr": 163,
       "avg_temp_f": 51,
       "date": "2025-11-01",
+      "distance": 21432.4,
+      "elevation_gain": 40.0,
       "hour": 9,
       "is_race": true,
       "mile_paces": [
@@ -8746,6 +8868,7 @@
         544,
         549
       ],
+      "moving_time": 6798.0,
       "name": "Ocean City Maryland Half Marathon Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -8902,6 +9025,8 @@
       "avg_hr": 128,
       "avg_temp_f": 37,
       "date": "2025-11-27",
+      "distance": 5116.9,
+      "elevation_gain": 75.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -8909,6 +9034,7 @@
         814,
         733
       ],
+      "moving_time": 2432.0,
       "name": "Towson Y Turkey Trot",
       "subtype": "Run",
       "type": "Run",
@@ -8956,6 +9082,8 @@
       "avg_hr": 170,
       "avg_temp_f": 27,
       "date": "2025-12-07",
+      "distance": 4999.9,
+      "elevation_gain": 65.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -8963,6 +9091,7 @@
         489,
         498
       ],
+      "moving_time": 1513.0,
       "name": "Angel Park 5K",
       "subtype": "Run",
       "type": "Run",
@@ -9001,6 +9130,8 @@
       "avg_hr": 152,
       "avg_temp_f": 27,
       "date": "2025-12-13",
+      "distance": 8205.5,
+      "elevation_gain": 98.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -9010,6 +9141,7 @@
         565,
         536
       ],
+      "moving_time": 2887.0,
       "name": "Celtic Solstice 5 Miler",
       "subtype": "Run",
       "type": "Run",
@@ -9489,6 +9621,8 @@
       "avg_hr": 161,
       "avg_temp_f": 49,
       "date": "2026-03-15",
+      "distance": 5086.7,
+      "elevation_gain": 13.0,
       "hour": 13,
       "is_race": true,
       "mile_paces": [
@@ -9496,6 +9630,7 @@
         450,
         449
       ],
+      "moving_time": 1406.0,
       "name": "Baltimore Shamrock 5K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -9526,6 +9661,8 @@
       "avg_hr": 169,
       "avg_temp_f": 51,
       "date": "2026-03-21",
+      "distance": 10482.3,
+      "elevation_gain": 95.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -9536,6 +9673,7 @@
         508,
         477
       ],
+      "moving_time": 3123.0,
       "name": "Annapolis Running Festival 10K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -9710,6 +9848,8 @@
       "avg_hr": 171,
       "avg_temp_f": 54,
       "date": "2026-04-25",
+      "distance": 10074.6,
+      "elevation_gain": 67.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -9720,6 +9860,7 @@
         475,
         456
       ],
+      "moving_time": 2931.0,
       "name": "Sole of the City 10K Race",
       "strava_pr_rank": 1,
       "subtype": "Run",
@@ -9795,6 +9936,8 @@
       "avg_hr": 173,
       "avg_temp_f": 58,
       "date": "2026-05-09",
+      "distance": 5337.9,
+      "elevation_gain": 68.0,
       "hour": 9,
       "is_race": true,
       "mile_paces": [
@@ -9802,6 +9945,7 @@
         454,
         506
       ],
+      "moving_time": 1541.0,
       "name": "Every Hour Every Day 5K(+)ish Race",
       "subtype": "Run",
       "type": "Run",
@@ -9930,6 +10074,8 @@
       "avg_hr": 169,
       "avg_temp_f": 72,
       "date": "2026-06-06",
+      "distance": 16277.8,
+      "elevation_gain": 137.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -9944,6 +10090,7 @@
         568,
         542
       ],
+      "moving_time": 5341.0,
       "name": "Baltimore 10 Miler Race",
       "subtype": "Run",
       "type": "Run",
@@ -10117,6 +10264,8 @@
       "avg_hr": 171,
       "avg_temp_f": 85,
       "date": "2026-07-04",
+      "distance": 6407.9,
+      "elevation_gain": 81.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -10125,6 +10274,7 @@
         487,
         530
       ],
+      "moving_time": 1947.0,
       "name": "Towson 4 on the 4th Race",
       "subtype": "Run",
       "type": "Run",
@@ -10532,6 +10682,8 @@
       "avg_hr": 166,
       "avg_temp_f": 71,
       "date": "2026-09-05",
+      "distance": 19490.6,
+      "elevation_gain": 174.0,
       "hour": 7,
       "is_race": true,
       "mile_paces": [
@@ -10548,6 +10700,7 @@
         585,
         641
       ],
+      "moving_time": 6385.0,
       "name": "Charles Street 12 Miler Race #chuck12 #chas12",
       "subtype": "Run",
       "type": "Run",
@@ -10793,6 +10946,8 @@
       "avg_hr": 169,
       "avg_temp_f": 53,
       "date": "2026-10-17",
+      "distance": 9823.2,
+      "elevation_gain": 92.0,
       "hour": 8,
       "is_race": true,
       "mile_paces": [
@@ -10803,6 +10958,7 @@
         467,
         446
       ],
+      "moving_time": 2858.0,
       "name": "Baltimore Running Festival 10k Race",
       "subtype": "Run",
       "type": "Run",
@@ -20984,7 +21140,7 @@
       }
     }
   },
-  "generated_at": "2026-10-17T15:47:41.327873+00:00",
+  "generated_at": "2026-10-17T16:52:02.756816+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
