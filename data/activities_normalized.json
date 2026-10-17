@@ -15276,5 +15276,69 @@
     "start_date_local": "2026-10-13T17:14:53Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-10-14",
+    "distance": 5105.5,
+    "elevation_gain": 83.0,
+    "id": "20588151017",
+    "moving_time": 1800.0,
+    "name": "Afternoon Run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-10-14T17:41:05Z",
+    "type": "Run",
+    "year": 2026
+  },
+  {
+    "date": "2026-10-16",
+    "distance": 3192.3,
+    "elevation_gain": 15.0,
+    "id": "20611064647",
+    "moving_time": 1742.0,
+    "name": "Lunch Walk",
+    "raw_activity_type": "Walk",
+    "raw_type": "Walk",
+    "start_date_local": "2026-10-16T12:17:28Z",
+    "type": "Walk",
+    "year": 2026
+  },
+  {
+    "avg_feels_f": 47,
+    "avg_hr": 169,
+    "avg_temp_f": 53,
+    "date": "2026-10-17",
+    "distance": 9823.2,
+    "elevation_gain": 92.0,
+    "id": "20621092127",
+    "is_race": true,
+    "mile_paces": [
+      504,
+      475,
+      476,
+      452,
+      467,
+      446
+    ],
+    "moving_time": 2858.0,
+    "name": "Baltimore Running Festival 10k Race",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-10-17T08:00:31Z",
+    "type": "Run",
+    "year": 2026
+  },
+  {
+    "date": "2026-10-17",
+    "distance": 1177.8,
+    "elevation_gain": 3.0,
+    "id": "20622294245",
+    "moving_time": 521.0,
+    "name": "Cooldown run",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-10-17T10:05:17Z",
+    "type": "Run",
+    "year": 2026
   }
 ]

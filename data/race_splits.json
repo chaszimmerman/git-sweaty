@@ -1289,6 +1289,43 @@
       "moving_s": 63
     }
   ],
+  "20621092127": [
+    {
+      "dist_m": 1610.9,
+      "elapsed_s": 504,
+      "moving_s": 504
+    },
+    {
+      "dist_m": 1610.1,
+      "elapsed_s": 475,
+      "moving_s": 475
+    },
+    {
+      "dist_m": 1609.4,
+      "elapsed_s": 476,
+      "moving_s": 476
+    },
+    {
+      "dist_m": 1609.0,
+      "elapsed_s": 452,
+      "moving_s": 452
+    },
+    {
+      "dist_m": 1610.6,
+      "elapsed_s": 467,
+      "moving_s": 467
+    },
+    {
+      "dist_m": 1608.8,
+      "elapsed_s": 446,
+      "moving_s": 446
+    },
+    {
+      "dist_m": 164.4,
+      "elapsed_s": 38,
+      "moving_s": 38
+    }
+  ],
   "6672089271": [
     {
       "dist_m": 1610.3,

@@ -10769,6 +10769,54 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/20574009286",
       "year": 2026
+    },
+    {
+      "date": "2026-10-14",
+      "hour": 17,
+      "name": "Afternoon Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/20588151017",
+      "year": 2026
+    },
+    {
+      "date": "2026-10-16",
+      "hour": 12,
+      "name": "Lunch Walk",
+      "subtype": "Walk",
+      "type": "Walk",
+      "url": "https://www.strava.com/activities/20611064647",
+      "year": 2026
+    },
+    {
+      "avg_feels_f": 47,
+      "avg_hr": 169,
+      "avg_temp_f": 53,
+      "date": "2026-10-17",
+      "hour": 8,
+      "is_race": true,
+      "mile_paces": [
+        504,
+        475,
+        476,
+        452,
+        467,
+        446
+      ],
+      "name": "Baltimore Running Festival 10k Race",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/20621092127",
+      "year": 2026
+    },
+    {
+      "date": "2026-10-17",
+      "hour": 10,
+      "name": "Cooldown run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/20622294245",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -20875,6 +20923,25 @@
           "distance": 7424.0,
           "elevation_gain": 114.0,
           "moving_time": 2701.0
+        },
+        "2026-10-14": {
+          "activity_ids": [
+            "20588151017"
+          ],
+          "count": 1,
+          "distance": 5105.5,
+          "elevation_gain": 83.0,
+          "moving_time": 1800.0
+        },
+        "2026-10-17": {
+          "activity_ids": [
+            "20621092127",
+            "20622294245"
+          ],
+          "count": 2,
+          "distance": 11001.0,
+          "elevation_gain": 95.0,
+          "moving_time": 3379.0
         }
       },
       "Walk": {
@@ -20904,11 +20971,20 @@
           "distance": 1022.5,
           "elevation_gain": 5.0,
           "moving_time": 674.0
+        },
+        "2026-10-16": {
+          "activity_ids": [
+            "20611064647"
+          ],
+          "count": 1,
+          "distance": 3192.3,
+          "elevation_gain": 15.0,
+          "moving_time": 1742.0
         }
       }
     }
   },
-  "generated_at": "2026-10-14T19:16:17.249014+00:00",
+  "generated_at": "2026-10-17T15:47:41.327873+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
