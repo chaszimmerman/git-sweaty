@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T16:52:02.737774+00:00",
+  "generated_at": "2026-10-22T18:53:46.460676+00:00",
   "years": {
     "2022": {
       "Hike": {
@@ -10123,6 +10123,24 @@
           "distance": 11001.0,
           "elevation_gain": 95.0,
           "moving_time": 3379.0
+        },
+        "2026-10-19": {
+          "activity_ids": [
+            "20653182755"
+          ],
+          "count": 1,
+          "distance": 11024.8,
+          "elevation_gain": 201.0,
+          "moving_time": 3867.0
+        },
+        "2026-10-21": {
+          "activity_ids": [
+            "20680713877"
+          ],
+          "count": 1,
+          "distance": 12261.9,
+          "elevation_gain": 217.0,
+          "moving_time": 4382.0
         }
       },
       "Walk": {
