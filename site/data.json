@@ -11076,7 +11076,7 @@
     {
       "date": "2026-11-07",
       "hour": 11,
-      "name": "Lunch Run",
+      "name": "Lunch Long Run",
       "subtype": "Run",
       "type": "Run",
       "url": "https://www.strava.com/activities/20898664882",
@@ -21356,7 +21356,7 @@
       }
     }
   },
-  "generated_at": "2026-11-07T19:23:36.243514+00:00",
+  "generated_at": "2026-11-08T19:29:02.494671+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
