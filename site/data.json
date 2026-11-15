@@ -11099,6 +11099,56 @@
       "type": "Run",
       "url": "https://www.strava.com/activities/20939719875",
       "year": 2026
+    },
+    {
+      "date": "2026-11-11",
+      "hour": 16,
+      "name": "Afternoon Treadmill Run",
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/20952981433",
+      "year": 2026
+    },
+    {
+      "date": "2026-11-13",
+      "hour": 9,
+      "name": "Morning Walk",
+      "subtype": "Walk",
+      "type": "Walk",
+      "url": "https://www.strava.com/activities/20972850645",
+      "year": 2026
+    },
+    {
+      "avg_feels_f": 33,
+      "avg_hr": 169,
+      "avg_temp_f": 41,
+      "date": "2026-11-14",
+      "distance": 21427.8,
+      "elevation_gain": 55.0,
+      "hour": 9,
+      "is_race": true,
+      "mile_paces": [
+        499,
+        492,
+        490,
+        489,
+        497,
+        501,
+        515,
+        513,
+        516,
+        520,
+        537,
+        542,
+        562
+      ],
+      "moving_time": 6841.0,
+      "name": "Ocean City Maryland Half Marathon Race",
+      "strava_pr_rank": 2,
+      "subtype": "Run",
+      "type": "Run",
+      "url": "https://www.strava.com/activities/20986747057",
+      "year": 2026
     }
   ],
   "aggregates": {
@@ -21350,6 +21400,24 @@
           "distance": 6619.2,
           "elevation_gain": 0.0,
           "moving_time": 2115.0
+        },
+        "2026-11-11": {
+          "activity_ids": [
+            "20952981433"
+          ],
+          "count": 1,
+          "distance": 6706.9,
+          "elevation_gain": 0.0,
+          "moving_time": 2125.0
+        },
+        "2026-11-14": {
+          "activity_ids": [
+            "20986747057"
+          ],
+          "count": 1,
+          "distance": 21427.8,
+          "elevation_gain": 55.0,
+          "moving_time": 6841.0
         }
       },
       "Walk": {
@@ -21388,11 +21456,20 @@
           "distance": 3192.3,
           "elevation_gain": 15.0,
           "moving_time": 1742.0
+        },
+        "2026-11-13": {
+          "activity_ids": [
+            "20972850645"
+          ],
+          "count": 1,
+          "distance": 3675.4,
+          "elevation_gain": 29.0,
+          "moving_time": 2640.0
         }
       }
     }
   },
-  "generated_at": "2026-11-11T21:53:18.802503+00:00",
+  "generated_at": "2026-11-15T02:30:36.248692+00:00",
   "other_bucket": "OtherSports",
   "profile_url": "https://www.strava.com/athletes/97932238",
   "repo": "chaszimmerman/git-sweaty",
