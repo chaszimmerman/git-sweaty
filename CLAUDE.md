@@ -23,6 +23,8 @@ A GitHub Pages dashboard that turns Strava/Garmin workout activities into GitHub
 - **Sync Heatmaps** (`sync.yml`) — runs daily at 15:00 UTC; can be triggered manually via Actions tab
   - Manual run options: override source, update README link, full backfill reset
 - **Deploy Pages** (`pages.yml`) — triggers automatically after Sync Heatmaps succeeds, or on pushes to `site/`
+  - A **Wait for artifact to be listed** step (added 2026-11-17) sits between Upload artifact and Deploy. It polls the run's artifacts API (needs `actions: read`) for up to 2 min, because `deploy-pages` looks the artifact up ~1s after upload and GitHub sometimes hasn't listed it yet — that failed 3 deploys in a row on 2026-11-17 with "No artifacts named github-pages were found" while githubstatus was green.
+  - **Don't "Re-run failed jobs" on a failed deploy:** the re-run uploads a second `github-pages` artifact into the same run and `deploy-pages` then fails with "Multiple artifacts … Artifact count is 2". Start a fresh run instead (`gh workflow run pages.yml --ref main`).
 
 ## Secrets & Variables (GitHub repo settings)
 - `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, `STRAVA_REFRESH_TOKEN` — Strava API credentials
