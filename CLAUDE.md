@@ -1,7 +1,7 @@
 # git-sweaty — Claude Context
 
 ## What This Project Is
-A GitHub Pages dashboard that turns Strava/Garmin workout activities into GitHub-style contribution heatmaps. Forked from `aspain/git-sweaty`.
+A GitHub Pages dashboard that turns Strava/Garmin workout activities into GitHub-style contribution heatmaps. Originally forked from `aspain/git-sweaty`; **detached from the fork network on 2026-11-16** and now a standalone repo (`fork: false`).
 
 - **Live dashboard:** https://chaszimmerman.github.io/git-sweaty/
 - **Data source:** Strava
@@ -36,8 +36,13 @@ A GitHub Pages dashboard that turns Strava/Garmin workout activities into GitHub
 - GitHub CLI (`gh`) installed via Homebrew; requires `repo` and `workflow` scopes
 
 ## Keeping Up to Date
-- Pull upstream changes via GitHub's **Sync fork** button on `main`
-- Locally: `git fetch origin && git reset --hard origin/main`
+- The repo left the fork network on 2026-11-16, so there is **no Sync fork button**. Upstream comes in through the `upstream` git remote (`https://github.com/aspain/git-sweaty.git`, added locally the same day):
+  - `git fetch upstream && git merge upstream/main`, then resolve conflicts in `site/app.js` / `site/index.html` against the Fork Customizations below, and push to `origin`.
+  - At detach time `main` was 28 commits ahead / 46 behind `upstream/main` (not merged).
+  - **`gh` gotcha:** with an `upstream` remote present, `gh` may target `aspain/git-sweaty` instead (runs 404). The local clone is pinned with `gh repo set-default chaszimmerman/git-sweaty`; re-run that in any fresh clone, or pass `-R chaszimmerman/git-sweaty`.
+- **Why it was detached:** GitHub kept silently dropping the daily `schedule` trigger on the fork (no scheduled runs Oct 15–23 and Nov 12–16, 2026, while the workflow still showed `active`). Turning the workflow off/on only restored it for ~18 days. Manual `workflow_dispatch` runs always worked.
+- **If scheduled syncs stop again:** check `gh run list --workflow sync.yml` for missing `schedule` runs. GitHub also disables schedules in public repos after 60 days without repo activity (bot pushes to `dashboard-data` likely don't count); `gh workflow disable sync.yml && gh workflow enable sync.yml` re-registers it.
+- To match the local clone to GitHub: `git fetch origin && git reset --hard origin/main`
 
 ## Config Notes
 - `config.yaml` — base defaults (committed)

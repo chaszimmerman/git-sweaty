@@ -74,6 +74,8 @@ You can switch between `strava` and `garmin` at any time.
 
 > **Note:** The following changes were made in this fork (`chaszimmerman/git-sweaty`) and are not part of the upstream `aspain/git-sweaty` repository. If you sync from upstream, review these customizations before overwriting `site/app.js` and `site/index.html`.
 
+> This repository left the fork network on 2026-11-16 so its daily scheduled sync runs reliably (GitHub kept dropping scheduled runs on the fork). It no longer has a **Sync fork** button; upstream changes are merged from an `upstream` git remote instead (`git fetch upstream && git merge upstream/main`).
+
 ### Monthly Activity Heatmap
 
 A new **Monthly Activity** section appears between the Activity Frequency chart and the year-by-year heatmaps. It shows a color-intensity grid of monthly totals — one row per activity type, one column per month.
