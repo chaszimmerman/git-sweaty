@@ -15607,5 +15607,18 @@
     "start_date_local": "2026-11-16T07:11:26Z",
     "type": "Run",
     "year": 2026
+  },
+  {
+    "date": "2026-11-20",
+    "distance": 5654.0,
+    "elevation_gain": 97.0,
+    "id": "21061088833",
+    "moving_time": 1800.0,
+    "name": "Lunch Run hills then burritos",
+    "raw_activity_type": "Run",
+    "raw_type": "Run",
+    "start_date_local": "2026-11-20T11:50:38Z",
+    "type": "Run",
+    "year": 2026
   }
 ]
